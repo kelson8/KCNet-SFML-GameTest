@@ -11,7 +11,8 @@ Currently on this guide in the playlist (Creating the window): https://www.youtu
 2. Add sfml to additional include directories and additional linker directories: 
 ```
 Include dirs for Release and Debug: 
- $(SolutionDir)include\;$(SolutionDir)src\
+ $(SolutionDir)include\
+ $(SolutionDir)src\
 
 Linker dirs for Release and Debug: 
  $(SolutionDir)lib
