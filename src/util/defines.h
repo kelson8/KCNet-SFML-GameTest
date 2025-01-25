@@ -33,7 +33,16 @@ public:
 
 	// Game info
 	const char* windowTitle = "KCNet-SFML-GameTest";
+	// Version alpha 1.0.0
+	// TODO Possibly place this elsewhere.
 	const std::string programVersion = "a1.0.0";
+	const std::string programAuthor = "kelson8";
+	const std::string programLicense = "Licensed under the MIT License (c) kelson8 - KCNet";
+
+	// The frame rate can be changed here if needed.
+	unsigned int gameFramerate = 60;
+
+
 
 	// Screen size
 	const int screenWidth = 800;
