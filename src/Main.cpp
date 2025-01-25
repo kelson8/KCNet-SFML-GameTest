@@ -3,8 +3,8 @@
 
 #include "Game.h"
 
-// Killing enemies
-// https://www.youtube.com/watch?v=Sil75qOxCW0&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=8
+// Points and Health
+// https://www.youtube.com/watch?v=K8pMdCJtdCY&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=9
 // I got the linker and include files fixed for this in Debug and Release
 
 

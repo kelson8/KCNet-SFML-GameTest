@@ -37,7 +37,7 @@ void Game::initVariables()
 	}
 	else 
 	{
-		this->enemySpawnTimerMax = 1000.0f;
+		this->enemySpawnTimerMax = 10.0f;
 	}
 	
 	
@@ -76,8 +76,8 @@ void Game::initEnemies()
 
 	// Set the fill color, outline color and outline thickness.
 	this->enemy.setFillColor(sf::Color::Green);
-	this->enemy.setOutlineColor(sf::Color::Yellow);
-	this->enemy.setOutlineThickness(1.0f);
+	//this->enemy.setOutlineColor(sf::Color::Yellow);
+	//this->enemy.setOutlineThickness(1.0f);
 }
 
 /// <summary>
@@ -185,16 +185,43 @@ void Game::updateEnemies()
 		}
 	}
 
-	// Move the enemies downwards
-	// TODO Figure out what exactly this does
-	for (auto& e : this->enemies)
+	// Moving and updating the enemies.
+	for (int i = 0; i < this->enemies.size(); i++)
 	{
+		bool deleted = false;
 		// Change the speed by changing the offsetY
-		e.move(0.0f, enemySpeed);
+		this->enemies[i].move(0.0f, enemySpeed);
+
+
+		// Remove the enemies
+		// Check if clicked upon
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			// Only run if the mouse is clicked
+			if (this->enemies[i].getGlobalBounds().contains(this->mousePosView))
+			{
+				deleted = true;
+
+				// Gain points
+				this->points += 10.0f;
+			}
+		}
+
+		// Delete the enemy if they are past the bottom of the screen.
+		if (this->enemies[i].getPosition().y > this->window->getSize().y)
+		{
+			deleted = true;
+		}
+
+		// Final delete
+		if (deleted)
+		{
+			this->enemies.erase(this->enemies.begin() + i);
+		}
 	}
 
-	// TODO Setup on other part of guide
-	// Remove the enemies
+	
+
 }
 
 
@@ -246,6 +273,9 @@ void Game::PollEvents()
 void Game::updateMousePositions()
 {
 	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+
+	// This takes a pixel from the window, making it a float.
+	this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 
 	//int mousePosX = sf::Mouse::getPosition().x;
 //int mousePosY = sf::Mouse::getPosition().y;
