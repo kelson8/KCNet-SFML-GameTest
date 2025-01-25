@@ -5,6 +5,11 @@
 include/imgui
 include/imgui-SFML
 
+# TMX Parser tests
+include/sfml-tmxloader
+include/tmxlite
+include/tmxparser
+
 resources/assets/enemy_ships
 resources/assets/other
 
