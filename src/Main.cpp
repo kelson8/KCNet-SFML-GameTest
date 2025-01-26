@@ -7,13 +7,17 @@
 // Enable command arguments test for this program.
 #define _COMMAND_ARGS
 
+// ImGui test from here added into game.cpp, it doesn't work yet:
+// https://youtu.be/2YS5WJTeKpI
+
+
 
 // TODO Fix this project to use pre compiled headers
 // https://stackoverflow.com/questions/1552058/how-to-implement-precompiled-headers-into-your-project
 
 
-// Points and Health
-// https://www.youtube.com/watch?v=K8pMdCJtdCY&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=9
+// Fonts and Text
+// https://www.youtube.com/watch?v=oDOgquwEf38&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=10
 // I got the linker and include files fixed for this in Debug and Release
 
 #ifdef _COMMAND_ARGS
@@ -63,18 +67,23 @@ int main()
 	// Timer test
 	//sf::Clock timer;
 
-	// Play the music
-	sf::Music* gameMusic = musicUtil.PlayMusic(defines.musicSound);
-
-	if (gameMusic)
+	// Play the music, add a toggle in defines.h
+	if (defines.musicEnabled)
 	{
-		gameMusic->play();
-		gameMusic->setLoop(true);
-		gameMusic->setVolume(defines.musicVolume);
+		sf::Music* gameMusic = musicUtil.PlayMusic(defines.musicSound);
+
+		if (gameMusic)
+		{
+			gameMusic->play();
+			gameMusic->setLoop(true);
+			gameMusic->setVolume(defines.musicVolume);
+		}
 	}
 
+
 	// Game loop
-	while (game.running())
+	// Check if game is running and is not ended.
+	while (game.running() && !game.getEndGame())
 	{
 		// Update
 		game.Update();

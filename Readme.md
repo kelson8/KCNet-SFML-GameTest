@@ -4,8 +4,7 @@ I will be working on a basic game in SFML using C++ in this repo
 I would like to thank the author of this youtube series for this:
 * https://www.youtube.com/playlist?list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up
 
-Currently on this guide in the playlist (Points and Health): https://www.youtube.com/watch?v=K8pMdCJtdCY&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=9
-
+Currently on this guide in the playlist (Fonts and Text): https://www.youtube.com/watch?v=oDOgquwEf38&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=10
 # To build
 1. Open this project in Visual Studio 2022
 2. Add sfml to additional include directories and additional linker directories: 
