@@ -4,14 +4,9 @@
 #include <vector>
 #include <ctime>
 
-// SFML
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
+// Moved sfml into pch.h
 
-#include "util/defines.h"
+#include "pch.h"
 
 // TMX Parser
 // TODO Fix this for sprites to be loaded in, such as maps created with the Tiled map editor.
@@ -43,6 +38,8 @@ private:
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event event;
+	//sf::Font gameFont;
+	//sf::Text text;
 
 	// Mouse positions
 	sf::Vector2i mousePosWindow;
@@ -68,7 +65,14 @@ private:
 	void initBackground();
 	void initWindow();
 	void initEnemies();
+
+	void renderScore();
+	void renderText();
 	
+	//void playEnemySfx();
+#ifdef _ENEMY_SOUNDS_TEST
+	sf::SoundBuffer* playEnemySfx();
+#endif //_ENEMY_SOUNDS_TEST
 
 public:
 	// Constructors / Destructors
@@ -81,11 +85,14 @@ public:
 	// Functions
 	void spawnEnemy();
 
+	// Music functions, moved into MusicUtil
+
 	void PollEvents();
 	void updateMousePositions();
 	void updateEnemies();
+
 	void Update();
-	
+
 	void renderEnemies();
 	void Render();
 };

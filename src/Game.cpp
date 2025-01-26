@@ -1,6 +1,10 @@
 #include "Game.h"
 
 
+// Enable the enemy sound test, play sounds when the enemies are clicked on.
+// I need to work on this some more to fix it
+//#define _ENEMY_SOUNDS_TEST
+
 // Booleans
 // TODO Eventually add these to a game menu once I figure that out.
 // Enable faster enemies spawning
@@ -8,14 +12,16 @@ bool fastEnemies = false;
 // Make the enemies go down faster.
 bool fastEnemiesFall = false;
 
+// Show the score test, and some test text with a font.
+// TODO Fix this
+bool renderTestItems = false;
+
 
 // Enable my mouse pos define below.
 // TODO Add a timer to this, delay it by like 1 second instead of letting it run super fast.
 //#define _SHOW_MOUSE_POS
 
 // Private functions
-
-
 
 
 /// <summary>
@@ -161,6 +167,29 @@ void Game::spawnEnemy()
 	// Remove enemies at the end of the screen.
 }
 
+//void Game::playEnemySfx()
+
+#ifdef _ENEMY_SOUNDS_TEST
+sf::SoundBuffer* Game::playEnemySfx()
+{
+	Defines defines = Defines();
+
+	sf::SoundBuffer* buffer = &sf::SoundBuffer();
+	if (!buffer->loadFromFile(defines.enemyHitSound))
+	{
+		std::cerr << "Could not load the enemy sound" << std::endl;
+		delete buffer;
+		return nullptr; // Handle error
+	}
+
+	return buffer;
+
+	// Play the sound
+	//sf::Sound sound(buffer);
+	//sound.play();
+}
+#endif //_ENEMY_SOUNDS_TEST
+
 /// <summary>
 ///  Update the enemy spawn timer and spawns enemies.
 ///  When the total amount of enemies is smaller then the maximum.
@@ -169,6 +198,7 @@ void Game::spawnEnemy()
 /// </summary>
 void Game::updateEnemies()
 {
+	Defines defines = Defines();
 
 	// Updating the timer.
 	if (this->enemies.size() < this->maxEnemies)
@@ -204,6 +234,12 @@ void Game::updateEnemies()
 
 				// Gain points
 				this->points += 10.0f;
+			
+#ifdef _ENEMY_SOUNDS_TEST
+				// Play sound effect
+				sf::Sound enemySfx(*this->playEnemySfx());
+				enemySfx.play();
+#endif //_ENEMY_SOUNDS_TEST
 			}
 		}
 
@@ -224,7 +260,6 @@ void Game::updateEnemies()
 
 }
 
-
 /// <summary>
 /// Render the enemies
 /// </summary>
@@ -235,6 +270,35 @@ void Game::renderEnemies()
 	{
 		this->window->draw(e);
 	}
+}
+
+/// <summary>
+/// Test for displaying a score
+/// </summary>
+void Game::renderScore()
+{
+
+}
+
+/// <summary>
+/// Test for showing text on the screen.
+/// TODO Fix this to work.
+/// </summary>
+void Game::renderText()
+{
+	Defines defines = Defines();
+
+	// https://www.sfml-dev.org/documentation/2.6.1/
+	sf::Font gameFont;
+	if (!gameFont.loadFromFile(defines.fontFile))
+	{
+		std::cout << "Error: the Game Fonts could not be loaded!" << std::endl;
+	}
+
+	sf::Text text("Hello SFML", gameFont, 50);
+	//text.setPosition(sf::Vector2f(40.0f, 40.0f));
+
+
 }
 
 /// <summary>
@@ -338,7 +402,21 @@ void Game::Render()
 	//this->window->draw(this->enemy);
 	this->renderEnemies();
 
+
+	// Only run this for now if it is enabled
+	if (renderTestItems)
+	{
+		// Render the score test.
+		this->renderScore();
+
+		// Show test text on screen.
+		this->renderText();
+	}
+
+
 	// Draw game objects
+
+
 
 	// Draw your game
 	this->window->display(); // Tell app that window is done drawing.
