@@ -25,8 +25,7 @@ bool fastEnemies = false;
 bool fastEnemiesFall = false;
 
 // Show the score test, and some test text with a font.
-// TODO Fix this
-bool renderTestItems = false;
+bool renderTestItems = true;
 
 
 // Enable my mouse pos define below.
@@ -145,6 +144,51 @@ void Game::initWindow()
 	this->window->setFramerateLimit(defines.gameFramerate);
 }
 
+
+/// <summary>
+/// Setup the fonts.
+/// </summary>
+void Game::initFonts()
+{
+	Defines defines = Defines();
+
+	// If the font failed to load
+	if (!this->font.loadFromFile(defines.fontFile))
+	{
+		std::cout << "Error, could not load font " << defines.fontFile << std::endl;
+	}
+}
+
+/// <summary>
+/// Setup the game text.
+/// </summary>
+void Game::initText()
+{
+	// Setup the font
+	this->scoreText.setFont(this->font);
+
+	// // Set the character size, fill color and default string
+	this->scoreText.setCharacterSize(24);
+	this->scoreText.setFillColor(sf::Color::White);
+	this->scoreText.setString("NONE");
+
+	// Setup the health text
+
+	// Setup the font
+	this->healthText.setFont(this->font);
+
+	// Set the Y to be lower then the scoreText, so it doesn't overlap.
+	this->healthText.setPosition(sf::Vector2f(0.0f, 30.0f));
+	
+	// Set the character size, fill color and default string
+	this->healthText.setCharacterSize(24);
+	this->healthText.setFillColor(sf::Color::White);
+	this->healthText.setString("NONE");
+
+	// Set the position
+	//this->uiText.setPosition();
+}
+
 // Constructors
 
 /// <summary>
@@ -154,6 +198,11 @@ Game::Game()
 {
 	this->initVariables();
 	this->initWindow();
+
+	// Setup fonts and text
+	this->initFonts();
+	this->initText();
+	
 	this->initEnemies();
 }
 
@@ -329,14 +378,27 @@ void Game::updateEnemies()
 }
 
 /// <summary>
+/// Render the text
+/// </summary>
+void Game::RenderText(sf::RenderTarget& target)
+{
+	// Draw the text
+	// Draw the score text
+	target.draw(this->scoreText);
+
+	target.draw(this->healthText);
+}
+
+
+/// <summary>
 /// Render the enemies
 /// </summary>
-void Game::renderEnemies()
+void Game::RenderEnemies(sf::RenderTarget& target)
 {
 	// Draw the enemies
 	for (auto& e : this->enemies)
 	{
-		this->window->draw(e);
+		target.draw(e);
 	}
 }
 
@@ -345,27 +407,6 @@ void Game::renderEnemies()
 /// </summary>
 void Game::renderScore()
 {
-
-}
-
-/// <summary>
-/// Test for showing text on the screen.
-/// TODO Fix this to work.
-/// </summary>
-void Game::renderText()
-{
-	Defines defines = Defines();
-
-	// https://www.sfml-dev.org/documentation/2.6.1/
-	sf::Font gameFont;
-	if (!gameFont.loadFromFile(defines.fontFile))
-	{
-		std::cout << "Error: the Game Fonts could not be loaded!" << std::endl;
-	}
-
-	sf::Text text("Hello SFML", gameFont, 50);
-	//text.setPosition(sf::Vector2f(40.0f, 40.0f));
-
 
 }
 
@@ -429,6 +470,21 @@ void Game::updateMousePositions()
 #endif //_SHOW_MOUSE_POS
 }
 
+/// <summary>
+/// Update the game text
+/// </summary>
+void Game::UpdateText()
+{
+	// This is kind of like cout, can add floats, ints and everything else to it.
+	std::stringstream points_ss;
+	std::stringstream health_ss;
+
+	points_ss << "Points: " << this->points;
+	health_ss << "Health: " << this->health;
+
+	this->scoreText.setString(points_ss.str());
+	this->healthText.setString(health_ss.str());
+}
 
 /// <summary>
 /// Updates the game events
@@ -441,6 +497,9 @@ void Game::Update()
 	if (!this->endGame)
 	{
 		this->updateMousePositions();
+
+		// Update the game text
+		this->UpdateText();
 
 		this->updateEnemies();
 	}
@@ -457,6 +516,8 @@ void Game::Update()
 
 	//std::cout << "Time elapsed: " << elapsed.asSeconds() << " seconds" << std::endl;
 }
+
+
 
 
 
@@ -480,7 +541,7 @@ void Game::Render()
 	// TODO Put a background in front of everything else, on the top of the screen.
 
 	//this->window->draw(this->enemy);
-	this->renderEnemies();
+	this->RenderEnemies(*this->window);
 
 
 	// Only run this for now if it is enabled
@@ -490,7 +551,8 @@ void Game::Render()
 		this->renderScore();
 
 		// Show test text on screen.
-		this->renderText();
+		//this->renderText();
+		this->RenderText(*this->window);
 	}
 
 

@@ -16,8 +16,8 @@
 // https://stackoverflow.com/questions/1552058/how-to-implement-precompiled-headers-into-your-project
 
 
-// Fonts and Text
-// https://www.youtube.com/watch?v=oDOgquwEf38&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=10
+// Enemy types & difficulties
+// https://www.youtube.com/watch?v=uaB3oK62T34&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=11
 // I got the linker and include files fixed for this in Debug and Release
 
 #ifdef _COMMAND_ARGS

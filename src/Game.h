@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <sstream>
 
 // Moved sfml into pch.h
 
@@ -45,6 +46,14 @@ private:
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 
+	// Resources
+	sf::Font font;
+
+	// Text
+	//sf::Text uiText;
+	sf::Text scoreText;
+	sf::Text healthText;
+
 	// Game logic
 	
 	// Check if the game has ended
@@ -76,8 +85,11 @@ private:
 	void initWindow();
 	void initEnemies();
 
+	void initFonts();
+	void initText();
+
 	void renderScore();
-	void renderText();
+	//void renderText();
 	
 	//void playEnemySfx();
 #ifdef _ENEMY_SOUNDS_TEST
@@ -104,7 +116,12 @@ public:
 
 	void Update();
 
-	void renderEnemies();
+	void UpdateText();
+
+	// Don't always have to render to the main window.
+	void RenderText(sf::RenderTarget& target);
+	void RenderEnemies(sf::RenderTarget& target);
+
 	void Render();
 };
 
