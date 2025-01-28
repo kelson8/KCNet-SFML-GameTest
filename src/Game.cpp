@@ -140,7 +140,6 @@ void Game::initWindow()
 	ImGui::SFML::Init(*this->window);
 #endif //_IMGUI_TEST
 
-
 	this->window->setFramerateLimit(defines.gameFramerate);
 }
 
@@ -429,11 +428,27 @@ void Game::PollEvents()
 
 			// Keys pressed
 		case sf::Event::KeyPressed:
-			// Close the window using escape.
-			if (this->event.key.code == sf::Keyboard::Escape)
-			{
+			
+
+			// Make this into a switch statement, this is cleaner then the method I was using.
+			switch (this->event.key.code) {
+			case sf::Keyboard::Escape:
+				// TODO Make this show a pause menu, or just freeze the game for now.
+				// Close the window using escape.
 				this->window->close();
+				break;
+
+			case sf::Keyboard::F1:
+				// TODO Make this show and hide ImGui once I set it up.
+				// I'm going to use ImGui for making debug menus once I progress further into making games.
+				break;
+
+			
+			case sf::Keyboard::F11:
+				// TODO Make this put the game into fullscreen
+				break;
 			}
+			
 			break;
 		}
 	}

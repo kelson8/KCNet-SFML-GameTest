@@ -51,6 +51,12 @@ The dlls are also in a folder named DLL's in the root of the project, those can 
 ### Info
 So far this doesn't do anything besides display some text to the console. I am going to try to make this into a basic Asteroids clone or something from scratch.
 
+# Libraries
+I have a list of libraries that this project uses in the Libraries.md file.
+This file contains a list of all libraries that I may use for this project 
+in the future and the ones that are currently in use.
+
+
 # License
 This project is licensed under the MIT license.
 
