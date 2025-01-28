@@ -231,6 +231,15 @@ const bool Game::getEndGame() const
 	return this->endGame;
 }
 
+/// <summary>
+/// Get the game pause status
+/// </summary>
+/// <returns>If the game is paused or playing.</returns>
+const bool Game::getPaused() const
+{
+	return this->isPaused;
+}
+
 // Functions
 
 /// <summary>
@@ -433,9 +442,15 @@ void Game::PollEvents()
 			// Make this into a switch statement, this is cleaner then the method I was using.
 			switch (this->event.key.code) {
 			case sf::Keyboard::Escape:
-				// TODO Make this show a pause menu, or just freeze the game for now.
+				// TODO Make this show a pause menu.
+				
+				// Original:
 				// Close the window using escape.
-				this->window->close();
+				//this->window->close();
+
+				// This works!!
+				// Add a basic pause function, this just freezes the game until it's unpaused.
+				this->isPaused = !this->isPaused;
 				break;
 
 			case sf::Keyboard::F1:
@@ -508,8 +523,11 @@ void Game::Update()
 {
 	this->PollEvents();
 
-	// If the game hasn't ended, let everything update.
-	if (!this->endGame)
+	// If the game hasn't ended and isn't paused, let everything update
+	// I got the idea for pausing the game from here.
+	// https://en.sfml-dev.org/forums/index.php?topic=28906.0
+
+	if (!this->endGame && !this->getPaused())
 	{
 		this->updateMousePositions();
 

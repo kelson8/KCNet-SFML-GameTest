@@ -55,6 +55,9 @@ private:
 	sf::Text healthText;
 
 	// Game logic
+
+	// Check if the game is paused
+	bool isPaused;
 	
 	// Check if the game has ended
 	bool endGame;
@@ -104,6 +107,7 @@ public:
 	// Accessors
 	const bool running() const;
 	const bool getEndGame() const;
+	const bool getPaused() const;
 
 	// Functions
 	void spawnEnemy();
