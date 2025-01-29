@@ -8,6 +8,19 @@
 // I have also added the player default health in here.
 // TODO Move that somewhere else sometime
 
+// Toggles
+ 
+// For now, I'm just attempting to move the mouse updating into MouseUtil.cpp
+// It just makes the screen flicker non-stop though.
+//#define _MOVE_MOUSE_UTIL
+
+
+// Test moving enemy code into Enemy.cpp
+//#define _MOVE_ENEMY_FILE
+
+// Test moving window functions into WindowManager.cpp
+//#define _MOVE_WINDOW_FILE
+
 class Defines {
 public:
 
@@ -26,7 +39,7 @@ public:
 	// Music
 	//const std::string musicSound = "resources/sounds/music/dreams.wav";
 	// Turn the music on/off
-	bool musicEnabled = false;
+	bool musicEnabled = true;
 	const std::string musicSound = "resources/sounds/music/space_dungeon_bpm100.ogg";
 	float musicVolume = 50.0f;
 

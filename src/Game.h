@@ -43,6 +43,7 @@ private:
 	//sf::Text text;
 
 	// Mouse positions
+
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 
@@ -53,6 +54,7 @@ private:
 	//sf::Text uiText;
 	sf::Text scoreText;
 	sf::Text healthText;
+	sf::Text endScreenText;
 
 	// Game logic
 
@@ -62,37 +64,53 @@ private:
 	// Check if the game has ended
 	bool endGame;
 
+	// Check if the end screen is being shown
+	bool endScreen;
+
 	// Player
 	// Positive values only
 	unsigned points;
 	int lives;
 	int health;
+	int default_lives;
 
 	// Enemy
+#ifndef _MOVE_ENEMY_FILE
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 	int maxEnemies;
 	float enemySpeed; // The speed of the enemy
+#endif //!_MOVE_ENEMY_FILE
 
 	bool mouseHeld; // Check if the mouse is held down.
 
 	// Game objects
 	// TODO Switch to sprites
 	//sf::Sprite
+#ifndef _MOVE_ENEMY_FILE
 	std::vector<sf::RectangleShape> enemies;
 	sf::RectangleShape enemy;
+#endif //!_MOVE_ENEMY_FILE
 
 	// Private functions
 	void initVariables();
 	void initBackground();
 	void initWindow();
-	void initEnemies();
 
+#ifndef _MOVE_ENEMY_FILE
+	void initEnemies();
+#endif //!_MOVE_ENEMY_FILE
+
+	// TODO Move into TextFunctions.cpp
 	void initFonts();
 	void initText();
 
 	void renderScore();
+	// Show the end screen.
+	void renderEndScreen();
 	//void renderText();
+
+	void resetGame();
 	
 	//void playEnemySfx();
 #ifdef _ENEMY_SOUNDS_TEST
@@ -108,24 +126,41 @@ public:
 	const bool running() const;
 	const bool getEndGame() const;
 	const bool getPaused() const;
+	const bool getEndScreen() const;
+
+	// TODO Figure out if I got this right.
+	const sf::RenderWindow* getWindow() const;
 
 	// Functions
+#ifndef _MOVE_ENEMY_FILE
 	void spawnEnemy();
+#endif //!_MOVE_ENEMY_FILE
 
 	// Music functions, moved into MusicUtil
 
 	void PollEvents();
 	void updateMousePositions();
+
+#ifndef _MOVE_ENEMY_FILE
 	void updateEnemies();
+#endif //!_MOVE_ENEMY_FILE
 
 	void Update();
 
+	// TODO Move into TextFunctions.cpp
 	void UpdateText();
 
 	// Don't always have to render to the main window.
 	void RenderText(sf::RenderTarget& target);
+
+#ifndef _MOVE_ENEMY_FILE
 	void RenderEnemies(sf::RenderTarget& target);
+#endif //!_MOVE_ENEMY_FILE
 
 	void Render();
+
+	// Health test
+	void setHealth(int newHealth);
+	const int getHealth() const;
 };
 
