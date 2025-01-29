@@ -4,13 +4,13 @@
 #include "Game.h"
 #include "util/MusicUtil.h"
 
+#include "WindowManager.h"
+
 // Enable command arguments test for this program.
 #define _COMMAND_ARGS
 
 // ImGui test from here added into game.cpp, it doesn't work yet:
 // https://youtu.be/2YS5WJTeKpI
-
-
 
 // TODO Fix this project to use pre compiled headers
 // https://stackoverflow.com/questions/1552058/how-to-implement-precompiled-headers-into-your-project
@@ -63,6 +63,9 @@ int main()
 
 	// Init Game engine
 	Game game;
+#ifdef _MOVE_WINDOW_FILE
+	WindowManager windowManager = WindowManager();
+#endif //_MOVE_WINDOW_FILE
 
 	// Timer test
 	//sf::Clock timer;
@@ -83,7 +86,11 @@ int main()
 
 	// Game loop
 	// Check if game is running and is not ended.
+#ifdef _MOVE_WINDOW_FILE
+	while (windowManager.running() && !game.getEndGame())
+#else
 	while (game.running() && !game.getEndGame())
+#endif //_MOVE_WINDOW_FILE
 	{
 		// Update
 		game.Update();
