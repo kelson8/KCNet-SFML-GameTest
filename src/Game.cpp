@@ -77,7 +77,7 @@ void Game::initVariables()
 	}
 	else 
 	{
-		this->enemySpawnTimerMax = 10.0f;
+		this->enemySpawnTimerMax = 20.0f;
 	}
 	
 	
@@ -86,7 +86,7 @@ void Game::initVariables()
 
 	//
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
-	this->maxEnemies = 20.0f;
+	this->maxEnemies = 10.0f;
 	
 	// Set the enemy speed
 	if (fastEnemiesFall)
@@ -162,6 +162,7 @@ void Game::initWindow()
 #endif //_IMGUI_TEST
 
 	this->window->setFramerateLimit(defines.gameFramerate);
+	this->window->setVerticalSyncEnabled(defines.vsyncEnabled);
 }
 #endif //!_MOVE_WINDOW_FILE
 
@@ -365,7 +366,26 @@ sf::SoundBuffer* Game::playEnemySfx()
 }
 #endif //_ENEMY_SOUNDS_TEST
 
+/// <summary>
+/// Clear the enemies if the game ends or something.
+/// </summary>
+void Game::resetEnemies()
+{
+	bool deleted = false;
 
+	// If !deleted
+	//for (size_t i = 0; i < this->enemies.size() && !deleted; i++)
+	for (size_t i = 0; i < this->enemies.size() && deleted == false; i++)
+	{
+		// Delete the enemy
+		// Setting deleted to true cancels the loop.
+		deleted = true;
+		// TODO Test this.
+		this->enemies.clear();
+		// this->enemies.erase(this->enemies.);
+
+	}
+}
 
 /// <summary>
 ///  Update the enemy spawn timer and spawns enemies.
@@ -509,6 +529,8 @@ void Game::renderScore()
 
 /// <summary>
 /// Reset the game state to default
+/// TODO Figure out how to make this set the enemies back at the top of the screen.
+/// Currently they stay where they were when the game ends, makes it impossible to play.
 /// </summary>
 void Game::resetGame()
 {
@@ -517,6 +539,9 @@ void Game::resetGame()
 	this->points = 0;
 	this->endScreen = false;
 	this->endGame = false;
+
+	// Clear the enemies
+	this->resetEnemies();
 	
 	// TODO Move these into Enemy.cpp
 	if (fastEnemies)
@@ -549,6 +574,8 @@ void Game::resetGame()
 
 	// Set health
 	this->health = defines.playerHealth;
+
+	// Init the enemies
 }
 
 /// <summary>

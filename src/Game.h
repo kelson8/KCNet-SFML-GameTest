@@ -155,6 +155,9 @@ public:
 
 #ifndef _MOVE_ENEMY_FILE
 	void RenderEnemies(sf::RenderTarget& target);
+
+	// Reset the enemy positions, used for when I reset the game.
+	void resetEnemies();
 #endif //!_MOVE_ENEMY_FILE
 
 	void Render();

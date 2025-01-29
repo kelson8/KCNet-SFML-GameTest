@@ -73,6 +73,7 @@ public:
 
 	// The frame rate can be changed here if needed.
 	unsigned int gameFramerate = 60;
+	bool vsyncEnabled = true;
 
 	// Screen size
 	const int screenWidth = 800;
