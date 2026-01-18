@@ -27,18 +27,16 @@ Game::Game() :
 {
 	this->initVariables();
 
-	// Only allow one instance of the window, this should work.
-	// TODO Fix this, it opens more windows if I use the setEndScreen or setEndGame functions in WindowManager.
+	// Setup fonts and text
+	this->initFonts();
+	this->initText();
+
+	// Only allow one instance of the window, this works now.
 	if (!windowInitialized)
 	{
 		this->windowManager.initWindow(1920, 1080, "Game Title");
 		windowInitialized = true;
 	}
-	
-
-	// Setup fonts and text
-	this->initFonts();
-	this->initText();
 
 	//this->initEnemies();
 }
@@ -168,7 +166,7 @@ void Game::renderEndScreen()
 	this->endScreenText.setString("Your score was ... \nPress enter to play again");
 
 	// Draw the text to the window.
-	//window->draw(endScreenText);
+	windowManager.getWindow().draw(endScreenText);
 
 }
 

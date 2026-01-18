@@ -29,7 +29,7 @@ int main()
     std::srand(static_cast<unsigned>(time(NULL)));
 
     // Init Game engine
-    Game game;
+    Game& game = Game::getInstance();
 
     // Game loop
     // Check if game is running and is not ended.

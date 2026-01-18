@@ -45,13 +45,16 @@ void WindowManager::pollEvents() {
                 close();
             }
 
-            if (keyPressed->scancode == sf::Keyboard::Scancode::A)
+            else if (keyPressed->scancode == sf::Keyboard::Scancode::A)
             {
-                // Well this just open another window and don't do anything else.
-                Game::getInstance().setEndGame(true);
                 Game::getInstance().setEndScreen(true);
-                //game->setEndGame(true);
-                //game->setEndScreen(true);
+                std::cout << "Game end screen set with 'A' key" << std::endl;
+            }
+
+            else if (keyPressed->scancode == sf::Keyboard::Scancode::B)
+            {
+                Game::getInstance().setEndGame(true);
+                std::cout << "Game ended with 'B' key" << std::endl;
             }
         }
     }

@@ -17,11 +17,6 @@ public:
 		return instance;
 	}
 
-
-	// Constructors / Destructors
-	Game();
-	~Game();
-
 	void Render();
 
 	void Update();
@@ -38,6 +33,10 @@ public:
 	void setEndScreen(bool newEndScreen);
 
 private:
+	// Constructors / Destructors
+	Game();
+	~Game();
+
 	WindowManager windowManager; // Use WindowManager
 
 	// Private variables
