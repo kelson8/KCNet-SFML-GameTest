@@ -2,7 +2,11 @@ include(FetchContent)
 
 set(IMGUI_VERSION 1.91.1)
 
+#-------------
 # SFML
+# TODO Move into here, and out of root CMake.
+#-------------
+
 # FetchContent_Declare(
   # sfml
   # URL https://github.com/SFML/SFML/archive/refs/tags/2.5.1.zip
@@ -10,25 +14,23 @@ set(IMGUI_VERSION 1.91.1)
 # )
 # add_subdirectory(sfml)
 
-#---------
+#-------------
+# Fmt
+#-------------
+
+FetchContent_Declare(fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG        12.1.0
+  GIT_PROGRESS   TRUE
+  GIT_SHALLOW    TRUE
+)
+
+FetchContent_MakeAvailable(fmt)
+
+#-------------
 # ImGui
-#---------
+#-------------
 
-# Dear ImGui
-# FetchContent_Declare(
-  # imgui
-  # GIT_REPOSITORY https://github.com/ocornut/imgui
-  # GIT_TAG 35b1148efb839381b84de9290d9caf0b66ad7d03 # 1.82
-# )
-
-# FetchContent_MakeAvailable(imgui)
-
-# ImGui-SFML
-# FetchContent_Declare(
-  # imgui-sfml
-  # GIT_REPOSITORY https://github.com/SFML/imgui-sfml
-  # GIT_TAG 82dc2033e51b8323857c3ae1cf1f458b3a933c35 # 2.3
-# )
 
 FetchContent_Declare(imgui
   URL "https://github.com/ocornut/imgui/archive/v${IMGUI_VERSION}.zip"

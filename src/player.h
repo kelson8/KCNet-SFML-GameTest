@@ -29,6 +29,7 @@ public:
 	const float GetMoveSpeed() const;
 	void SetMoveSpeed(float speed);
 
+	const bool IsInBounds();
 
 private:
 	// Constructors / Destructors

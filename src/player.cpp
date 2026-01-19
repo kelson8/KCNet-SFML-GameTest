@@ -91,12 +91,13 @@ void Player::SetPosition(float x, float y)
  * @param x The X pos to move towards.
  * @param y The Y pos to move towards.
  * 
- * TODO Make this to where the player cannot go off of the screen.
+ * TODO Make this to where it doesn't always place the player back
+ *  in the center of the screen.
  */
 void Player::Move(float x, float y)
 {
 
-	// TODO Move elsewhere, putting here for testing
+	// TODO Move elsewhere
 	WindowManager& windowManager = WindowManager::getInstance();
 
 	// Get the size of the player shape
@@ -106,20 +107,18 @@ void Player::Move(float x, float y)
 	// Calculate the center position
 	float centerX = (windowSize.x - playerSize.x) / 2;
 	float centerY = (windowSize.y - playerSize.y) / 2;
+
 	//
 
-	if (this->GetPosition().x > windowSize.x && this->GetPosition().y > windowSize.y)
-	//	this->GetPosition().x < windowSize.x && this->GetPosition().y < windowSize.y)
+
+	// This works for bounds checking!!
+	// I had to change this to set the position, not the X and Y values.
+	if (!this->IsInBounds())
 	{
-		x = centerX;
-		y = centerY;
-		//x = x - 5;
-		//y = y - 5;
+		this->SetPosition(centerX, centerY);
 	}
 
 	this->player.move(sf::Vector2f(x, y));
-
-	
 }
 
 /**
@@ -138,4 +137,36 @@ const float Player::GetMoveSpeed() const
 void Player::SetMoveSpeed(float speed)
 {
 	this->moveSpeed = speed;
+}
+
+/**
+ * @brief Check if the player is in the bounds of the map
+ * 
+ * TODO Re-use this for the enemies also, possibly make into shared code somewhere if possible.
+ * @return If the player is in the map bounds.
+ */
+const bool Player::IsInBounds()
+{
+	WindowManager& windowManager = WindowManager::getInstance();
+
+	float playerPosX = GetPosition().x;
+	float playerPosY = GetPosition().y;
+
+	float screenSizeX = windowManager.getWindow().getSize().x;
+	float screenSizeY = windowManager.getWindow().getSize().y;
+
+	// This is the amount of space above the screen for the X and Y, otherwise it won't count as being out of bounds until
+	//  the player leaves the map a bit.
+	int maxBounds = 50;
+
+	if (
+		playerPosX > screenSizeX - maxBounds ||
+		playerPosY > screenSizeY - maxBounds ||
+		playerPosX < -5 ||
+		playerPosY < -5)
+	{
+		return false;
+	}
+
+	return true;
 }

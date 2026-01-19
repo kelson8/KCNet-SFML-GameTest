@@ -64,6 +64,7 @@ add_executable(main
 target_link_libraries(main PRIVATE 
 	# SFML::Graphics
 	ImGui-SFML::ImGui-SFML
+	fmt::fmt
 	)
 	
 # include_directories(src)
