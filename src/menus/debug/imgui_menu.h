@@ -22,8 +22,19 @@ private:
 	ImGuiMenu();
 	~ImGuiMenu();
 
+	void SetRandomScreenPos();
+
 	bool showDemoWindow;
 	bool showImGuiWindow;
+
+	// Toggle the random screen size display
+	bool showRandomScreenSize;
+
+	// Random X position from the window.
+	float randomScreenPosX;
+
+	// Random Y position from the window.
+	float randomScreenPosY;
 
 
 #endif // _IMGUI_TEST

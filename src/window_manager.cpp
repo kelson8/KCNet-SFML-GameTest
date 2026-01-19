@@ -15,6 +15,8 @@
 
 #include "player.h"
 
+#include "util/random_number_generator.h"
+
 
 // Using this for getters and setters
 // https://www.geeksforgeeks.org/cpp/write-getter-and-setter-methods-in-cpp/
@@ -155,15 +157,50 @@ void WindowManager::pollEvents()
     }
 }
 
+/**
+ * @brief Check if the window is open
+ * @return If the window is open
+ */
 bool WindowManager::isOpen() const {
     return window && window->isOpen();
 }
 
+/**
+ * @brief Close the window
+ */
 void WindowManager::close() {
     if (window)
         window->close();
 }
 
+/**
+ * @brief Get the current window
+ * @return A reference to the window.
+ */
 sf::RenderWindow& WindowManager::getWindow() {
-    return *window; // Return a reference to the window
+    return *window;
+}
+
+/**
+ * @brief Get a random X position from the max screen width.
+ * @return 
+ */
+float WindowManager::GetRandomScreenX()
+{
+    RandomNumberGenerator& randomNumberGenerator = RandomNumberGenerator::getInstance();
+
+    // TODO Make this into float? It is an int but it should be fine.
+    return randomNumberGenerator.GenerateRandomNumber(0, window->getSize().x);
+}
+
+/**
+ * @brief Get a random Y position from the max screen height.
+ * @return
+ */
+float WindowManager::GetRandomScreenY()
+{
+    RandomNumberGenerator& randomNumberGenerator = RandomNumberGenerator::getInstance();
+
+    // TODO Make this into float? It is an int but it should be fine.
+    return randomNumberGenerator.GenerateRandomNumber(0, window->getSize().y);
 }

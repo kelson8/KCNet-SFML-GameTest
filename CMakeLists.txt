@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.28)
 project(CMakeSFMLProject LANGUAGES CXX)
 set(PROJECT_NAME "CMakeSFMLProject")
 
-file(GLOB SOURCES "src/*.cpp" "src/menus/debug/*.cpp")
-file(GLOB HEADERS "src/*.h" "src/menus/debug/*.h")
+file(GLOB SOURCES "src/*.cpp" "src/util/*.cpp" "src/menus/debug/*.cpp")
+file(GLOB HEADERS "src/*.h" "src/util/*.h" "src/menus/debug/*.h")
 
 # set(SOURCES
 	# src/main.cpp 

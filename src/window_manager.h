@@ -22,6 +22,10 @@ public:
     //sf::RenderWindow* getWindow(); // To access the window
     sf::RenderWindow& getWindow(); // To access the window
 
+    float GetRandomScreenX();
+    float GetRandomScreenY();
+
+
 private:
     WindowManager();
     ~WindowManager();

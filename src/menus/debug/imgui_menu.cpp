@@ -14,11 +14,26 @@ ImGuiMenu::ImGuiMenu()
 {
 	showDemoWindow = false;
 	showImGuiWindow = false;
+
+	showRandomScreenSize = false;
+
+	randomScreenPosX = 0;
+	randomScreenPosY = 0;
 }
 
 ImGuiMenu::~ImGuiMenu()
 {
 
+}
+
+/**
+ * @brief Set a random screen position for the random screen position generator in the menu.
+ */
+void ImGuiMenu::SetRandomScreenPos()
+{
+	WindowManager& windowManager = WindowManager::getInstance();
+	randomScreenPosX = windowManager.GetRandomScreenX();
+	randomScreenPosY = windowManager.GetRandomScreenY();
 }
 
 /**
@@ -40,6 +55,9 @@ void ImGuiMenu::SetStatus(bool toggle)
 	this->showImGuiWindow = toggle;
 }
 
+/**
+ * @brief Draw the ImGui window.
+ */
 void ImGuiMenu::Draw()
 {
 	//----
@@ -92,12 +110,33 @@ void ImGuiMenu::Draw()
 		ImGui::Text("Screen Size: ");
 		ImGui::Text(fmt::format("X: {}", screenSizeX).c_str());
 		ImGui::Text(fmt::format("Y: {}", screenSizeY).c_str());
+
+
+		ImGui::Separator();
+
+		// Random screen sizes
+		ImGui::Text("Random screen size testing");
+
+		// Update the random screen size variables
+		if (ImGui::Button("Update Random Screen Size"))
+		{
+			this->SetRandomScreenPos();
+		}
+
+		ImGui::Checkbox("Display random screen size", &showRandomScreenSize);
+
+		// I fixed this by making a randomScreenPosX and Y variable, and updating it on a button press.
+		// This random screen size could be useful for random player or enemy spawns if I fine tune it.
+		if(showRandomScreenSize)
+		{
+			ImGui::Text(fmt::format("X: {}", randomScreenPosX).c_str());
+			ImGui::Text(fmt::format("Y: {}", randomScreenPosY).c_str());
+		}
 	}
 
-
-
-	//ImGui::Button("Look at this pretty button");
 	ImGui::End();
 }
+
+
 
 #endif // _IMGUI_TEST
