@@ -1,26 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(CMakeSFMLProject LANGUAGES CXX)
-set(PROJECT_NAME "CMakeSFMLProject")
+set(PROJECT_NAME "KCNet-SFML-GameTest")
 
 file(GLOB SOURCES "src/*.cpp" "src/util/*.cpp" "src/menus/debug/*.cpp")
 file(GLOB HEADERS "src/*.h" "src/util/*.h" "src/menus/debug/*.h")
-
-# set(SOURCES
-	# src/main.cpp 
-	# src/game.cpp
-	# src/window_manager.cpp
-	# src/player.cpp
-	# src/menus/debug/imgui_menu.cpp
-	
-# )
-
-# set(HEADERS
-	# src/game.h
-	# src/window_manager.h
-	# src/player.h
-	# src/menus/debug/imgui_menu.h
-# )
 
 # 
 # https://github.com/eliasdaler/imgui-sfml-fetchcontent/blob/master/dependencies/CMakeLists.txt
@@ -56,23 +40,46 @@ add_subdirectory(dependencies)
 # Main program
 #---------
 
-add_executable(main
+add_executable(${PROJECT_NAME}
 	${SOURCES}
 	${HEADERS}
 	)
-# target_compile_features(main PRIVATE cxx_std_17)
-target_link_libraries(main PRIVATE 
+
+# Setup precompiled headers
+target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.h)
+
+# Setup the libraries to link with.
+target_link_libraries(${PROJECT_NAME} PRIVATE 
 	SFML::Graphics
 	SFML::Audio
+	SFML::System
 	ImGui-SFML::ImGui-SFML
 	fmt::fmt
 	)
 	
-# include_directories(src)
-	
-# This probably isn't required, I forgot to re-add the ImGui SFML library
-target_include_directories(main PRIVATE
+# Include directories for the project, I prefer to use util/ or menus/ for other folders.
+# So just the src and ImGui include directories are in here
+target_include_directories(${PROJECT_NAME} PRIVATE
 	src/
 	${imgui-sfml_SOURCE_DIR}/include)
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
+# Set the Visual Studio startup project to be main.
+#set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+
+#------
+# Copy files to build
+#------
+
+# Copy the fonts to the build folder
+# https://discourse.cmake.org/t/copying-files-with-destination-folder-depending-on-build-config/10686
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/fonts/"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/fonts")
+
+# Copy the resources, such as music to the build folder.
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/resources/"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")
