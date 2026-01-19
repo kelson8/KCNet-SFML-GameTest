@@ -16,6 +16,9 @@
 // Toggle the game.cpp/game.h files
 #define GAME_TEST
 
+// Toggle the enemies rendering and updating here
+#define ENEMIES_ENABLED
+
 class Defines {
 public:
 
@@ -38,8 +41,6 @@ public:
 	const std::string musicSound = "resources/sounds/music/space_dungeon_bpm100.ogg";
 	float musicVolume = 50.0f;
 
-
-
 	// Sound effects
 	// TODO Implement the sound effects.
 	// Enable/disable sound effects
@@ -49,7 +50,6 @@ public:
 
 	// TODO Setup fonts
 	const std::string fontFile = "fonts/font.TTF";
-
 
 	// TODO Setup assets
 	// Ships

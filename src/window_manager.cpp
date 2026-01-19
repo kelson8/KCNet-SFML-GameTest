@@ -57,8 +57,6 @@ void WindowManager::initWindow(unsigned int width, unsigned int height, const st
     //window = new sf::RenderWindow(sf::VideoMode({ 1920u, 1080u }), title, sf::Style::Titlebar | sf::Style::Close);
     window = new sf::RenderWindow(sf::VideoMode({ defines.screenWidth, defines.screenHeight }), title, sf::Style::Titlebar | sf::Style::Close);
 
-
-
     this->window->setFramerateLimit(defines.gameFramerate);
     this->window->setVerticalSyncEnabled(defines.vsyncEnabled);
 

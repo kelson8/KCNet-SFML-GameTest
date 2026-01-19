@@ -9,6 +9,8 @@
 #include "menus/debug/imgui_menu.h"
 #endif // _IMGUI_TEST
 
+#include "enemy.h"
+
 // Copied values out of KCNet-SFML-GameTest
 
 #ifdef GAME_TEST
@@ -173,11 +175,13 @@ void Game::initFonts()
 void Game::initWindow()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
+
+	Defines defines = Defines();
+
 	// Only allow one instance of the window, this works now.
 	if (!windowInitialized)
 	{
-		//this->windowManager.initWindow(1920, 1080, "Game Title");
-		windowManager.initWindow(1920, 1080, "Game Title");
+		windowManager.initWindow(defines.screenHeight, defines.screenWidth, defines.windowTitle);
 		windowInitialized = true;
 	}
 }
@@ -357,8 +361,7 @@ void Game::setEndScreen(bool newEndScreen)
 void Game::Update()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
-	//MouseUtil mouseUtil = MouseUtil();
-	//Enemy enemy = Enemy();
+	Enemy& enemy = Enemy::getInstance();
 
 	windowManager.pollEvents(); // Poll events regularly
 
@@ -374,25 +377,13 @@ void Game::Update()
 	// I got the idea for pausing the game from here.
 	// https://en.sfml-dev.org/forums/index.php?topic=28906.0
 
-	//if (!this->endGame && !this->getPaused() && !this->getEndScreen())
-	//{
-	//	this->updateMousePositions();
-
 	// Update the texts on screen
 	this->UpdateText();
 
-	//	//this->updateEnemies();
-	//}
-
-	// Show the end screen if the health goes below 0
-	//if (this->health <= 0)
-	//{
-	//	// This can close the window.
-	//	//this->endGame = true;
-	//	this->endScreen = true;
-	//}
-
-
+	// Have the enemies display on screen
+#ifdef ENEMIES_ENABLED
+	enemy.Update();
+#endif ENEMIES_ENABLED
 
 	//sf::Time elapsed = clock.getElapsedTime();
 
@@ -409,6 +400,7 @@ void Game::Update()
 void Game::Render()
 {
 	Player& player = Player::getInstance();
+	Enemy& enemy = Enemy::getInstance();
 	WindowManager& windowManager = WindowManager::getInstance();
 
 #ifdef _IMGUI_TEST
@@ -443,6 +435,10 @@ void Game::Render()
 		}
 
 		//this->RenderEnemies(*this->window);
+
+#ifdef ENEMIES_ENABLED
+		enemy.Render(windowManager.getWindow());
+#endif // ENEMIES_ENABLED
 
 		// Only run this for now if it is enabled
 		//if (renderTestItems)

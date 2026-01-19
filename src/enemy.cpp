@@ -25,6 +25,15 @@ Enemy::~Enemy()
  */
 void Enemy::Init()
 {
+	// Set the position, size, and scale.
+	this->enemy.setPosition(sf::Vector2f(10.0f, 10.0f));
+	this->enemy.setSize(sf::Vector2f(100.0f, 100.0f));
+	this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
+
+	// Set the fill color, outline color and outline thickness.
+	this->enemyColor = sf::Color::Cyan;
+	this->enemy.setFillColor(enemyColor);
+
 	// Set the enemies to be fast
 	if (fastEnemies)
 	{
@@ -70,7 +79,7 @@ void Enemy::Spawn()
 		//static_cast<float> (rand() % static_cast<int>(this->window->getSize().y - this->enemy.getSize().y))
 	);
 
-	this->enemy.setFillColor(sf::Color::Green);
+	this->enemy.setFillColor(enemyColor);
 
 	// Spawn the enemy
 	this->enemies.push_back(this->enemy);
@@ -103,6 +112,11 @@ sf::SoundBuffer* Game::playEnemySfx()
 
 /**
  * @brief Clear the enemies if the game ends or something.
+ * 
+ * TODO Set this up somewhere, I never did have it setup in my other game test.
+ * 
+ * This seems to work in my ImGui menu, I wonder if I can use it to setup rounds?
+ * Like reset and make the enemies go faster or something.
  */
 void Enemy::Reset()
 {
@@ -119,6 +133,19 @@ void Enemy::Reset()
 		this->enemies.clear();
 		// this->enemies.erase(this->enemies.);
 
+	}
+}
+
+/**
+ * @brief Render the enemies.
+ * @param target The target window to render to.
+ */
+void Enemy::Render(sf::RenderTarget& target)
+{
+	// Draw the enemies
+	for (auto& e : this->enemies)
+	{
+		target.draw(e);
 	}
 }
 
@@ -171,6 +198,9 @@ void Enemy::Update()
 			this->enemies.erase(this->enemies.begin() + i);
 
 			// Setting the player health? Although why, this must've been for something else.
+			// Oh I remember why, if the enemies went off the screen it took the players health down.
+			// Hmm...
+			// TODO Change this to make the players lives go down if the enemy touches the player.
 			//this->health -= 1;
 			//std::cout << "Health: " << this->health << std::endl;
 		}

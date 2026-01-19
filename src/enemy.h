@@ -15,6 +15,7 @@ public:
 	void Init();
 	void Spawn();
 	void Reset();
+	void Render(sf::RenderTarget& target);
 	void Update();
 
 private:
@@ -36,5 +37,8 @@ private:
 
 	// Make the enemies go down faster.
 	bool fastEnemiesFall;
+
+	// Set the enemy color
+	sf::Color enemyColor;
 };
 

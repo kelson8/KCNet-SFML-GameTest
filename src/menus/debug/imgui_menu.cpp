@@ -9,6 +9,8 @@
 #include "window_manager.h"
 #include "game.h"
 
+#include "enemy.h"
+
 #include <fmt/core.h>
 
 namespace ImGuiDebug 
@@ -80,6 +82,7 @@ void ImGuiMenu::Draw()
 	Player& player = Player::getInstance();
 	Entity& entity = Entity::getInstance();
 	Game& game = Game::getInstance();
+	Enemy& enemy = Enemy::getInstance();
 
 	float playerPosX = player.GetPosition().x;
 	float playerPosY = player.GetPosition().y;
@@ -101,6 +104,8 @@ void ImGuiMenu::Draw()
 
 	ImGui::Begin("Game Debugger");
 
+	//----
+	// Player
 	if(ImGui::CollapsingHeader("Player info"))
 	{
 		ImGui::Text(fmt::format("Position:").c_str());
@@ -140,6 +145,23 @@ void ImGuiMenu::Draw()
 			{
 				game.SetLivesTextPos(ImGuiDebug::livesPosX, ImGuiDebug::livesPosY);
 			}
+		}
+	}
+
+	//------
+	// Enemy
+	//------
+
+	if (ImGui::CollapsingHeader("Enemy Info"))
+	{
+		if (ImGui::Button("Reset Enemies"))
+		{
+			enemy.Reset();
+		}
+
+		if (ImGui::Button("Spawn Enemies"))
+		{
+			enemy.Spawn();
 		}
 	}
 
