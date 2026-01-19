@@ -66,6 +66,10 @@ private:
 	sf::Text healthText;
 	sf::Text endScreenText;
 
+	// New variables
+	sf::Clock deltaClock;
+	//
+
 	// Game logic
 
 	// Check if the window has been initialized

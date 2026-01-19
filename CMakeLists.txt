@@ -3,18 +3,24 @@ cmake_minimum_required(VERSION 3.28)
 project(CMakeSFMLProject LANGUAGES CXX)
 set(PROJECT_NAME "CMakeSFMLProject")
 
-set(SOURCES
-	src/main.cpp 
-	src/game.cpp
-	src/window_manager.cpp
-	src/player.cpp
-)
+file(GLOB SOURCES "src/*.cpp" "src/menus/debug/*.cpp")
+file(GLOB HEADERS "src/*.h" "src/menus/debug/*.h")
 
-set(HEADERS
-	src/game.h
-	src/window_manager.h
-	src/player.h
-)
+# set(SOURCES
+	# src/main.cpp 
+	# src/game.cpp
+	# src/window_manager.cpp
+	# src/player.cpp
+	# src/menus/debug/imgui_menu.cpp
+	
+# )
+
+# set(HEADERS
+	# src/game.h
+	# src/window_manager.h
+	# src/player.h
+	# src/menus/debug/imgui_menu.h
+# )
 
 # 
 # https://github.com/eliasdaler/imgui-sfml-fetchcontent/blob/master/dependencies/CMakeLists.txt

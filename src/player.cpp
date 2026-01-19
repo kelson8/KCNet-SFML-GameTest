@@ -17,7 +17,8 @@ Player::Player()
 	playerHealth = 100;
 	playerLives = 3;
 
-	moveSpeed = 10.0f;
+	//moveSpeed = 10.0f;
+	moveSpeed = 30.0f;
 
 	playerJumpStatus = false;
 	
@@ -94,7 +95,31 @@ void Player::SetPosition(float x, float y)
  */
 void Player::Move(float x, float y)
 {
+
+	// TODO Move elsewhere, putting here for testing
+	WindowManager& windowManager = WindowManager::getInstance();
+
+	// Get the size of the player shape
+	sf::Vector2f playerSize = this->player.getSize();
+	sf::Vector2u windowSize = windowManager.getWindow().getSize();
+
+	// Calculate the center position
+	float centerX = (windowSize.x - playerSize.x) / 2;
+	float centerY = (windowSize.y - playerSize.y) / 2;
+	//
+
+	if (this->GetPosition().x > windowSize.x && this->GetPosition().y > windowSize.y)
+	//	this->GetPosition().x < windowSize.x && this->GetPosition().y < windowSize.y)
+	{
+		x = centerX;
+		y = centerY;
+		//x = x - 5;
+		//y = y - 5;
+	}
+
 	this->player.move(sf::Vector2f(x, y));
+
+	
 }
 
 /**

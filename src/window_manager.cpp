@@ -1,12 +1,11 @@
 #include "window_manager.h"
 
 
-//#define _IMGUI_TEST
+#include "defines.h"
 
 #ifdef _IMGUI_TEST
 #include <imgui-SFML.h>
 #include <imgui.h>
-//#include <imgui>
 #endif // _IMGUI_TEST
 
 #include "defines.h"
@@ -40,24 +39,30 @@ WindowManager::~WindowManager()
 }
 
 void WindowManager::initWindow(unsigned int width, unsigned int height, const std::string& title) {
-
     Defines defines = Defines();
     //window = new sf::RenderWindow(sf::VideoMode({ 1920u, 1080u }), title, sf::Style::Titlebar | sf::Style::Close);
     window = new sf::RenderWindow(sf::VideoMode({ defines.screenWidth, defines.screenHeight }), title, sf::Style::Titlebar | sf::Style::Close);
 
-    // Setup ImGui window
-#ifdef _IMGUI_TEST
-    ImGui::SFML::Init(*this->window);
-#endif //_IMGUI_TEST
+
 
     this->window->setFramerateLimit(defines.gameFramerate);
     this->window->setVerticalSyncEnabled(defines.vsyncEnabled);
+
+    // Setup ImGui window
+#ifdef _IMGUI_TEST
+
+    if (!ImGui::SFML::Init(*window))
+        return;
+
+#endif //_IMGUI_TEST
 }
 
 void WindowManager::pollEvents() 
 {
     Player& player = Player::getInstance();
-    while (const std::optional<sf::Event> event = window->pollEvent()) {
+
+    while (const std::optional<sf::Event> event = window->pollEvent()) 
+    {
         sf::Vector2f playerPos = player.GetPosition();
 
         //std::cout << "Player position X: " << playerPos.x << " Y: " << playerPos.y << std::endl;
@@ -65,9 +70,11 @@ void WindowManager::pollEvents()
         //if(Game::getInstance().getWindowInitialized())
         //    player.Draw();
 
-        // TODO Figure this part out.
-        //ImGui::SFML::ProcessEvent(window, event);
-        //ImGui::SFML::ProcessEvent(event);
+
+#ifdef _IMGUI_TEST
+        ImGui::SFML::ProcessEvent(*window, *event);
+#endif
+
 
         if (event->is<sf::Event::Closed>()) {
             close();

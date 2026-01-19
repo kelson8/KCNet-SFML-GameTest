@@ -9,6 +9,10 @@
 // I have also added the player default health in here.
 // TODO Move that somewhere else sometime
 
+// Toggle the ImGui test
+// This now works.
+#define _IMGUI_TEST
+
 // Toggle the game.cpp/game.h files
 #define GAME_TEST
 

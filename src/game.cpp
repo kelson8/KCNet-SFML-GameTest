@@ -3,6 +3,12 @@
 
 #include "player.h"
 
+#ifdef _IMGUI_TEST
+#include <imgui-SFML.h>
+#include <imgui.h>
+#include "menus/debug/imgui_menu.h"
+#endif // _IMGUI_TEST
+
 // Copied values out of KCNet-SFML-GameTest
 
 #ifdef GAME_TEST
@@ -34,7 +40,6 @@ Game::Game() :
 	this->initText();
 	
 	this->initWindow();
-
 
 	//this->initEnemies();
 }
@@ -259,6 +264,14 @@ void Game::Update()
 
 	windowManager.pollEvents(); // Poll events regularly
 
+#ifdef _IMGUI_TEST
+	// Calculate delta time
+	sf::Time deltaTime = deltaClock.restart(); // Gets the time since the last call
+
+	ImGui::SFML::Update(windowManager.getWindow(), deltaTime);
+
+#endif // _IMGUI_TEST
+
 	// If the game hasn't ended and isn't paused, let everything update
 	// I got the idea for pausing the game from here.
 	// https://en.sfml-dev.org/forums/index.php?topic=28906.0
@@ -299,6 +312,11 @@ void Game::Render()
 {
 	Player& player = Player::getInstance();
 	WindowManager& windowManager = WindowManager::getInstance();
+
+#ifdef _IMGUI_TEST
+	ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
+#endif
+
 	//Enemy enemy = Enemy();
 
 	//if (Game::getInstance().getWindowInitialized())
@@ -341,6 +359,17 @@ void Game::Render()
 		//window->draw(endScreenText);
 		this->renderEndScreen();
 	}
+
+
+#ifdef _IMGUI_TEST
+
+
+	imGuiMenu.Draw();
+
+	// Use ImGui's render function here
+	ImGui::SFML::Render(windowManager.getWindow());
+
+#endif // _IMGUI_TEST
 
 	// Draw your game
 	//this->window->display(); // Tell app that window is done drawing.
