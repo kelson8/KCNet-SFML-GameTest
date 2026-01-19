@@ -167,11 +167,11 @@ const int Player::GetLives() const
 
 /**
  * @brief Basic function to check if the player has any lives.
- * @return If the player lives are equal to 0.
+ * @return If the player lives are less than or equal to 0.
  */
 const bool Player::HasLives() const
 {
-	if (this->playerLives == 0) 
+	if (this->playerLives <= 0)
 	{
 		return false;
 	}
