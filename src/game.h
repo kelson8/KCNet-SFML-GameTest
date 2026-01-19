@@ -18,9 +18,7 @@ public:
 	}
 
 	void Run();
-
 	void Render();
-
 	void Update();
 
 	// Accessors
@@ -36,6 +34,13 @@ public:
 	void setEndGame(bool newEndGame);
 	void setEndScreen(bool newEndScreen);
 
+#ifdef _IMGUI_TEST
+	const float GetLivesTextPosX() const;
+	const float GetLivesTextPosY() const;
+
+	void SetLivesTextPos(float livesPosX, float livesPosY);
+#endif
+
 private:
 	// Constructors / Destructors
 	Game();
@@ -47,6 +52,8 @@ private:
 	void initText();
 	void initWindow();
 
+	void RenderText(sf::RenderTarget& target);
+	void UpdateText();
 	void renderEndScreen();
 
 	// Couldn't get this working in SFML3
@@ -64,10 +71,23 @@ private:
 	// Text
 	sf::Text scoreText;
 	sf::Text healthText;
+	sf::Text livesText;
 	sf::Text endScreenText;
 
 	// New variables
 	sf::Clock deltaClock;
+
+	float scoreTextPosX;
+	float scoreTextPosY;
+
+	float healthTextPosX;
+	float healthTextPosY;
+
+	float livesTextPosX;
+	float livesTextPosY;
+
+	float endScreenTextPosX;
+	float endScreenTextPosY;
 	//
 
 	// Game logic

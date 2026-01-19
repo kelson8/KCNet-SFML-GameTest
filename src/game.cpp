@@ -31,6 +31,7 @@ Game::Game() :
 	windowInitialized(false),
 	scoreText(font),
 	healthText(font),
+	livesText(font),
 	endScreenText(font)
 {
 	this->initVariables();
@@ -48,6 +49,27 @@ Game::~Game()
 {
 	//delete this->window;
 }
+
+#ifdef _IMGUI_TEST
+// Debugging for moving the text display on screen
+const float Game::GetLivesTextPosX() const
+{
+	return this->livesTextPosX;
+}
+
+const float Game::GetLivesTextPosY() const
+{
+	return this->livesTextPosY;
+}
+
+void Game::SetLivesTextPos(float livesPosX, float livesPosY)
+{
+	this->livesTextPosX = livesPosX;
+	this->livesTextPosY = livesPosY;
+}
+
+
+#endif
 
 const bool Game::getWindowInitialized() const
 {
@@ -72,6 +94,20 @@ void Game::initVariables()
 
 	// Set the endScreen status
 	this->endScreen = false;
+
+	// TODO Move into player class
+	scoreTextPosX = 0.0f;
+	scoreTextPosY = 0.0f;
+
+	healthTextPosX = 0.0f;
+	healthTextPosY = 30.0f;
+
+	livesTextPosX = 0.0f;
+	livesTextPosY = 60.0f;
+
+	endScreenTextPosX = 40.0f;
+	endScreenTextPosY = 40.0f;
+	//
 
 	// Set the default lives
 	//this->default_lives = 3;
@@ -151,6 +187,9 @@ void Game::initWindow()
 /// </summary>
 void Game::initText()
 {
+	//----
+	// Score
+	//----
 	// Setup the font
 	this->scoreText.setFont(this->font);
 
@@ -159,8 +198,9 @@ void Game::initText()
 	this->scoreText.setFillColor(sf::Color::White);
 	this->scoreText.setString("NONE");
 
-	// Setup the health text
-
+	//----
+	// Health
+	//----
 	// Setup the font
 	this->healthText.setFont(this->font);
 
@@ -172,11 +212,69 @@ void Game::initText()
 	this->healthText.setFillColor(sf::Color::White);
 	this->healthText.setString("NONE");
 
-	// Setup the end screen text
+	//----
+	// Lives
+	//----
+	this->livesText.setFont(this->font);
+
+	// Set the Y to be lower then the the other vaules, so it doesn't overlap.
+	//this->livesText.setPosition(sf::Vector2f(0.0f, 35.0f));
+	this->livesText.setPosition(sf::Vector2f(livesTextPosX, livesTextPosY));
+
+	// Set the character size, fill color and default string
+	this->livesText.setCharacterSize(24);
+	this->livesText.setFillColor(sf::Color::White);
+	this->livesText.setString("NONE");
+
+
+	//----
+	// End screen
+	//----
 	this->endScreenText.setFont(this->font);
 	//this->endScreenText.setPosition(40, 40);
 	this->endScreenText.setPosition(sf::Vector2f(40, 40));
 	this->endScreenText.setCharacterSize(48);
+}
+
+/**
+ * @brief Update the game text
+ */
+void Game::UpdateText()
+{
+	Player& player = Player::getInstance();
+	// This is kind of like cout, can add floats, ints and everything else to it.
+	std::stringstream points_ss;
+	//std::stringstream health_ss;
+	std::stringstream lives_ss;
+
+	//points_ss << "Points: " << this->points;
+	points_ss << "Points: " << player.GetPoints();
+	//health_ss << "Health: " << player.getHealth();
+	lives_ss << "Lives: " << player.GetLives();
+
+	this->scoreText.setString(points_ss.str());
+	//this->healthText.setString(health_ss.str());
+	this->livesText.setString(lives_ss.str());
+}
+
+/**
+ * @brief Render the score, health, and more in the future.
+ * @param target
+ */
+void Game::RenderText(sf::RenderTarget& target)
+{
+	// Draw the score text
+	target.draw(this->scoreText);
+
+	// Draw the health text
+	//target.draw(this->healthText);
+
+	// Draw the lives text
+	target.draw(this->livesText);
+#ifdef _IMGUI_TEST
+	// This is required for changing the position of the displays.
+	this->livesText.setPosition(sf::Vector2f(livesTextPosX, livesTextPosY));
+#endif
 }
 
 /// <summary>
@@ -280,8 +378,8 @@ void Game::Update()
 	//{
 	//	this->updateMousePositions();
 
-	//	// Update the game text
-	//	this->UpdateText();
+	// Update the texts on screen
+	this->UpdateText();
 
 	//	//this->updateEnemies();
 	//}
@@ -335,6 +433,14 @@ void Game::Render()
 
 	if (!this->getEndScreen()) {
 		player.Draw();
+
+		this->RenderText(windowManager.getWindow());
+
+		// Set the end screen if the players lives go below 0.
+		if (player.GetLives() == 0)
+		{
+			this->setEndScreen(true);
+		}
 
 		//this->RenderEnemies(*this->window);
 

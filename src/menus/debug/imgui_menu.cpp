@@ -5,10 +5,23 @@
 #include <imgui.h>
 
 #include "player.h"
+#include "entity.h"
 #include "window_manager.h"
 #include "game.h"
 
 #include <fmt/core.h>
+
+namespace ImGuiDebug 
+{
+	// Debug variables for game menu, these are for the float sliders to use.
+	float livesPosX = 0.0f;
+	float livesPosY = 0.0f;
+
+	// The max text position for the debug display editor.
+	// Checks if this value is too high for the display.
+	float maxTextPosX = 100.0f;
+	float maxTextPosY = 35.0f;
+}
 
 ImGuiMenu::ImGuiMenu()
 {
@@ -65,6 +78,7 @@ void ImGuiMenu::Draw()
 
 	WindowManager& windowManager = WindowManager::getInstance();
 	Player& player = Player::getInstance();
+	Entity& entity = Entity::getInstance();
 	Game& game = Game::getInstance();
 
 	float playerPosX = player.GetPosition().x;
@@ -94,13 +108,38 @@ void ImGuiMenu::Draw()
 		ImGui::Text(fmt::format("Y: {}", playerPosY).c_str());
 
 		
+		//-----
 		// Check if player is out of bounds, I made a new function for this
-		if(!player.IsInBounds())
+		//-----
+		if(!entity.IsInBounds(player.GetPlayer()))
 		{
 			ImGui::Text("Player is out of bounds.");
 		}
-		else {
+		else 
+		{
 			ImGui::Text("Player is in bounds.");
+		}
+
+		//-----
+		// Lives debug
+		//-----
+		if (ImGui::CollapsingHeader("Lives debug"))
+		{
+
+			ImGui::Text("Current lives position: ");
+			ImGui::Text(fmt::format("X: {}", game.GetLivesTextPosX()).c_str());
+			ImGui::Text(fmt::format("Y: {}", game.GetLivesTextPosY()).c_str());
+			
+			ImGui::SliderFloat("Lives Text X", &ImGuiDebug::livesPosX, 0.0f, 
+				screenSizeX - ImGuiDebug::maxTextPosX);
+			//ImGui::SliderFloat("Lives Text Y", &ImGuiDebug::livesPosY, 0.0f, screenSizeY - 30);
+			ImGui::SliderFloat("Lives Text Y", &ImGuiDebug::livesPosY, 0.0f, 
+				screenSizeY - ImGuiDebug::maxTextPosY);
+			
+			if (ImGui::Button("Set Lives Position"))
+			{
+				game.SetLivesTextPos(ImGuiDebug::livesPosX, ImGuiDebug::livesPosY);
+			}
 		}
 	}
 

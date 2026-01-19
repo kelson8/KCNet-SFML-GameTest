@@ -29,7 +29,13 @@ public:
 	const float GetMoveSpeed() const;
 	void SetMoveSpeed(float speed);
 
-	const bool IsInBounds();
+	const int GetLives() const;
+	void SetLives(int lives);
+
+	const int GetPoints() const;
+	void SetPoints(int points);
+
+	const sf::RectangleShape GetPlayer() const;
 
 private:
 	// Constructors / Destructors
@@ -40,6 +46,7 @@ private:
 
 	int playerHealth;
 	int playerLives;
+	int playerPoints;
 
 	float moveSpeed;
 

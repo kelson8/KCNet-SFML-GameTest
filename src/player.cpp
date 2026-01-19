@@ -1,5 +1,7 @@
 #include "player.h"
 
+#include "entity.h"
+
 #include <iostream>
 
 /**
@@ -16,12 +18,12 @@ Player::Player()
 
 	playerHealth = 100;
 	playerLives = 3;
+	playerPoints = 0;
 
 	//moveSpeed = 10.0f;
 	moveSpeed = 30.0f;
 
 	playerJumpStatus = false;
-	
 }
 
 /**
@@ -67,6 +69,15 @@ void Player::Draw()
 }
 
 /**
+ * @brief Get the player object
+ * @return The sf::RectangleShape for the player.
+ */
+const sf::RectangleShape Player::GetPlayer() const
+{
+	return this->player;
+}
+
+/**
  * @brief Get the players X and Y position
  * @return The players X and Y as a sf::Vector2f
  */
@@ -99,6 +110,7 @@ void Player::Move(float x, float y)
 
 	// TODO Move elsewhere
 	WindowManager& windowManager = WindowManager::getInstance();
+	Entity& entity = Entity::getInstance();
 
 	// Get the size of the player shape
 	sf::Vector2f playerSize = this->player.getSize();
@@ -113,9 +125,12 @@ void Player::Move(float x, float y)
 
 	// This works for bounds checking!!
 	// I had to change this to set the position, not the X and Y values.
-	if (!this->IsInBounds())
+
+	// New for checking entities.
+	if (!entity.IsInBounds(player))
 	{
 		this->SetPosition(centerX, centerY);
+		this->playerLives = this->playerLives - 1;
 	}
 
 	this->player.move(sf::Vector2f(x, y));
@@ -140,33 +155,37 @@ void Player::SetMoveSpeed(float speed)
 }
 
 /**
- * @brief Check if the player is in the bounds of the map
- * 
- * TODO Re-use this for the enemies also, possibly make into shared code somewhere if possible.
- * @return If the player is in the map bounds.
+ * @brief Get the players current lives
+ * @return The current lives from the player.
  */
-const bool Player::IsInBounds()
+const int Player::GetLives() const
 {
-	WindowManager& windowManager = WindowManager::getInstance();
+	return this->playerLives;
+}
 
-	float playerPosX = GetPosition().x;
-	float playerPosY = GetPosition().y;
+/**
+ * @brief Set the player lives
+ * @param points The lives to set to
+ */
+void Player::SetLives(int lives)
+{
+	this->playerLives = lives;
+}
 
-	float screenSizeX = windowManager.getWindow().getSize().x;
-	float screenSizeY = windowManager.getWindow().getSize().y;
+/**
+ * @brief Get the players current points
+ * @return The current points from the player.
+ */
+const int Player::GetPoints() const
+{
+	return this->playerPoints;
+}
 
-	// This is the amount of space above the screen for the X and Y, otherwise it won't count as being out of bounds until
-	//  the player leaves the map a bit.
-	int maxBounds = 50;
-
-	if (
-		playerPosX > screenSizeX - maxBounds ||
-		playerPosY > screenSizeY - maxBounds ||
-		playerPosX < -5 ||
-		playerPosY < -5)
-	{
-		return false;
-	}
-
-	return true;
+/**
+ * @brief Set the player points
+ * @param points The points to set to
+ */
+void Player::SetPoints(int points)
+{
+	this->playerPoints = points;
 }

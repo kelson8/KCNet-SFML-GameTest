@@ -175,8 +175,11 @@ void WindowManager::close() {
 
 /**
  * @brief Get the current window
+ * TODO Figure out how to make this const, add different option to set window options later.
+ * 
  * @return A reference to the window.
  */
+//const sf::RenderWindow& WindowManager::getWindow() {
 sf::RenderWindow& WindowManager::getWindow() {
     return *window;
 }
