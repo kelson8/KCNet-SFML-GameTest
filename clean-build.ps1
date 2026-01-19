@@ -6,24 +6,24 @@ $confirmation = Read-Host "This deletes and re-creates the build folder, and reb
 $msbuild_path = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe"
 
 # Path to the built project file.
-$project_path = ".\build\KCNet-SFML-GameTest.vcxproj"
+$project_path = ".\KCNet-SFML-GameTest.vcxproj"
 
 # https://stackoverflow.com/questions/24649019/how-to-use-confirm-in-powershell
 if ($confirmation -eq 'y') {
 	
 	# Check if the build path exists, if so delete it, if not create a new one.
-	# if (Test-Path -path ".\build") {
-		# Remove-Item -Recurse -Force build/
-		# New-Item -Path ".\build" -ItemType Directory
-		# Write-Output "build folder has been removed and re-created"
-	# }else{
-		# New-Item -Path ".\build" -ItemType Directory
-		# Write-Output "build folder has been created"
-	# }
+	if (Test-Path -path ".\build") {
+		Remove-Item -Recurse -Force build/
+		New-Item -Path ".\build" -ItemType Directory
+		Write-Output "build folder has been removed and re-created"
+	}else{
+		New-Item -Path ".\build" -ItemType Directory
+		Write-Output "build folder has been created"
+	}
 	
-	# Write-Output "Switching to build folder, and running CMake."
-	# cd ".\build"
-	# cmake ..
+	Write-Output "Switching to build folder, and running CMake."
+	cd ".\build"
+	cmake ..
 	
 	Write-Output "CMake build finished."
 	

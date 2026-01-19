@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
-project(CMakeSFMLProject LANGUAGES CXX)
 set(PROJECT_NAME "KCNet-SFML-GameTest")
+project(${PROJECT_NAME} LANGUAGES CXX)
 
 file(GLOB SOURCES "src/*.cpp" "src/util/*.cpp" "src/menus/debug/*.cpp")
 file(GLOB HEADERS "src/*.h" "src/util/*.h" "src/menus/debug/*.h")
