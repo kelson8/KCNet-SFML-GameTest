@@ -16,6 +16,11 @@
 // Toggle the enemies rendering and updating here
 #define ENEMIES_ENABLED
 
+// Toggle the random enemy spawns here, this toggles if this is set the enemies spawn in random places.
+// This is buggy so I have it disabled.
+// If this is disabled, the enemies fall from the top to the bottom.
+//#define ENEMY_RANDOM_SPAWNS
+
 class Defines {
 public:
 

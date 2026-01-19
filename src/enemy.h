@@ -3,6 +3,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "defines.h"
+
 class Enemy
 {
 public:
@@ -11,6 +13,10 @@ public:
 		static Enemy instance; // Guaranteed to be destroyed.
 		return instance;
 	}
+
+#ifdef _IMGUI_TEST
+	const float GetRandomSpawnPos() const;
+#endif // _IMGUI_TEST
 
 	void Init();
 	void Spawn();
@@ -38,6 +44,9 @@ private:
 
 	// Make the enemies go down faster.
 	bool fastEnemiesFall;
+
+	// Random spawn position for the enemies.
+	float m_RandomSpawnPos;
 
 	// Set the enemy color
 	sf::Color enemyColor;

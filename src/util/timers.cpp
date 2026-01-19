@@ -4,13 +4,29 @@
 
 Timers::Timers()
 {
-	elapsedTime = 0;
+	m_ElapsedTime = 0;
+	m_ElapsedTimeOld = 0;
 }
 
 Timers::~Timers()
 {
 	// This should work for stopping the clock when this ends, although not sure if this is needed.
 	timerClock.stop();
+}
+
+/**
+ * @brief Check if a second has passed.
+ * @return If a second has passed in the game
+ */
+bool Timers::SecondPassed()
+{
+	if (m_ElapsedTime > m_ElapsedTimeOld)
+	{
+		m_ElapsedTimeOld++;
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -26,9 +42,9 @@ void Timers::TimerTest()
 	// This only restarts if the timer seconds is now greater then one.
 	if (timerClock.getElapsedTime().asSeconds() > 1)
 	{
-		elapsedTime++;
+		m_ElapsedTime++;
 
-		std::cout << "Elapsed time (seconds): " << elapsedTime << std::endl;
+		std::cout << "Elapsed time (seconds): " << m_ElapsedTime << std::endl;
 
 		// Start the countdown over.  Think of laps on a stop watch.
 		timerClock.restart();
@@ -44,7 +60,7 @@ void Timers::TimerTest()
 	//timerClock.restart();
 
 	//TimerTest();
-	//std::cout << "Elapsed time since previous frame(seconds): " << elapsedTime << std::endl;
+	//std::cout << "Elapsed time since previous frame(seconds): " << m_ElapsedTime << std::endl;
 
 	// Well this almost works as a timer, it goes too fast though..
 	// https://en.sfml-dev.org/forums/index.php?topic=3547.0

@@ -10,6 +10,7 @@ public:
 		return instance;
 	}
 
+	bool SecondPassed();
 	void TimerTest();
 
 private:
@@ -17,7 +18,11 @@ private:
 	Timers();
 	~Timers();
 
-	int elapsedTime;
+	// Current elapsed time.
+	int m_ElapsedTime;
+
+	// Store the previous time value.
+	int m_ElapsedTimeOld;
 
 	// Clock for the game timer display.
 	sf::Clock timerClock;

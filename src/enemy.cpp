@@ -3,12 +3,17 @@
 
 #include "defines.h"
 
+#include "util/random_number_generator.h"
+#include "util/timers.h"
+
 // TODO Make a life system, if enough enemies get through it's game over, add a way to attack or something.
 
 Enemy::Enemy()
 {
 	fastEnemies = false;
 	fastEnemiesFall = false;
+
+	m_RandomSpawnPos = 0.0f;
 
 	this->Init();
 }
@@ -18,6 +23,16 @@ Enemy::~Enemy()
 
 }
 
+#ifdef _IMGUI_TEST
+/**
+ * @brief Get the enemy random spawn position.
+ * @return The random spawn position for the enemy.
+ */
+const float Enemy::GetRandomSpawnPos() const
+{
+	return m_RandomSpawnPos;
+}
+#endif // _IMGUI_TEST
 
 /**
  * @brief Setup the enemies variables
@@ -69,15 +84,26 @@ void Enemy::Init()
 void Enemy::Spawn()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
+	RandomNumberGenerator& randomNumberGenerator = RandomNumberGenerator::getInstance();
 
 	// Randomizing between zero and the window size for the X
 	// Using static cast, safely turning the value into a float, the random function only takes an int so it has to be
 	// converted to an int first then randomize it.
 
+
+#ifdef ENEMY_RANDOM_SPAWNS
+	//float randomSpawnPos = randomNumberGenerator.GenerateRandomNumber(10.0f, 40.0f);
+	//this->enemy.setPosition(sf::Vector2f(m_RandomSpawnPos, m_RandomSpawnPos));
+	this->enemy.setPosition(
+		sf::Vector2f(windowManager.getWindow().getSize().x - this->enemy.getSize().x, 
+		0.0f));
+
+#else
 	this->enemy.setPosition(sf::Vector2f(
 		static_cast<float> (rand() % static_cast<int>(windowManager.getWindow().getSize().x - this->enemy.getSize().x)), 0.0f)
-		//static_cast<float> (rand() % static_cast<int>(this->window->getSize().y - this->enemy.getSize().y))
 	);
+
+#endif // ENEMY_RANDOM_SPAWNS
 
 	this->enemy.setFillColor(enemyColor);
 
@@ -158,6 +184,8 @@ void Enemy::Render(sf::RenderTarget& target)
 void Enemy::Update()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
+	RandomNumberGenerator& randomNumberGenerator = RandomNumberGenerator::getInstance();
+	Timers& timers = Timers::getInstance();
 
 	// TODO Fix this
 #ifdef _ENEMY_SOUNDS_TEST
@@ -174,9 +202,7 @@ void Enemy::Update()
 	{
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
 		{
-
 			this->Spawn();
-
 			this->enemySpawnTimer = 0.0f;
 		}
 		else
@@ -189,11 +215,28 @@ void Enemy::Update()
 	for (int i = 0; i < this->enemies.size(); i++)
 	{
 		bool deleted = false;
-		// Change the speed by changing the offsetY
+
+
+
+#ifdef ENEMY_RANDOM_SPAWNS
+		// Well this makes a fun effect but the enemies disappear too fast.
+		if (timers.SecondPassed())
+		{
+			m_RandomSpawnPos = randomNumberGenerator.GenerateRandomNumber(5.0f, 20.0f);
+		}
+
+		//this->enemies[i].move(sf::Vector2f(randomSpawnPos, enemySpeed));
+		//this->enemies[i].move(sf::Vector2f(m_RandomSpawnPos, -m_RandomSpawnPos));
+		this->enemies[i].move(sf::Vector2f(5.0f, m_RandomSpawnPos));
+
+#else
+		//Change the speed by changing the offsetY
 		this->enemies[i].move(sf::Vector2f(0.0f, enemySpeed));
+#endif // ENEMY_RANDOM_SPAWNS
 
 		// Delete the enemy if they are past the bottom of the screen.
-		if (this->enemies[i].getPosition().y > windowManager.getWindow().getSize().y)
+		if (this->enemies[i].getPosition().y > windowManager.getWindow().getSize().y
+			|| this->enemies[i].getPosition().x > windowManager.getWindow().getSize().x)
 		{
 			this->enemies.erase(this->enemies.begin() + i);
 

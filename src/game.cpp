@@ -307,7 +307,6 @@ void Game::Render()
 
 	}
 	// Show the end screen
-	// This now works, I just can't press enter to start a new game.
 	else
 	{
 		textHandler.RenderEndScreen();
@@ -316,6 +315,7 @@ void Game::Render()
 
 #ifdef _IMGUI_TEST
 
+	// Draw the ImGui menu if it is active.
 	if (imGuiMenu.GetStatus())
 	{
 		imGuiMenu.Draw();
@@ -327,7 +327,7 @@ void Game::Render()
 #endif // _IMGUI_TEST
 
 	// Draw your game
-	//this->window->display(); // Tell app that window is done drawing.
+	// Tell app that window is done drawing.
 	windowManager.getWindow().display();
 
 }

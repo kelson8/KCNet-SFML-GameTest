@@ -14,6 +14,7 @@
 #include "util/text_handler.h"
 #include "util/mouse_util.h"
 #include "util/music_util.h"
+#include "util/timers.h"
 
 #include <fmt/core.h>
 
@@ -27,6 +28,8 @@ namespace ImGuiDebug
 	// Checks if this value is too high for the display.
 	float maxTextPosX = 100.0f;
 	float maxTextPosY = 35.0f;
+
+	int timePassed = 0;
 }
 
 ImGuiMenu::ImGuiMenu()
@@ -91,6 +94,7 @@ void ImGuiMenu::Draw()
 	MouseUtil& mouseUtil = MouseUtil::getInstance();
 	TextHandler& textHandler = TextHandler::getInstance();
 	MusicUtil& musicUtil = MusicUtil::getInstance();
+	Timers& timers = Timers::getInstance();
 
 	float playerPosX = player.GetPosition().x;
 	float playerPosY = player.GetPosition().y;
@@ -111,6 +115,13 @@ void ImGuiMenu::Draw()
 	}
 
 	ImGui::Begin("Game Debugger");
+
+	// Misc variable, this keeps the time passed variable updated when ImGui is being drawn.
+	// TODO Make this get value from the Game loop instead of when ImGui is being drawn.
+	if (timers.SecondPassed())
+	{
+		ImGuiDebug::timePassed++;
+	}
 
 	//----
 	// Player
@@ -171,6 +182,8 @@ void ImGuiMenu::Draw()
 		{
 			enemy.Spawn();
 		}
+
+		ImGui::Text(fmt::format("Random Spawn Position: {}", enemy.GetRandomSpawnPos()).c_str());
 	}
 
 	//------
@@ -203,6 +216,10 @@ void ImGuiMenu::Draw()
 			ImGui::Text(fmt::format("X: {}", randomScreenPosX).c_str());
 			ImGui::Text(fmt::format("Y: {}", randomScreenPosY).c_str());
 		}
+
+		// Display the seconds passed since game start with ImGui open
+		//ImGui::Text(fmt::format("Seconds passed since game start (ImGui was open): {}", ImGuiDebug::timePassed).c_str());
+		ImGui::Text(fmt::format("Seconds passed since ImGui has been open: {}", ImGuiDebug::timePassed).c_str());
 	}
 
 	//------
