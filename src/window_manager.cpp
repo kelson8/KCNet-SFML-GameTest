@@ -14,6 +14,7 @@
 #include "game.h"
 
 #include "player.h"
+#include "enemy.h"
 
 #include "util/random_number_generator.h"
 
@@ -38,6 +39,8 @@ namespace KeyCodes
     sf::Keyboard::Scan Key_S = sf::Keyboard::Scancode::D;
     
     sf::Keyboard::Scan Key_F2 = sf::Keyboard::Scancode::F2;
+
+    sf::Keyboard::Scan Key_Enter = sf::Keyboard::Scancode::Enter;
 }
 
 WindowManager::WindowManager() : window(nullptr) 
@@ -73,6 +76,8 @@ void WindowManager::pollEvents()
 {
     Player& player = Player::getInstance();
     ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
+    Game& game = Game::getInstance();
+    Enemy& enemy = Enemy::getInstance();
 
     while (const std::optional<sf::Event> event = window->pollEvent()) 
     {
@@ -141,6 +146,20 @@ void WindowManager::pollEvents()
             //    Game::getInstance().setEndGame(true);
             //    std::cout << "Game ended with 'B' key" << std::endl;
             //}
+
+            // End game key to restart
+            // Set the end screen to false
+            // Reset enemies
+            // Set the players lives back to default.
+            else if (keyPressed->scancode == KeyCodes::Key_Enter)
+            {
+                if (game.getEndScreen())
+                {
+                    game.setEndScreen(false);
+                    enemy.Reset();
+                    player.SetLives(Defines::defaultLives);
+                }
+            }
 
             //------
             // ImGui keys

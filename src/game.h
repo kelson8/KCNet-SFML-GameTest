@@ -50,6 +50,7 @@ private:
 	void initFonts();
 	void initVariables();
 	void initText();
+	void initMusic();
 	void initWindow();
 
 	void RenderText(sf::RenderTarget& target);

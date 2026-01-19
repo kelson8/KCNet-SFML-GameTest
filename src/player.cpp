@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "defines.h"
+
 /**
  * @brief Setup the player
  */
@@ -17,7 +19,7 @@ Player::Player()
 	Setup();
 
 	playerHealth = 100;
-	playerLives = 3;
+	playerLives = Defines::defaultLives;
 	playerPoints = 0;
 
 	//moveSpeed = 10.0f;

@@ -62,7 +62,8 @@ add_executable(main
 	)
 # target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main PRIVATE 
-	# SFML::Graphics
+	SFML::Graphics
+	SFML::Audio
 	ImGui-SFML::ImGui-SFML
 	fmt::fmt
 	)

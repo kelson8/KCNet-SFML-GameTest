@@ -24,7 +24,7 @@ public:
 
 	// Player
 	int playerHealth = 10;
-	// int defaultLives = 3;
+	const static int defaultLives = 3;
 
 	// I updated these to their new values.
 	// Sounds

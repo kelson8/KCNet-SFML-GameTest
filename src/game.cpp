@@ -3,6 +3,9 @@
 
 #include "player.h"
 
+#include <SFML/Audio.hpp>
+#include "util/music_util.h"
+
 #ifdef _IMGUI_TEST
 #include <imgui-SFML.h>
 #include <imgui.h>
@@ -41,6 +44,7 @@ Game::Game() :
 	// Setup fonts and text
 	this->initFonts();
 	this->initText();
+	this->initMusic();
 	
 	this->initWindow();
 
@@ -238,6 +242,32 @@ void Game::initText()
 	//this->endScreenText.setPosition(40, 40);
 	this->endScreenText.setPosition(sf::Vector2f(40, 40));
 	this->endScreenText.setCharacterSize(48);
+}
+
+/**
+ * @brief Setup the music for the game.
+ */
+void Game::initMusic()
+{
+	Defines defines = Defines();
+	MusicUtil& musicUtil = MusicUtil::getInstance();
+
+	// Play the game music
+	// TODO Move this into a different function
+	// OH HELL, I accidentally put this in the loop at first lol, that was loud.
+	// Play the music, add a toggle in defines.h
+	if (defines.musicEnabled)
+	{
+		sf::Music* gameMusic = musicUtil.PlayMusic(defines.musicSound);
+
+		if (gameMusic)
+		{
+			gameMusic->play();
+			gameMusic->setLooping(true);
+			gameMusic->setVolume(defines.musicVolume);
+		}
+	}
+	//
 }
 
 /**

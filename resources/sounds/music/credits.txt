@@ -1,0 +1,18 @@
+All assets in this folder are either in the public domain or free to use.
+
+If I forgot to credit you, open an issue on the github and I will add your name in the credits.
+
+Credit to MintoDog for sky_blue_street_climax_bpm180.ogg: 
+ https://opengameart.org/content/sky-blue-street
+
+I don't remember where the dreams.wav, dreams.ogg and mysteriobossfight.wav came from.
+
+I think they are from https://opengameart.org
+
+space_dungeon_bpm100.mp3, space_dungeon_bpm100.ogg:
+ Credit to MintoDog on Open Game Art:
+  https://opengameart.org/content/space-dungeon
+  
+menu_music.wav:
+ Credit to mrpoly on Open Game Art:
+  https://opengameart.org/content/menu-music
