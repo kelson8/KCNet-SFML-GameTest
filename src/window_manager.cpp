@@ -6,6 +6,7 @@
 #ifdef _IMGUI_TEST
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include "menus/debug/imgui_menu.h"
 #endif // _IMGUI_TEST
 
 #include "defines.h"
@@ -18,12 +19,23 @@
 // Using this for getters and setters
 // https://www.geeksforgeeks.org/cpp/write-getter-and-setter-methods-in-cpp/
 
+// 
+
+
+/**
+ * @brief Keycodes I am using in the game so far, putting them here for easier access
+ * These shouldn't need accessed outside this file.
+ * 
+ * If these need accessed elsewhere, move into the window_manager.h header.
+ */
 namespace KeyCodes
 {
     sf::Keyboard::Scan Key_W = sf::Keyboard::Scancode::W;
     sf::Keyboard::Scan Key_A = sf::Keyboard::Scancode::A;
     sf::Keyboard::Scan Key_D = sf::Keyboard::Scancode::S;
     sf::Keyboard::Scan Key_S = sf::Keyboard::Scancode::D;
+    
+    sf::Keyboard::Scan Key_F2 = sf::Keyboard::Scancode::F2;
 }
 
 WindowManager::WindowManager() : window(nullptr) 
@@ -60,6 +72,7 @@ void WindowManager::initWindow(unsigned int width, unsigned int height, const st
 void WindowManager::pollEvents() 
 {
     Player& player = Player::getInstance();
+    ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
 
     while (const std::optional<sf::Event> event = window->pollEvent()) 
     {
@@ -85,6 +98,10 @@ void WindowManager::pollEvents()
                 close();
             }
 
+            //------
+            // Move keys
+            //------
+            
             // TODO Possibly move player movement into player class somehow?
             else if (keyPressed->scancode == KeyCodes::Key_W)
             {
@@ -117,12 +134,23 @@ void WindowManager::pollEvents()
                 player.Move(0.f, player.GetMoveSpeed());
             }
 
+            // Test
 
             //else if (keyPressed->scancode == sf::Keyboard::Scancode::B)
             //{
             //    Game::getInstance().setEndGame(true);
             //    std::cout << "Game ended with 'B' key" << std::endl;
             //}
+
+            //------
+            // ImGui keys
+            //-------
+#ifdef _IMGUI_TEST
+            else if (keyPressed->scancode == KeyCodes::Key_F2)
+            {
+                imGuiMenu.SetStatus(!imGuiMenu.GetStatus());
+            }
+#endif
         }
     }
 }

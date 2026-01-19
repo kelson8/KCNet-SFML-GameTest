@@ -13,12 +13,17 @@ public:
 
 	void Draw();
 
+	const bool GetStatus();
+	void SetStatus(bool toggle);
+
+
 private:
 	// Constructors / Destructors
 	ImGuiMenu();
 	~ImGuiMenu();
 
 	bool showDemoWindow;
+	bool showImGuiWindow;
 
 
 #endif // _IMGUI_TEST

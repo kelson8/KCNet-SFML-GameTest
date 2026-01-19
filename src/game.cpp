@@ -363,8 +363,10 @@ void Game::Render()
 
 #ifdef _IMGUI_TEST
 
-
-	imGuiMenu.Draw();
+	if (imGuiMenu.GetStatus())
+	{
+		imGuiMenu.Draw();
+	}
 
 	// Use ImGui's render function here
 	ImGui::SFML::Render(windowManager.getWindow());

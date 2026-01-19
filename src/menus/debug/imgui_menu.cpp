@@ -13,11 +13,31 @@
 ImGuiMenu::ImGuiMenu()
 {
 	showDemoWindow = false;
+	showImGuiWindow = false;
 }
 
 ImGuiMenu::~ImGuiMenu()
 {
 
+}
+
+/**
+ * @brief Get the status of the ImGui window
+ * @return If the ImGui window is set to display or not.
+ */
+const bool ImGuiMenu::GetStatus()
+{
+	return this->showImGuiWindow;
+}
+
+/**
+ * @brief Toggle the ImGui menu
+ * @param toggle The status of the ImGui menu.
+ */
+void ImGuiMenu::SetStatus(bool toggle)
+{
+	//showImGuiWindow = toggle;
+	this->showImGuiWindow = toggle;
 }
 
 void ImGuiMenu::Draw()
