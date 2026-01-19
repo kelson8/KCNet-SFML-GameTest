@@ -16,6 +16,8 @@
 
 #include "util/mouse_util.h"
 
+#include "util/text_handler.h"
+
 // Copied values out of KCNet-SFML-GameTest
 
 #ifdef GAME_TEST
@@ -35,19 +37,11 @@
 Game::Game() : 
 	endGame(false), 
 	endScreen(false),
-	windowInitialized(false),
-	scoreText(font),
-	healthText(font),
-	livesText(font),
-	endScreenText(font)
+	windowInitialized(false)
 {
+	// Init game variables, music, and the window.
 	this->initVariables();
-
-	// Setup fonts and text
-	this->initFonts();
-	this->initText();
 	this->initMusic();
-	
 	this->initWindow();
 
 	//this->initEnemies();
@@ -57,27 +51,6 @@ Game::~Game()
 {
 	//delete this->window;
 }
-
-#ifdef _IMGUI_TEST
-// Debugging for moving the text display on screen
-const float Game::GetLivesTextPosX() const
-{
-	return this->livesTextPosX;
-}
-
-const float Game::GetLivesTextPosY() const
-{
-	return this->livesTextPosY;
-}
-
-void Game::SetLivesTextPos(float livesPosX, float livesPosY)
-{
-	this->livesTextPosX = livesPosX;
-	this->livesTextPosY = livesPosY;
-}
-
-
-#endif
 
 const bool Game::getWindowInitialized() const
 {
@@ -102,20 +75,6 @@ void Game::initVariables()
 
 	// Set the endScreen status
 	this->endScreen = false;
-
-	// TODO Move into player class
-	scoreTextPosX = 0.0f;
-	scoreTextPosY = 0.0f;
-
-	healthTextPosX = 0.0f;
-	healthTextPosY = 30.0f;
-
-	livesTextPosX = 0.0f;
-	livesTextPosY = 60.0f;
-
-	endScreenTextPosX = 40.0f;
-	endScreenTextPosY = 40.0f;
-	//
 
 	// Set the default lives
 	//this->default_lives = 3;
@@ -159,21 +118,6 @@ void Game::initVariables()
 
 }
 
-/// <summary>
-/// Setup the fonts.
-/// </summary>
-void Game::initFonts()
-{
-	Defines defines = Defines();
-
-	// If the font failed to load
-	//if (!this->font.loadFromFile(defines.fontFile))
-	if (!this->font.openFromFile(defines.fontFile))
-	{
-		std::cout << "Error, could not load font " << defines.fontFile << std::endl;
-	}
-}
-
 /**
  * @brief Init the game window
  * Actually this is required in here, I just made a getter for the windowInitialized variable.
@@ -190,60 +134,6 @@ void Game::initWindow()
 		windowManager.initWindow(defines.screenHeight, defines.screenWidth, defines.windowTitle);
 		windowInitialized = true;
 	}
-}
-
-/// <summary>
-/// Setup the game text.
-/// </summary>
-void Game::initText()
-{
-	//----
-	// Score
-	//----
-	// Setup the font
-	this->scoreText.setFont(this->font);
-
-	// // Set the character size, fill color and default string
-	this->scoreText.setCharacterSize(24);
-	this->scoreText.setFillColor(sf::Color::White);
-	this->scoreText.setString("NONE");
-
-	//----
-	// Health
-	//----
-	// Setup the font
-	this->healthText.setFont(this->font);
-
-	// Set the Y to be lower then the scoreText, so it doesn't overlap.
-	this->healthText.setPosition(sf::Vector2f(0.0f, 30.0f));
-
-	// Set the character size, fill color and default string
-	this->healthText.setCharacterSize(24);
-	this->healthText.setFillColor(sf::Color::White);
-	this->healthText.setString("NONE");
-
-	//----
-	// Lives
-	//----
-	this->livesText.setFont(this->font);
-
-	// Set the Y to be lower then the the other vaules, so it doesn't overlap.
-	//this->livesText.setPosition(sf::Vector2f(0.0f, 35.0f));
-	this->livesText.setPosition(sf::Vector2f(livesTextPosX, livesTextPosY));
-
-	// Set the character size, fill color and default string
-	this->livesText.setCharacterSize(24);
-	this->livesText.setFillColor(sf::Color::White);
-	this->livesText.setString("NONE");
-
-
-	//----
-	// End screen
-	//----
-	this->endScreenText.setFont(this->font);
-	//this->endScreenText.setPosition(40, 40);
-	this->endScreenText.setPosition(sf::Vector2f(40, 40));
-	this->endScreenText.setCharacterSize(48);
 }
 
 /**
@@ -270,62 +160,6 @@ void Game::initMusic()
 		}
 	}
 	//
-}
-
-/**
- * @brief Update the game text
- */
-void Game::UpdateText()
-{
-	Player& player = Player::getInstance();
-	// This is kind of like cout, can add floats, ints and everything else to it.
-	std::stringstream points_ss;
-	//std::stringstream health_ss;
-	std::stringstream lives_ss;
-
-	//points_ss << "Points: " << this->points;
-	points_ss << "Points: " << player.GetPoints();
-	//health_ss << "Health: " << player.getHealth();
-	lives_ss << "Lives: " << player.GetLives();
-
-	this->scoreText.setString(points_ss.str());
-	//this->healthText.setString(health_ss.str());
-	this->livesText.setString(lives_ss.str());
-}
-
-/**
- * @brief Render the score, health, and more in the future.
- * @param target
- */
-void Game::RenderText(sf::RenderTarget& target)
-{
-	// Draw the score text
-	target.draw(this->scoreText);
-
-	// Draw the health text
-	//target.draw(this->healthText);
-
-	// Draw the lives text
-	target.draw(this->livesText);
-#ifdef _IMGUI_TEST
-	// This is required for changing the position of the displays.
-	this->livesText.setPosition(sf::Vector2f(livesTextPosX, livesTextPosY));
-#endif
-}
-
-/// <summary>
-/// Show the game end screen as a test.
-/// This idea came from the open source Asteroids project
-/// https://github.com/Anmfishe/Asteroids-SFML-CPP
-/// </summary>
-void Game::renderEndScreen()
-{
-	WindowManager& windowManager = WindowManager::getInstance();
-	//this->endScreenText.setString("Your score was " + std::to_string(this->points)
-	this->endScreenText.setString("Your score was ... \nPress enter to play again");
-
-	// Draw the text to the window.
-	windowManager.getWindow().draw(endScreenText);
 }
 
 // Accessors
@@ -401,6 +235,7 @@ void Game::Update()
 	Enemy& enemy = Enemy::getInstance();
 
 	MouseUtil& mouseUtil = MouseUtil::getInstance();
+	TextHandler& textHandler = TextHandler::getInstance();
 
 	windowManager.pollEvents(); // Poll events regularly
 
@@ -417,7 +252,7 @@ void Game::Update()
 	// https://en.sfml-dev.org/forums/index.php?topic=28906.0
 
 	// Update the texts on screen
-	this->UpdateText();
+	textHandler.Update();
 
 	// Have the enemies display on screen
 #ifdef ENEMIES_ENABLED
@@ -448,6 +283,7 @@ void Game::Render()
 	Player& player = Player::getInstance();
 	Enemy& enemy = Enemy::getInstance();
 	WindowManager& windowManager = WindowManager::getInstance();
+	TextHandler& textHandler = TextHandler::getInstance();
 
 #ifdef _IMGUI_TEST
 	ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
@@ -471,7 +307,7 @@ void Game::Render()
 		{
 			player.Draw();
 
-			this->RenderText(windowManager.getWindow());
+			textHandler.Render(windowManager.getWindow());
 
 			// Set the end screen if the players lives go below 0.
 			if (player.GetLives() == 0)
@@ -486,6 +322,7 @@ void Game::Render()
 #endif // ENEMIES_ENABLED
 
 			// Only run this for now if it is enabled
+			// If i use this again, I moved the functions into the TextHandler class
 			//if (renderTestItems)
 			//{
 			//	// Render the score test.
@@ -505,8 +342,7 @@ void Game::Render()
 	// This now works, I just can't press enter to start a new game.
 	else
 	{
-		//window->draw(endScreenText);
-		this->renderEndScreen();
+		textHandler.RenderEndScreen();
 	}
 
 

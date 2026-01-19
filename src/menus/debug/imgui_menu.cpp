@@ -11,6 +11,7 @@
 
 #include "enemy.h"
 
+#include "util/text_handler.h"
 #include "util/mouse_util.h"
 
 #include <fmt/core.h>
@@ -87,6 +88,7 @@ void ImGuiMenu::Draw()
 	Enemy& enemy = Enemy::getInstance();
 
 	MouseUtil& mouseUtil = MouseUtil::getInstance();
+	TextHandler& textHandler = TextHandler::getInstance();
 
 	float playerPosX = player.GetPosition().x;
 	float playerPosY = player.GetPosition().y;
@@ -136,8 +138,8 @@ void ImGuiMenu::Draw()
 		{
 
 			ImGui::Text("Current lives position: ");
-			ImGui::Text(fmt::format("X: {}", game.GetLivesTextPosX()).c_str());
-			ImGui::Text(fmt::format("Y: {}", game.GetLivesTextPosY()).c_str());
+			ImGui::Text(fmt::format("X: {}", textHandler.GetLivesTextPosX()).c_str());
+			ImGui::Text(fmt::format("Y: {}", textHandler.GetLivesTextPosY()).c_str());
 			
 			ImGui::SliderFloat("Lives Text X", &ImGuiDebug::livesPosX, 0.0f, 
 				screenSizeX - ImGuiDebug::maxTextPosX);
@@ -147,7 +149,7 @@ void ImGuiMenu::Draw()
 			
 			if (ImGui::Button("Set Lives Position"))
 			{
-				game.SetLivesTextPos(ImGuiDebug::livesPosX, ImGuiDebug::livesPosY);
+				textHandler.SetLivesTextPos(ImGuiDebug::livesPosX, ImGuiDebug::livesPosY);
 			}
 		}
 	}

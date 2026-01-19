@@ -31,17 +31,9 @@ public:
 
 	const bool getWindowInitialized() const;
 
-	//const sf::RenderWindow* getWindow() const;
-
 	void setEndGame(bool newEndGame);
 	void setEndScreen(bool newEndScreen);
 
-#ifdef _IMGUI_TEST
-	const float GetLivesTextPosX() const;
-	const float GetLivesTextPosY() const;
-
-	void SetLivesTextPos(float livesPosX, float livesPosY);
-#endif
 
 private:
 	// Constructors / Destructors
@@ -49,15 +41,9 @@ private:
 	~Game();
 
 	// Private variables
-	void initFonts();
 	void initVariables();
-	void initText();
 	void initMusic();
 	void initWindow();
-
-	void RenderText(sf::RenderTarget& target);
-	void UpdateText();
-	void renderEndScreen();
 
 	// Couldn't get this working in SFML3
 	//sf::VideoMode videoMode;
@@ -71,27 +57,8 @@ private:
 	// Resources
 	sf::Font font;
 
-	// Text
-	sf::Text scoreText;
-	sf::Text healthText;
-	sf::Text livesText;
-	sf::Text endScreenText;
-
-	// New variables
+	// Delta clock for keeping track of time, required for ImGui.
 	sf::Clock deltaClock;
-
-	float scoreTextPosX;
-	float scoreTextPosY;
-
-	float healthTextPosX;
-	float healthTextPosY;
-
-	float livesTextPosX;
-	float livesTextPosY;
-
-	float endScreenTextPosX;
-	float endScreenTextPosY;
-	//
 
 	// Game logic
 
@@ -107,18 +74,8 @@ private:
 	// Check if the end screen is being shown
 	bool endScreen;
 
-	//void spawnEnemy();
-
-
 	//void PollEvents();
 	//void updateMousePositions();
-
-	//void updateEnemies();
-
-	// TODO Move into TextFunctions.cpp
-	//void UpdateText();
-
-	//void RenderText(sf::RenderTarget& target);
 
 	//void RenderEnemies(sf::RenderTarget& target);
 
