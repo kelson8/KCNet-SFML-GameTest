@@ -32,20 +32,6 @@ int main()
     Game& game = Game::getInstance();
 
     // Game loop
-    // Check if game is running and is not ended.
-    while (game.running() && !game.getEndGame())
-    {
-        // Update
-        game.Update();
-
-        // Timer test
-        // TODO Figure this out.
-        //sf::Time passed = timer.restart();
-
-        //std::cout << "Seconds: " << passed.asSeconds() << std::endl;
-
-        // Render
-        game.Render();
-    }
-
+    // Moved into Game class.
+    game.Run();
 }

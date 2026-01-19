@@ -17,6 +17,8 @@ public:
 		return instance;
 	}
 
+	void Run();
+
 	void Render();
 
 	void Update();
@@ -26,6 +28,8 @@ public:
 	const bool getEndGame() const;
 	const bool getPaused() const;
 	const bool getEndScreen() const;
+
+	const bool getWindowInitialized() const;
 
 	//const sf::RenderWindow* getWindow() const;
 
@@ -37,12 +41,12 @@ private:
 	Game();
 	~Game();
 
-	WindowManager windowManager; // Use WindowManager
-
 	// Private variables
 	void initFonts();
 	void initVariables();
 	void initText();
+	void initWindow();
+
 	void renderEndScreen();
 
 	// Couldn't get this working in SFML3

@@ -1,11 +1,31 @@
 #include "window_manager.h"
 
+
+//#define _IMGUI_TEST
+
+#ifdef _IMGUI_TEST
+#include <imgui-SFML.h>
+#include <imgui.h>
+//#include <imgui>
+#endif // _IMGUI_TEST
+
 #include "defines.h"
 
 #include "game.h"
 
+#include "player.h"
+
+
 // Using this for getters and setters
 // https://www.geeksforgeeks.org/cpp/write-getter-and-setter-methods-in-cpp/
+
+namespace KeyCodes
+{
+    sf::Keyboard::Scan Key_W = sf::Keyboard::Scancode::W;
+    sf::Keyboard::Scan Key_A = sf::Keyboard::Scancode::A;
+    sf::Keyboard::Scan Key_D = sf::Keyboard::Scancode::S;
+    sf::Keyboard::Scan Key_S = sf::Keyboard::Scancode::D;
+}
 
 WindowManager::WindowManager() : window(nullptr) 
 {
@@ -34,8 +54,21 @@ void WindowManager::initWindow(unsigned int width, unsigned int height, const st
     this->window->setVerticalSyncEnabled(defines.vsyncEnabled);
 }
 
-void WindowManager::pollEvents() {
+void WindowManager::pollEvents() 
+{
+    Player& player = Player::getInstance();
     while (const std::optional<sf::Event> event = window->pollEvent()) {
+        sf::Vector2f playerPos = player.GetPosition();
+
+        //std::cout << "Player position X: " << playerPos.x << " Y: " << playerPos.y << std::endl;
+
+        //if(Game::getInstance().getWindowInitialized())
+        //    player.Draw();
+
+        // TODO Figure this part out.
+        //ImGui::SFML::ProcessEvent(window, event);
+        //ImGui::SFML::ProcessEvent(event);
+
         if (event->is<sf::Event::Closed>()) {
             close();
         }
@@ -45,17 +78,44 @@ void WindowManager::pollEvents() {
                 close();
             }
 
-            else if (keyPressed->scancode == sf::Keyboard::Scancode::A)
+            // TODO Possibly move player movement into player class somehow?
+            else if (keyPressed->scancode == KeyCodes::Key_W)
             {
-                Game::getInstance().setEndScreen(true);
-                std::cout << "Game end screen set with 'A' key" << std::endl;
+                //player.Move(0.f, -5.0f);
+                player.Move(0.f, -player.GetMoveSpeed());
             }
 
-            else if (keyPressed->scancode == sf::Keyboard::Scancode::B)
+            else if (keyPressed->scancode == KeyCodes::Key_A)
             {
-                Game::getInstance().setEndGame(true);
-                std::cout << "Game ended with 'B' key" << std::endl;
+                //player.SetPosition(playerPos.y + player.GetMoveSpeed(), playerPos.y + player.GetMoveSpeed());
+                //player.Move(-1.f, 0.f); // Move left
+                player.Move(-player.GetMoveSpeed(), 0.f); // Move left
+                
+
+                //Game::getInstance().setEndScreen(true);
+                //std::cout << "Game end screen set with 'A' key" << std::endl;
             }
+
+            else if (keyPressed->scancode == KeyCodes::Key_S)
+            {
+                //player.Move(1.f, 0.f); // Move down
+                player.Move(player.GetMoveSpeed(), 0.f); // Move down
+
+                
+            }
+
+            else if (keyPressed->scancode == KeyCodes::Key_D)
+            {
+                //player.Move(0.f, 5.0f);
+                player.Move(0.f, player.GetMoveSpeed());
+            }
+
+
+            //else if (keyPressed->scancode == sf::Keyboard::Scancode::B)
+            //{
+            //    Game::getInstance().setEndGame(true);
+            //    std::cout << "Game ended with 'B' key" << std::endl;
+            //}
         }
     }
 }

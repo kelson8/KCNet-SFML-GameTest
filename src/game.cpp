@@ -1,6 +1,8 @@
 #include "game.h"
 #include "defines.h"
 
+#include "player.h"
+
 // Copied values out of KCNet-SFML-GameTest
 
 #ifdef GAME_TEST
@@ -30,13 +32,9 @@ Game::Game() :
 	// Setup fonts and text
 	this->initFonts();
 	this->initText();
+	
+	this->initWindow();
 
-	// Only allow one instance of the window, this works now.
-	if (!windowInitialized)
-	{
-		this->windowManager.initWindow(1920, 1080, "Game Title");
-		windowInitialized = true;
-	}
 
 	//this->initEnemies();
 }
@@ -44,6 +42,11 @@ Game::Game() :
 Game::~Game()
 {
 	//delete this->window;
+}
+
+const bool Game::getWindowInitialized() const
+{
+	return windowInitialized;
 }
 
 /// <summary>
@@ -122,6 +125,22 @@ void Game::initFonts()
 	}
 }
 
+/**
+ * @brief Init the game window
+ * Actually this is required in here, I just made a getter for the windowInitialized variable.
+ */
+void Game::initWindow()
+{
+	WindowManager& windowManager = WindowManager::getInstance();
+	// Only allow one instance of the window, this works now.
+	if (!windowInitialized)
+	{
+		//this->windowManager.initWindow(1920, 1080, "Game Title");
+		windowManager.initWindow(1920, 1080, "Game Title");
+		windowInitialized = true;
+	}
+}
+
 /// <summary>
 /// Setup the game text.
 /// </summary>
@@ -162,12 +181,12 @@ void Game::initText()
 /// </summary>
 void Game::renderEndScreen()
 {
+	WindowManager& windowManager = WindowManager::getInstance();
 	//this->endScreenText.setString("Your score was " + std::to_string(this->points)
 	this->endScreenText.setString("Your score was ... \nPress enter to play again");
 
 	// Draw the text to the window.
 	windowManager.getWindow().draw(endScreenText);
-
 }
 
 // Accessors
@@ -178,6 +197,7 @@ void Game::renderEndScreen()
 /// <returns>True if the window is open</returns>
 const bool Game::running() const
 {
+	WindowManager& windowManager = WindowManager::getInstance();
 	//return this->window->isOpen();
 	return windowManager.isOpen();
 }
@@ -233,7 +253,7 @@ void Game::setEndScreen(bool newEndScreen)
 /// </summary>
 void Game::Update()
 {
-	
+	WindowManager& windowManager = WindowManager::getInstance();
 	//MouseUtil mouseUtil = MouseUtil();
 	//Enemy enemy = Enemy();
 
@@ -277,8 +297,12 @@ void Game::Update()
 /// </summary>
 void Game::Render()
 {
-
+	Player& player = Player::getInstance();
+	WindowManager& windowManager = WindowManager::getInstance();
 	//Enemy enemy = Enemy();
+
+	//if (Game::getInstance().getWindowInitialized())
+		//player.Draw();
 
 	// 
 	// Use this to generate colors:
@@ -292,6 +316,7 @@ void Game::Render()
 	// TODO Put a background in front of everything else, on the top of the screen.
 
 	if (!this->getEndScreen()) {
+		player.Draw();
 
 		//this->RenderEnemies(*this->window);
 
@@ -321,6 +346,27 @@ void Game::Render()
 	//this->window->display(); // Tell app that window is done drawing.
 	windowManager.getWindow().display();
 
+}
+
+void Game::Run()
+{
+	// Game loop
+	// Check if game is running and is not ended.
+	//while (game.running() && !game.getEndGame())
+	while (running() && !getEndGame())
+	{
+		// Update
+		Update();
+
+		// Timer test
+		// TODO Figure this out.
+		//sf::Time passed = timer.restart();
+
+		//std::cout << "Seconds: " << passed.asSeconds() << std::endl;
+
+		// Render
+		Render();
+	}
 }
 
 #endif // GAME_TEST

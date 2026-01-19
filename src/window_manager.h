@@ -7,9 +7,12 @@
 class WindowManager
 {
 public:
-	WindowManager();
-	~WindowManager();
-
+    // TODO Fix this....
+    static WindowManager& getInstance()
+    {
+        static WindowManager instance; // Guaranteed to be destroyed.
+        return instance;
+    }
 
     void initWindow(unsigned int width, unsigned int height, const std::string& title);
     void pollEvents();
@@ -20,6 +23,12 @@ public:
     sf::RenderWindow& getWindow(); // To access the window
 
 private:
+    WindowManager();
+    ~WindowManager();
+
+    WindowManager(const WindowManager&) = delete; // Prevent copying
+    WindowManager& operator=(const WindowManager&) = delete; // Prevent assignments
+
     sf::RenderWindow* window;
 
     //Game* game;

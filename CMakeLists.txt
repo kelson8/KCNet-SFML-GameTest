@@ -1,5 +1,23 @@
 cmake_minimum_required(VERSION 3.28)
+
 project(CMakeSFMLProject LANGUAGES CXX)
+set(PROJECT_NAME "CMakeSFMLProject")
+
+set(SOURCES
+	src/main.cpp 
+	src/game.cpp
+	src/window_manager.cpp
+	src/player.cpp
+)
+
+set(HEADERS
+	src/game.h
+	src/window_manager.h
+	src/player.h
+)
+
+# 
+# https://github.com/eliasdaler/imgui-sfml-fetchcontent/blob/master/dependencies/CMakeLists.txt
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -11,6 +29,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
+
+#---------
+# SFML
+#---------
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
     GIT_TAG 3.0.2
@@ -19,12 +41,30 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main 
-	src/main.cpp 
-	src/game.cpp
-	src/window_manager.cpp
+#---------
+# ImGui and other dependencies
+#---------
+add_subdirectory(dependencies)
+
+#---------
+# Main program
+#---------
+
+add_executable(main
+	${SOURCES}
+	${HEADERS}
 	)
 # target_compile_features(main PRIVATE cxx_std_17)
-target_link_libraries(main PRIVATE SFML::Graphics)
+target_link_libraries(main PRIVATE 
+	# SFML::Graphics
+	ImGui-SFML::ImGui-SFML
+	)
+	
+# include_directories(src)
+	
+# This probably isn't required, I forgot to re-add the ImGui SFML library
+target_include_directories(main PRIVATE
+	src/
+	${imgui-sfml_SOURCE_DIR}/include)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
