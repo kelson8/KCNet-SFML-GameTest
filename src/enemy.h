@@ -32,6 +32,7 @@ private:
 	int maxEnemies;
 	float enemySpeed;
 
+	// TODO Rename these below booleans.
 	// Make the enemies faster.
 	bool fastEnemies;
 

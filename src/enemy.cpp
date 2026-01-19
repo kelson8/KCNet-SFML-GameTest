@@ -3,8 +3,7 @@
 
 #include "defines.h"
 
-// TODO Fix this, copied from my other game test
-// TODO Implement this into my Game class later.
+// TODO Make a life system, if enough enemies get through it's game over, add a way to attack or something.
 
 Enemy::Enemy()
 {
@@ -34,7 +33,8 @@ void Enemy::Init()
 	this->enemyColor = sf::Color::Cyan;
 	this->enemy.setFillColor(enemyColor);
 
-	// Set the enemies to be fast
+	// Changing this value spawns in more enemies at once.
+	
 	if (fastEnemies)
 	{
 		this->enemySpawnTimerMax = 1.0f;
@@ -44,7 +44,7 @@ void Enemy::Init()
 		this->enemySpawnTimerMax = 20.0f;
 	}
 
-	// Set the enemy speed
+	// Set the enemies to fall down faster, pretty much spawning in faster.
 	if (fastEnemiesFall)
 	{
 		// Fast enemies

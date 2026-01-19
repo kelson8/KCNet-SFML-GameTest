@@ -13,9 +13,6 @@
 // This now works.
 #define _IMGUI_TEST
 
-// Toggle the game.cpp/game.h files
-#define GAME_TEST
-
 // Toggle the enemies rendering and updating here
 #define ENEMIES_ENABLED
 

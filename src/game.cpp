@@ -15,13 +15,10 @@
 #include "enemy.h"
 
 #include "util/mouse_util.h"
-
 #include "util/text_handler.h"
+#include "util/timers.h"
 
 // Copied values out of KCNet-SFML-GameTest
-
-#ifdef GAME_TEST
-
 
 // TODO Fix this to work, it's just a stripped down version of my game test project.
 // I had to add the extra values in the constructor to get rid of the errors.
@@ -30,10 +27,9 @@
 
 // Constructors
 
-/// <summary>
-/// Initialize variables, the window, and enemies
-/// </summary>
-//Game::Game()
+/**
+ * @brief Initialize variables, the music, and the window.
+ */
 Game::Game() : 
 	endGame(false), 
 	endScreen(false),
@@ -49,25 +45,25 @@ Game::Game() :
 
 Game::~Game()
 {
-	//delete this->window;
+	
 }
 
+/**
+ * @brief Check if the window is initialized.
+ * @return If the window is initialized.
+ */
 const bool Game::getWindowInitialized() const
 {
 	return windowInitialized;
 }
 
-/// <summary>
-/// Set all the game variables up, enemy spawn timer, max enemies, and enemy speed so far.
-/// 
-/// Hmm, i've never really initialized variables like this in C++.
-/// Now I somewhat know how this works.
-/// </summary>
+/**
+ * @brief Setup the end game status, and the end screen status
+ * Sets these values to false.
+ */
 void Game::initVariables()
 {
 	Defines defines = Defines();
-
-	//this->window = nullptr;
 
 	// Game logic
 	// Set the endgame status
@@ -76,46 +72,9 @@ void Game::initVariables()
 	// Set the endScreen status
 	this->endScreen = false;
 
-	// Set the default lives
-	//this->default_lives = 3;
-
-	//this->points = 0;
-	//this->lives = 0; // Not in use
-	//if (fastEnemies)
-	//{
-	//	this->enemySpawnTimerMax = 1.0f;
-	//}
-	//else
-	//{
-	//	this->enemySpawnTimerMax = 20.0f;
-	//}
-
-
-	// Changing this value spawns in more enemies at once.
-	// TODO Make a life system, if enough enemies get through it's game over.
-
-	//
-	//this->enemySpawnTimer = this->enemySpawnTimerMax;
-	//this->maxEnemies = 10.0f;
-
-	// Set the enemy speed
-	//if (fastEnemiesFall)
-	//{
-	//	// Fast enemies
-	//	this->enemySpeed = 25.0f;
-	//}
-	//else
-	//{
-	//	// Normal speed
-	//	this->enemySpeed = 5.0f;
-	//}
-
-	//// Set mouse held to false
+	// Set mouse held to false
+	// TODO Make into function in mouse_util.cpp/.h
 	//this->mouseHeld = false;
-
-	//// Set health
-	//this->health = defines.playerHealth;
-
 }
 
 /**
@@ -164,10 +123,10 @@ void Game::initMusic()
 
 // Accessors
 
-/// <summary>
-/// Check if the game is running
-/// </summary>
-/// <returns>True if the window is open</returns>
+/**
+ * @brief Check if the game is running
+ * @return True if the window is open
+ */
 const bool Game::running() const
 {
 	WindowManager& windowManager = WindowManager::getInstance();
@@ -175,10 +134,10 @@ const bool Game::running() const
 	return windowManager.isOpen();
 }
 
-/// <summary>
-/// Check the end game status
-/// </summary>
-/// <returns>True if the game has ended</returns>
+/**
+ * @brief Check the end game status
+ * @return True if the game has ended
+ */
 const bool Game::getEndGame() const
 {
 	return this->endGame;
@@ -193,24 +152,28 @@ void Game::setEndGame(bool newEndGame)
 	endGame = newEndGame;
 }
 
-/// <summary>
-/// Get the game pause status
-/// </summary>
-/// <returns>If the game is paused or playing.</returns>
+/**
+ * @brief Get the game pause status
+ * @return If the game is paused or playing.
+ */
 const bool Game::getPaused() const
 {
 	return this->isPaused;
 }
 
+/**
+ * @brief Set the game pause status
+ * @param paused The new pause status
+ */
 void Game::setPaused(bool paused)
 {
 	this->isPaused = paused;
 }
 
-/// <summary>
-/// Get the end screen status
-/// </summary>
-/// <returns>If the end screen is shown</returns>
+/**
+ * @brief Get the end screen status
+ * @return If the end screen is shown
+ */
 const bool Game::getEndScreen() const
 {
 	return this->endScreen;
@@ -225,10 +188,17 @@ void Game::setEndScreen(bool newEndScreen)
 	endScreen = newEndScreen;
 }
 
-/// <summary>
-/// Updates the game events
-/// TODO Fix in here, need to add PollEvents, updateMousePositions, and UpdateText functions.
-/// </summary>
+/**
+ * @brief Updates the game events
+ * 
+ * Update poll events, and delta time.
+ * 
+ * Update ImGui if enabled.
+ * 
+ * Update the text handler, and enemies.
+ * 
+ * Update the Mouse Util, which updates the mouse positions stored for debugging and use later.
+ */
 void Game::Update()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
@@ -239,9 +209,11 @@ void Game::Update()
 
 	windowManager.pollEvents(); // Poll events regularly
 
-#ifdef _IMGUI_TEST
 	// Calculate delta time
-	sf::Time deltaTime = deltaClock.restart(); // Gets the time since the last call
+	deltaTime = deltaClock.restart(); // Gets the time since the last call
+
+#ifdef _IMGUI_TEST
+
 
 	ImGui::SFML::Update(windowManager.getWindow(), deltaTime);
 
@@ -271,13 +243,9 @@ void Game::Update()
 	//std::cout << "Time elapsed: " << elapsed.asSeconds() << " seconds" << std::endl;
 }
 
-/// <summary>
-/// 
-// Clear old frame
-// Render objects
-// Display frame in window
-// Renders the game objects
-/// </summary>
+/**
+ * @brief Clear the old frame, render objects, display frame in window, and render game objects.
+ */
 void Game::Render()
 {
 	Player& player = Player::getInstance();
@@ -364,25 +332,23 @@ void Game::Render()
 
 }
 
+/**
+ * @brief Main game run loop, this is running in main.cpp.
+ */
 void Game::Run()
 {
+	Timers& timers = Timers::getInstance();
 	// Game loop
 	// Check if game is running and is not ended.
-	//while (game.running() && !game.getEndGame())
 	while (running() && !getEndGame())
 	{
 		// Update
 		Update();
 
-		// Timer test
-		// TODO Figure this out.
-		//sf::Time passed = timer.restart();
-
-		//std::cout << "Seconds: " << passed.asSeconds() << std::endl;
+		// Toggle the timer test here.
+		timers.TimerTest();
 
 		// Render
 		Render();
 	}
 }
-
-#endif // GAME_TEST

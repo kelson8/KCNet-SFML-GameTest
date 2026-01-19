@@ -5,8 +5,6 @@
 
 #include "window_manager.h"
 
-#ifdef GAME_TEST
-
 class Game
 {
 public:
@@ -59,6 +57,10 @@ private:
 
 	// Delta clock for keeping track of time, required for ImGui.
 	sf::Clock deltaClock;
+	sf::Time deltaTime;
+
+	// Clock for the game timer display.
+	sf::Clock timerClock;
 
 	// Game logic
 
@@ -82,5 +84,3 @@ private:
 	// Reset the enemy positions, used for when I reset the game.
 	//void resetEnemies();
 };
-
-#endif // GAME_TEST
