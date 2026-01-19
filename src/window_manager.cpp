@@ -39,8 +39,10 @@ namespace KeyCodes
     sf::Keyboard::Scan Key_S = sf::Keyboard::Scancode::D;
     
     sf::Keyboard::Scan Key_F2 = sf::Keyboard::Scancode::F2;
+    sf::Keyboard::Scan Key_F4 = sf::Keyboard::Scancode::F4;
 
     sf::Keyboard::Scan Key_Enter = sf::Keyboard::Scancode::Enter;
+    sf::Keyboard::Scan Key_Escape = sf::Keyboard::Scancode::Escape;
 }
 
 WindowManager::WindowManager() : window(nullptr) 
@@ -99,25 +101,29 @@ void WindowManager::pollEvents()
         }
         // Handle other events here, e.g. key presses
         else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-            if (keyPressed->scancode == sf::Keyboard::Scancode::Escape) {
-                close();
+            
+            // Pause the game
+            if (keyPressed->scancode == KeyCodes::Key_Escape) {
+                game.setPaused(!game.getPaused());
+                
             }
 
             //------
             // Move keys
+            // These check if the game is paused, and if the end screen is shown.
+            // Otherwise it doesn't update the values.
             //------
             
             // TODO Possibly move player movement into player class somehow?
             else if (keyPressed->scancode == KeyCodes::Key_W)
             {
-                //player.Move(0.f, -5.0f);
+                if (game.getPaused() || game.getEndScreen()) return;
                 player.Move(0.f, -player.GetMoveSpeed());
             }
 
             else if (keyPressed->scancode == KeyCodes::Key_A)
             {
-                //player.SetPosition(playerPos.y + player.GetMoveSpeed(), playerPos.y + player.GetMoveSpeed());
-                //player.Move(-1.f, 0.f); // Move left
+                if (game.getPaused() || game.getEndScreen()) return;
                 player.Move(-player.GetMoveSpeed(), 0.f); // Move left
                 
 
@@ -127,7 +133,7 @@ void WindowManager::pollEvents()
 
             else if (keyPressed->scancode == KeyCodes::Key_S)
             {
-                //player.Move(1.f, 0.f); // Move down
+                if (game.getPaused() || game.getEndScreen()) return;
                 player.Move(player.GetMoveSpeed(), 0.f); // Move down
 
                 
@@ -135,7 +141,7 @@ void WindowManager::pollEvents()
 
             else if (keyPressed->scancode == KeyCodes::Key_D)
             {
-                //player.Move(0.f, 5.0f);
+                if (game.getPaused() || game.getEndScreen()) return;
                 player.Move(0.f, player.GetMoveSpeed());
             }
 
@@ -170,6 +176,12 @@ void WindowManager::pollEvents()
                 imGuiMenu.SetStatus(!imGuiMenu.GetStatus());
             }
 #endif
+
+            // Close the game
+            else if (keyPressed->scancode == KeyCodes::Key_F4)
+            {
+                close();
+            }
         }
     }
 }

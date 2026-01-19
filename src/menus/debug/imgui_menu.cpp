@@ -11,6 +11,8 @@
 
 #include "enemy.h"
 
+#include "util/mouse_util.h"
+
 #include <fmt/core.h>
 
 namespace ImGuiDebug 
@@ -83,6 +85,8 @@ void ImGuiMenu::Draw()
 	Entity& entity = Entity::getInstance();
 	Game& game = Game::getInstance();
 	Enemy& enemy = Enemy::getInstance();
+
+	MouseUtil& mouseUtil = MouseUtil::getInstance();
 
 	float playerPosX = player.GetPosition().x;
 	float playerPosY = player.GetPosition().y;
@@ -193,6 +197,19 @@ void ImGuiMenu::Draw()
 			ImGui::Text(fmt::format("X: {}", randomScreenPosX).c_str());
 			ImGui::Text(fmt::format("Y: {}", randomScreenPosY).c_str());
 		}
+	}
+
+	if (ImGui::CollapsingHeader("Mouse Info"))
+	{
+		ImGui::Text("Mouse position on screen: ");
+
+		ImGui::Text("Relative to window: ");
+		ImGui::Text(fmt::format("X: {}", mouseUtil.getMousePosWindow().x).c_str());
+		ImGui::Text(fmt::format("Y: {}", mouseUtil.getMousePosWindow().y).c_str());
+
+		ImGui::Text("Relative to view: ");
+		ImGui::Text(fmt::format("X: {}", mouseUtil.getMousePosView().x).c_str());
+		ImGui::Text(fmt::format("Y: {}", mouseUtil.getMousePosView().y).c_str());
 	}
 
 	ImGui::End();

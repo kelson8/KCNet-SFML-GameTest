@@ -14,6 +14,8 @@
 
 #include "enemy.h"
 
+#include "util/mouse_util.h"
+
 // Copied values out of KCNet-SFML-GameTest
 
 #ifdef GAME_TEST
@@ -366,6 +368,11 @@ const bool Game::getPaused() const
 	return this->isPaused;
 }
 
+void Game::setPaused(bool paused)
+{
+	this->isPaused = paused;
+}
+
 /// <summary>
 /// Get the end screen status
 /// </summary>
@@ -393,6 +400,8 @@ void Game::Update()
 	WindowManager& windowManager = WindowManager::getInstance();
 	Enemy& enemy = Enemy::getInstance();
 
+	MouseUtil& mouseUtil = MouseUtil::getInstance();
+
 	windowManager.pollEvents(); // Poll events regularly
 
 #ifdef _IMGUI_TEST
@@ -412,8 +421,15 @@ void Game::Update()
 
 	// Have the enemies display on screen
 #ifdef ENEMIES_ENABLED
-	enemy.Update();
+	if (!this->getPaused())
+	{
+		enemy.Update();
+	}
+	
 #endif ENEMIES_ENABLED
+
+	// Update the mouse positions
+	mouseUtil.updateMousePositions(windowManager.getWindow());
 
 	//sf::Time elapsed = clock.getElapsedTime();
 
@@ -437,11 +453,6 @@ void Game::Render()
 	ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
 #endif
 
-	//Enemy enemy = Enemy();
-
-	//if (Game::getInstance().getWindowInitialized())
-		//player.Draw();
-
 	// 
 	// Use this to generate colors:
 	// https://www.rapidtables.com/web/color/RGB_Color.html
@@ -454,40 +465,46 @@ void Game::Render()
 	// TODO Put a background in front of everything else, on the top of the screen.
 
 	if (!this->getEndScreen()) {
-		player.Draw();
 
-		this->RenderText(windowManager.getWindow());
-
-		// Set the end screen if the players lives go below 0.
-		if (player.GetLives() == 0)
+		// If the game is not paused, run everything here.
+		if (!this->getPaused())
 		{
-			this->setEndScreen(true);
-		}
+			player.Draw();
 
-		//this->RenderEnemies(*this->window);
+			this->RenderText(windowManager.getWindow());
+
+			// Set the end screen if the players lives go below 0.
+			if (player.GetLives() == 0)
+			{
+				this->setEndScreen(true);
+			}
+
+			//this->RenderEnemies(*this->window);
 
 #ifdef ENEMIES_ENABLED
-		enemy.Render(windowManager.getWindow());
+			enemy.Render(windowManager.getWindow());
 #endif // ENEMIES_ENABLED
 
-		// Only run this for now if it is enabled
-		//if (renderTestItems)
-		//{
-		//	// Render the score test.
-		//	this->renderScore();
+			// Only run this for now if it is enabled
+			//if (renderTestItems)
+			//{
+			//	// Render the score test.
+			//	this->renderScore();
 
-		//	// Show test text on screen.
-		//	this->RenderText(windowManager.getWindow());
-		//	this->RenderText(*this->window);
-		//}
+			//	// Show test text on screen.
+			//	this->RenderText(windowManager.getWindow());
+			//	this->RenderText(*this->window);
+			//}
 
 
-		// Draw game objects
+			// Draw game objects
+		}
 
 	}
 	// Show the end screen
 	// This now works, I just can't press enter to start a new game.
-	else {
+	else
+	{
 		//window->draw(endScreenText);
 		this->renderEndScreen();
 	}

@@ -27,6 +27,8 @@ public:
 	const bool getPaused() const;
 	const bool getEndScreen() const;
 
+	void setPaused(bool paused);
+
 	const bool getWindowInitialized() const;
 
 	//const sf::RenderWindow* getWindow() const;

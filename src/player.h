@@ -30,6 +30,7 @@ public:
 	void SetMoveSpeed(float speed);
 
 	const int GetLives() const;
+	const bool HasLives() const;
 	void SetLives(int lives);
 
 	const int GetPoints() const;
