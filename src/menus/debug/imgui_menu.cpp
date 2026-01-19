@@ -13,6 +13,7 @@
 
 #include "util/text_handler.h"
 #include "util/mouse_util.h"
+#include "util/music_util.h"
 
 #include <fmt/core.h>
 
@@ -89,6 +90,7 @@ void ImGuiMenu::Draw()
 
 	MouseUtil& mouseUtil = MouseUtil::getInstance();
 	TextHandler& textHandler = TextHandler::getInstance();
+	MusicUtil& musicUtil = MusicUtil::getInstance();
 
 	float playerPosX = player.GetPosition().x;
 	float playerPosY = player.GetPosition().y;
@@ -171,7 +173,9 @@ void ImGuiMenu::Draw()
 		}
 	}
 
-
+	//------
+	// Screen
+	//------
 	if (ImGui::CollapsingHeader("Screen Info"))
 	{
 		ImGui::Text("Screen Size: ");
@@ -201,6 +205,9 @@ void ImGuiMenu::Draw()
 		}
 	}
 
+	//------
+	// Mouse
+	//------
 	if (ImGui::CollapsingHeader("Mouse Info"))
 	{
 		ImGui::Text("Mouse position on screen: ");
@@ -212,6 +219,32 @@ void ImGuiMenu::Draw()
 		ImGui::Text("Relative to view: ");
 		ImGui::Text(fmt::format("X: {}", mouseUtil.getMousePosView().x).c_str());
 		ImGui::Text(fmt::format("Y: {}", mouseUtil.getMousePosView().y).c_str());
+	}
+
+	//------
+	// Music
+	//------
+	if (ImGui::CollapsingHeader("Music Info"))
+	{
+		ImGui::Text("Run tests for the game music");
+		if (ImGui::Button("Game music test"))
+		{
+			fmt::println("Music volume: {}", musicUtil.GetMusicInfo()->getVolume());
+			// fmt cannot display this value.
+			//fmt::println("Music status: {}", musicUtil.GetMusicInfo()->getStatus());
+			
+			fmt::println("Is the track looping: {}", musicUtil.GetMusicInfo()->isLooping());
+		}
+
+		if (ImGui::Button("Start game music"))
+		{
+			musicUtil.SetMusicInfo(true, false, true);
+		}
+
+		if (ImGui::Button("Stop game music"))
+		{
+			musicUtil.SetMusicInfo(false, true, false);
+		}
 	}
 
 	ImGui::End();
