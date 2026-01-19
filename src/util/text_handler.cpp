@@ -156,13 +156,6 @@ void TextHandler::Render(sf::RenderTarget& target)
 
 }
 
-/// <summary>
-/// Show the game end screen as a test.
-/// This idea came from the open source Asteroids project
-/// https://github.com/Anmfishe/Asteroids-SFML-CPP
-/// </summary>
-/// 
-
 /**
  * @brief Show the game end screen
  * This idea came from the open source Asteroids project

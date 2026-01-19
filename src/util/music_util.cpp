@@ -6,20 +6,23 @@
 
 #include "defines.h"
 
-// This works
-// Return with a pointer
+/**
+ * @brief Play music for the game
+ * 
+ * TODO Setup constructor/deconstructor for this.
+ * @param filename The filename to play
+ * @return The music if found, nullptr if not.
+ */
 sf::Music* MusicUtil::PlayMusic(const std::string& filename)
 {
 	Defines defines = Defines();
 
 	sf::Music* music = new sf::Music();
-	//if (!music->openFromFile(defines.musicSound))
 	if (!music->openFromFile(filename))
 	{
-		//std::cout << "Error, could not find the game sound track." << std::endl;
 		std::cerr << "Error, could not find the game sound track." << std::endl;
 		delete music;
-		return nullptr; // Handle error
+		return nullptr;
 	}
 
 	return music;

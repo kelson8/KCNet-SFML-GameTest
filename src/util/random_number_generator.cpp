@@ -55,13 +55,9 @@ int *RandomNumberGenerator::GenerateRandomNumberArray(int min, int max, int numb
 }
 
 /**
- * Print the array of random numbers as a test.
+ * Print an array of random numbers.
  * 
- * This works! I wasn't expecting this to work.
- * 
- * I now have this function to run to display the numbers on the menu:
- * 
- * MenuSystem::GenerateRandomNumArray(WINDOW *win, int xPos)
+ * TODO Make this work with SFML.
  * 
  */
 void RandomNumberGenerator::PrintRandomNumberList()

@@ -17,6 +17,6 @@ public:
 private:
 	// Constructors / Destructors
 	MusicUtil() {}
-	//~Enemy();
+	//~MusicUtil();
 };
 

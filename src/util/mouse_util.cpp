@@ -3,12 +3,10 @@
 
 #include "window_manager.h"
 
-
-/// <summary>
-/// Updates the mouse positions:
-///  Mouse position relative to window (sf::Vector2i)
-///  Mouse position relative to the view (sf::Vector2i)
-/// </summary>
+/*
+ * @brief Updates the mouse positions:
+ * @param window The sf::RenderWindow to update the mouse positions for.
+ */
 void MouseUtil::updateMousePositions(sf::RenderWindow &window)
 {
 
@@ -29,11 +27,19 @@ void MouseUtil::updateMousePositions(sf::RenderWindow &window)
 
 }
 
+/**
+ * @brief Get the mouse position relative to window (sf::Vector2i)
+ * @return The mouse position relative to window
+ */
 sf::Vector2i MouseUtil::getMousePosWindow() const
 {
 	return this->mousePosWindow;
 }
 
+/**
+ * @brief Get the mouse position relative to the view (sf::Vector2i)
+ * @return The mouse position relative to the view
+ */
 sf::Vector2f MouseUtil::getMousePosView() const
 {
 	return this->mousePosView;

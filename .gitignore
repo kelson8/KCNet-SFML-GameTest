@@ -16,3 +16,7 @@ resources/sounds/music/*.mp3
 # Allow music my game uses.
 !resources/sounds/music/space_dungeon_bpm100.mp3
 !resources/sounds/music/space_dungeon_bpm100.ogg
+
+# Doxygen extras
+html/
+latex/
