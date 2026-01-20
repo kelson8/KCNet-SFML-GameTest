@@ -15,6 +15,17 @@ set(IMGUI_VERSION 1.91.1)
 # add_subdirectory(sfml)
 
 #-------------
+# SFML Button Library
+#-------------
+
+# FetchContent_Declare(
+    # sfml-button
+    # GIT_REPOSITORY https://github.com/Pyromagne/SFML-Button.git
+    # GIT_TAG        a4ec70970140f918d5dc03f1f885bd7ad498d6dc
+# )
+# FetchContent_MakeAvailable(sfml-button)
+
+#-------------
 # Fmt
 #-------------
 

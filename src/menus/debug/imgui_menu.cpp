@@ -22,8 +22,6 @@
 #include "util/music_util.h"
 #include "util/timers.h"
 
-
-
 ImGuiMenu::ImGuiMenu()
 {
 	showDemoWindow = false;
@@ -103,8 +101,6 @@ void ImGuiMenu::Draw()
 	TextHandler& textHandler = TextHandler::getInstance();
 	MusicUtil& musicUtil = MusicUtil::getInstance();
 	Timers& timers = Timers::getInstance();
-
-	ImGuiScreenMenu& imGuiScreenMenu = ImGuiScreenMenu::getInstance();
 
 	float playerPosX = player.GetPosition().x;
 	float playerPosY = player.GetPosition().y;

@@ -20,3 +20,6 @@ resources/sounds/music/*.mp3
 # Doxygen extras
 html/
 latex/
+
+# I need to update this to work with SFML3
+lib/SFML-Button

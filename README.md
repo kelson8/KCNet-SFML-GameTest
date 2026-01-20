@@ -1,10 +1,14 @@
 # KCNet-SFML-GameTest
 I am working on a basic game in SFML using C++ in this repo
 
-I would like to thank the author of this youtube series for this:
-* https://www.youtube.com/playlist?list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up
+## Info
+This just has a player that can move around, some game music, and falling enemies.
 
-Currently on this guide in the playlist (Enemy types & difficulties): https://www.youtube.com/watch?v=uaB3oK62T34&list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up&index=11
+The player only loses lives if they go out of bounds, I haven't setup the enemies to make the player
+lose lives just yet.
+
+I now have a very basic pause menu working, all it does is display the text `Paused` on the screen so far.
+Once I figure out how to use buttons with SFML, then I will most likely add a resume button, options, and quit.
 
 ## Quick start
 
@@ -79,16 +83,13 @@ If using Debug build mode, copy the sfml-d.dll files to ./x64/Debug,
 if using Release build mode.copy the files without the -d to ./x64/Release
 ```
 
-### Info
-This just has a player that can move around, some game music, and falling enemies.
-
-The player only loses lives if they go out of bounds, I haven't setup the enemies to make the player
-lose lives just yet.
-
-# License
-This project is licensed under the MIT license.
 
 # Credits
 None of this would be possible without the team at SFML, this is using their libraries and window system:
 * https://github.com/SFML/SFML/
 
+I would like to thank the author of this youtube series for a lot of help with learning SFML:
+* https://www.youtube.com/playlist?list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up
+
+# License
+This project is licensed under the MIT license.

@@ -7,19 +7,13 @@ class ImGuiScreenMenu : public IMenuBase
 {
 #ifdef _IMGUI_TEST
 public:
-	static ImGuiScreenMenu& getInstance()
-	{
-		static ImGuiScreenMenu instance; // Guaranteed to be destroyed.
-		return instance;
-	}
-
-	void Draw() override;
-
-private:
 	// Constructors / Destructors
 	ImGuiScreenMenu();
 	//~ImGuiScreenMenu();
 
+	void Draw() override;
+
+private:
 	void SetRandomScreenPos();
 
 	// Toggle the random screen size display

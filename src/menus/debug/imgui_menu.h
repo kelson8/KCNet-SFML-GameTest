@@ -1,6 +1,7 @@
 #pragma once
 #include "defines.h"
 
+#include "imgui_screen_menu.h"
 
 
 class ImGuiMenu
@@ -29,6 +30,8 @@ private:
 
 
 	void ControllerMenu();
+
+	ImGuiScreenMenu imGuiScreenMenu;
 
 	bool showDemoWindow;
 	bool showImGuiWindow;

@@ -78,6 +78,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SFML::System
 	ImGui-SFML::ImGui-SFML
 	fmt::fmt
+	# SFMLButton
 	)
 	
 # Include directories for the project, I prefer to use util/ or menus/ for other folders.
@@ -85,6 +86,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} PRIVATE
 	src/
 	${imgui-sfml_SOURCE_DIR}/include)
+	# lib/SFML-Button/include)
+	# ${sfml-button_SOURCE_DIR}/include)
+
+# add_subdirectory(lib/SFML-Button)
 
 # Set the Visual Studio startup project to be main.
 #set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
