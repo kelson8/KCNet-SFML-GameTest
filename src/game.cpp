@@ -354,6 +354,13 @@ void Game::Run()
 		//timers.TimerTest();
 		timers.TimerLoop();
 
+		// Update the wait timer when it is active
+		//timers.TimerWaitLoop();
+
+		// Update the timer to keep track of the score.
+		// Gets reset when the player runs out of lives.
+		timers.ScoreTimer();
+
 		// Render
 		Render();
 	}

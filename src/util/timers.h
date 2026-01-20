@@ -19,6 +19,12 @@ public:
 
 	void TimerLoop();
 
+	void StartWait(int duration, char unit);
+	void TimerWaitLoop();
+
+	void ScoreTimer();
+	const int GetScore() const;
+
 	void TimerTest();
 
 	const int GetElapsedTime() const;
@@ -36,6 +42,25 @@ private:
 
 	// Toggle the timer showing in the console.
 	bool m_TimerDisplayConsole;
+
+	// Wait timer variables
+	bool m_Waiting = false;
+	float m_WaitDuration = 0;
+	sf::Clock waitClock;
+
+	// Game timer/score variables
+	// Is the main game timer stopped?
+	bool m_GameTimerStopped = false;
+
+	// Timer for keeping track of the score.
+	sf::Clock scoreTimerClock;
+
+	// Int to keep track of the time for the score.
+	int m_CurrentScoreTime = 0;
+
+	// Store the previous score value here for the end screen.
+	int m_Score;
+	//
 
 	// Clock for the game timer display.
 	sf::Clock timerClock;

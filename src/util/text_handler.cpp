@@ -2,8 +2,12 @@
 
 #include "defines.h"
 
+#include <fmt/core.h>
+
 #include "player.h"
 #include "game.h"
+
+#include "timers.h"
 
 #include <SFML/Audio.hpp>
 
@@ -145,17 +149,23 @@ void TextHandler::InitPauseMenu()
 
 /**
  * @brief Update the game text
+ * 
+ * 
+ * Updates the points, lives, and will do more later.
+ * 
  */
 void TextHandler::Update()
 {
 	Player& player = Player::getInstance();
+	Timers& timers = Timers::getInstance();
+
 	// This is kind of like cout, can add floats, ints and everything else to it.
 	std::stringstream points_ss;
 	//std::stringstream health_ss;
 	std::stringstream lives_ss;
 
-	//points_ss << "Points: " << this->points;
-	points_ss << "Points: " << player.GetPoints();
+	points_ss << "Points: " << timers.GetScore();
+	//points_ss << "Points: " << player.GetPoints();
 	//health_ss << "Health: " << player.getHealth();
 	lives_ss << "Lives: " << player.GetLives();
 
@@ -216,7 +226,7 @@ void TextHandler::RenderEndScreen()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
 	//this->endScreenText.setString("Your score was " + std::to_string(this->points)
-	this->endScreenText.setString("Your score was ... \nPress enter to play again");
+	this->endScreenText.setString(fmt::format("Your score was {} \nPress enter to play again", Timers::getInstance().GetScore()));
 
 	// Draw the text to the window.
 	windowManager.getWindow().draw(endScreenText);

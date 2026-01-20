@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include <fmt/core.h>
+#include "game.h"
 
 Timers::Timers()
 {
@@ -10,8 +11,10 @@ Timers::Timers()
 
 	m_TimerDisplayConsole = true;
 
-	// Start the timer when this constructor starts up
+	// Start the timers when this constructor starts up
 	this->StartTimer();
+
+	scoreTimerClock.start();
 }
 
 Timers::~Timers()
@@ -28,7 +31,10 @@ bool Timers::SecondPassed()
 {
 	if (m_ElapsedTime > m_ElapsedTimeOld)
 	{
-		m_ElapsedTimeOld++;
+		//m_ElapsedTimeOld++;
+		// Update old time to current time
+		// This seems to fix the enemy hitting the player without 
+		m_ElapsedTimeOld = m_ElapsedTime; 
 		return true;
 	}
 
@@ -87,6 +93,101 @@ void Timers::TimerLoop()
 }
 
 /**
+ * @brief Setup a wait timer
+ * @param duration The time in milliseconds, seconds, or minutes.
+ * @param unit The unit, 'm' (milliseconds), 's' (seconds), 'M' (minutes)
+ */
+void Timers::StartWait(int duration, char unit)
+{
+	m_Waiting = true;
+
+	switch (unit)
+	{
+		case 'm': // Milliseconds
+			m_WaitDuration = duration / 1000.0f;
+			break;
+		case 's': // Seconds
+			m_WaitDuration = duration;
+			break;
+		case 'M': // Minutes
+			m_WaitDuration = duration;
+			break;
+		default:
+			fmt::println("Invalid unit");
+			m_Waiting = false;
+			break;
+	}
+
+	// Start the wait clock
+	waitClock.restart();
+}
+
+/**
+ * @brief Loop for the timer with a custom time, separate from the main timer.
+ */
+void Timers::TimerWaitLoop()
+{
+	if (m_Waiting && waitClock.getElapsedTime().asSeconds() > m_WaitDuration)
+	{
+		m_Waiting = false;
+	}
+}
+
+/**
+ * @brief Setup the new timer that handles the score, increment the score once a second and reset it on death
+ * 
+ * I got this to work, I setup the m_CurrentScoreTime and m_Score variables to be incremented every second.
+ * These values also get reset when the game ends.
+ */
+void Timers::ScoreTimer()
+{
+	if (!m_GameTimerStopped && scoreTimerClock.getElapsedTime().asSeconds() > 1)
+	{
+		m_CurrentScoreTime++;
+		m_Score++;
+		scoreTimerClock.restart();
+	}
+
+	if (!Game::getInstance().getEndScreen() && m_GameTimerStopped)
+	{
+		m_GameTimerStopped = false;
+		scoreTimerClock.start();
+		// Reset the score
+		m_Score = 0;
+	}
+
+	if (Game::getInstance().getEndScreen() && !m_GameTimerStopped)
+	{
+		scoreTimerClock.stop();
+		// Reset the score timer value.
+		m_CurrentScoreTime = 0;
+		m_GameTimerStopped = true;
+
+		fmt::println("Timer has been stopped and reset, new value: {}", m_CurrentScoreTime);
+	}
+}
+
+/**
+ * @brief Get the current score value from the timer
+ * @return The current time in seconds which is the players score.
+ */
+const int Timers::GetScore() const
+{
+	//return m_CurrentScoreTime;
+	return m_Score;
+}
+
+/**
+ * @brief Get the current time, this is how long the game has been open.
+ * @return
+ */
+const int Timers::GetElapsedTime() const
+{
+	return m_ElapsedTime;
+}
+
+
+/**
  * @brief This some testing code for the timer system.
  */
 void Timers::TimerTest()
@@ -113,9 +214,4 @@ void Timers::TimerTest()
 	//}
 	//std::cout << "Seconds: " << secondsToPass << std::endl;
 	//std::cout << "Seconds: " << currentGameSeconds << std::endl;
-}
-
-const int Timers::GetElapsedTime() const
-{
-	return m_ElapsedTime;
 }
