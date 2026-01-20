@@ -46,7 +46,8 @@ add_executable(${PROJECT_NAME}
 	)
 
 # Setup precompiled headers
-target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.h)
+# Disabled for now.
+# target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.h)
 
 # Setup the libraries to link with.
 target_link_libraries(${PROJECT_NAME} PRIVATE 

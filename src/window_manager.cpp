@@ -6,6 +6,7 @@
 #ifdef _IMGUI_TEST
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include "util/imgui_setup.h"
 #include "menus/debug/imgui_menu.h"
 #endif // _IMGUI_TEST
 
@@ -59,17 +60,27 @@ WindowManager::~WindowManager()
 
 void WindowManager::initWindow(unsigned int width, unsigned int height, const std::string& title) {
     Defines defines = Defines();
+    ImGuiSetup& imGuiSetup = ImGuiSetup::getInstance();
+
     //window = new sf::RenderWindow(sf::VideoMode({ 1920u, 1080u }), title, sf::Style::Titlebar | sf::Style::Close);
     window = new sf::RenderWindow(sf::VideoMode({ defines.screenWidth, defines.screenHeight }), title, sf::Style::Titlebar | sf::Style::Close);
 
     this->window->setFramerateLimit(defines.gameFramerate);
     this->window->setVerticalSyncEnabled(defines.vsyncEnabled);
 
-    // Setup ImGui window
+    
 #ifdef _IMGUI_TEST
+    // Setup ImGui window
+    imGuiSetup.InitImGui(window);
 
-    if (!ImGui::SFML::Init(*window))
-        return;
+    if (imGuiSetup.IsInitialized())
+    {
+        fmt::println("ImGui has been initialized.");
+    }
+    else 
+    {
+        fmt::println("ImGui couldn't be initialized! Debug system has been disabled.");
+    }
 
 #endif //_IMGUI_TEST
 }
