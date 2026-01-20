@@ -38,6 +38,9 @@ private:
 	int maxEnemies;
 	float enemySpeed;
 
+	// Check if the player has been hit
+	bool m_PlayerHit;
+
 	// TODO Rename these below booleans.
 	// Make the enemies faster.
 	bool fastEnemies;

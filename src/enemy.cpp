@@ -81,6 +81,8 @@ void Enemy::Init()
 
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 	this->maxEnemies = 10.0f;
+
+	m_PlayerHit = false;
 }
 
 /**
@@ -102,23 +104,23 @@ void Enemy::Spawn()
 #ifdef ENEMY_RANDOM_SPAWNS
 	//float randomSpawnPos = randomNumberGenerator.GenerateRandomNumber(10.0f, 40.0f);
 	//this->enemy.setPosition(sf::Vector2f(m_RandomSpawnPos, m_RandomSpawnPos));
-	this->enemy.setPosition(
-		sf::Vector2f(windowManager.getWindow().getSize().x - this->enemy.getSize().x, 
+this->enemy.setPosition(
+	sf::Vector2f(windowManager.getWindow().getSize().x - this->enemy.getSize().x,
 		0.0f));
 
 #else
-	this->enemy.setPosition(sf::Vector2f(
-		static_cast<float> (rand() % static_cast<int>(windowManager.getWindow().getSize().x - this->enemy.getSize().x)), 0.0f)
-	);
+this->enemy.setPosition(sf::Vector2f(
+	static_cast<float> (rand() % static_cast<int>(windowManager.getWindow().getSize().x - this->enemy.getSize().x)), 0.0f)
+);
 
 #endif // ENEMY_RANDOM_SPAWNS
 
-	this->enemy.setFillColor(enemyColor);
+this->enemy.setFillColor(enemyColor);
 
-	// Spawn the enemy
-	this->enemies.push_back(this->enemy);
+// Spawn the enemy
+this->enemies.push_back(this->enemy);
 
-	// Remove enemies at the end of the screen.
+// Remove enemies at the end of the screen.
 }
 
 //void Game::playEnemySfx()
@@ -146,9 +148,9 @@ sf::SoundBuffer* Game::playEnemySfx()
 
 /**
  * @brief Clear the enemies if the game ends or something.
- * 
+ *
  * TODO Set this up somewhere, I never did have it setup in my other game test.
- * 
+ *
  * This seems to work in my ImGui menu, I wonder if I can use it to setup rounds?
  * Like reset and make the enemies go faster or something.
  */
@@ -200,6 +202,13 @@ void Enemy::Update()
 	Game& game = Game::getInstance();
 
 	sf::FloatRect playerBoundingBox = player.GetPlayer().getGlobalBounds();
+
+	// Make this do nothing if the game is paused or the end screen is hit.
+	// This should save me from having to do it everywhere in this function.
+	if(game.getEndScreen() || game.getPaused())
+	{
+		return;
+	}
 
 	// TODO Fix this
 #ifdef _ENEMY_SOUNDS_TEST
@@ -259,19 +268,22 @@ void Enemy::Update()
 
 		// New
 			
-		// TODO Work on this, this is the player/enemy collision detection test.
 		// This works for basic collisions!
-		// Well now this takes more then one life away..
+		// I got this mostly working better then it was. I had to add the m_PlayerHit variable.
 
-		//if (entity.GetGlobalBounds(enemies[i]).contains(player.GetPosition()))
-		//{
-			//if (timers.SecondPassed())
-			//{
-				//player.SetLives(player.GetLives() - 1);
+		if (entity.GetGlobalBounds(enemies[i]).contains(player.GetPosition()))
+		{
+			if (timers.SecondPassed() && !m_PlayerHit)
+			{
+				player.SetLives(player.GetLives() - 1);
+				m_PlayerHit = true;
 				//fmt::println("Enemy is hitting the player, new lives: {}", player.GetLives());
-			//}
-			//
-		//}
+			}			
+		}
+		else
+		{
+			m_PlayerHit = false;
+		}
 		//
 
 		// Delete the enemy if they are past the bottom of the screen.
