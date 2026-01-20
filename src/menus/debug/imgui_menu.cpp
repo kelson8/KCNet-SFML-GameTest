@@ -6,6 +6,10 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+// Menus
+#include "imgui_screen_menu.h"
+//
+
 #include "player.h"
 #include "entity.h"
 #include "window_manager.h"
@@ -18,22 +22,7 @@
 #include "util/music_util.h"
 #include "util/timers.h"
 
-namespace ImGuiDebug 
-{
-	// Debug variables for game menu, these are for the float sliders to use.
-	float livesPosX = 0.0f;
-	float livesPosY = 0.0f;
 
-	float pauseMenuTextPosX = 0.0f;
-	float pauseMenuTextPosY = 0.0f;
-
-	// The max text position for the debug display editor.
-	// Checks if this value is too high for the display.
-	float maxTextPosX = 100.0f;
-	float maxTextPosY = 35.0f;
-
-	int timePassed = 0;
-}
 
 ImGuiMenu::ImGuiMenu()
 {
@@ -44,21 +33,19 @@ ImGuiMenu::ImGuiMenu()
 
 	randomScreenPosX = 0;
 	randomScreenPosY = 0;
+
+	livesPosX = 0.0f;
+	livesPosY = 0.0f;
+
+	maxTextPosX = 100.0f;
+	maxTextPosY = 35.0f;
+
+	timePassed = 0;
 }
 
 ImGuiMenu::~ImGuiMenu()
 {
 
-}
-
-/**
- * @brief Set a random screen position for the random screen position generator in the menu.
- */
-void ImGuiMenu::SetRandomScreenPos()
-{
-	WindowManager& windowManager = WindowManager::getInstance();
-	randomScreenPosX = windowManager.GetRandomScreenX();
-	randomScreenPosY = windowManager.GetRandomScreenY();
 }
 
 /**
@@ -81,6 +68,24 @@ void ImGuiMenu::SetStatus(bool toggle)
 }
 
 /**
+ * @brief Get the max text X position bounds for the window
+ * @return 
+ */
+const float ImGuiMenu::GetMaxTextXPos() const
+{
+	return maxTextPosX;
+}
+
+/**
+ * @brief Get the max text Y position bounds for the window
+ * @return
+ */
+const float ImGuiMenu::GetMaxTextYPos() const
+{
+	return maxTextPosY;
+}
+
+/**
  * @brief Draw the ImGui window.
  */
 void ImGuiMenu::Draw()
@@ -98,6 +103,8 @@ void ImGuiMenu::Draw()
 	TextHandler& textHandler = TextHandler::getInstance();
 	MusicUtil& musicUtil = MusicUtil::getInstance();
 	Timers& timers = Timers::getInstance();
+
+	ImGuiScreenMenu& imGuiScreenMenu = ImGuiScreenMenu::getInstance();
 
 	float playerPosX = player.GetPosition().x;
 	float playerPosY = player.GetPosition().y;
@@ -123,7 +130,7 @@ void ImGuiMenu::Draw()
 	// TODO Make this get value from the Game loop instead of when ImGui is being drawn.
 	if (timers.SecondPassed())
 	{
-		ImGuiDebug::timePassed++;
+		timePassed++;
 	}
 
 	//----
@@ -166,15 +173,15 @@ void ImGuiMenu::Draw()
 			ImGui::Text(fmt::format("X: {}", textHandler.GetLivesTextPosX()).c_str());
 			ImGui::Text(fmt::format("Y: {}", textHandler.GetLivesTextPosY()).c_str());
 			
-			ImGui::SliderFloat("Lives Text X", &ImGuiDebug::livesPosX, 0.0f, 
-				screenSizeX - ImGuiDebug::maxTextPosX);
+			ImGui::SliderFloat("Lives Text X", &livesPosX, 0.0f, 
+				screenSizeX - maxTextPosX);
 			//ImGui::SliderFloat("Lives Text Y", &ImGuiDebug::livesPosY, 0.0f, screenSizeY - 30);
-			ImGui::SliderFloat("Lives Text Y", &ImGuiDebug::livesPosY, 0.0f, 
-				screenSizeY - ImGuiDebug::maxTextPosY);
+			ImGui::SliderFloat("Lives Text Y", &livesPosY, 0.0f, 
+				screenSizeY - maxTextPosY);
 			
 			if (ImGui::Button("Set Lives Position"))
 			{
-				textHandler.SetLivesTextPos(ImGuiDebug::livesPosX, ImGuiDebug::livesPosY);
+				textHandler.SetLivesTextPos(livesPosX, livesPosY);
 			}
 
 			ImGui::Text("Current lives: {}", player.GetLives());
@@ -207,7 +214,8 @@ void ImGuiMenu::Draw()
 	//------
 	// Screen
 	//------
-	this->ScreenMenu();
+	//this->ScreenMenu();
+	imGuiScreenMenu.Draw();
 
 	ImGui::Separator();
 
@@ -266,7 +274,7 @@ void ImGuiMenu::Draw()
 	//
 	// Display the seconds passed since game start with ImGui open
 	//ImGui::Text(fmt::format("Seconds passed since game start (ImGui was open): {}", ImGuiDebug::timePassed).c_str());
-	ImGui::Text(fmt::format("Seconds passed since ImGui has been open: {}", ImGuiDebug::timePassed).c_str());
+	ImGui::Text(fmt::format("Seconds passed since ImGui has been open: {}", timePassed).c_str());
 
 	ImGui::End();
 }
@@ -276,65 +284,6 @@ void ImGuiMenu::Draw()
 // TODO Move these into separate menu files later.
 //----------
 
-/**
- * @brief Display the screen menu.
- */
-void ImGuiMenu::ScreenMenu()
-{
-	WindowManager& windowManager = WindowManager::getInstance();
-	TextHandler& textHandler = TextHandler::getInstance();
-
-	float screenSizeX = windowManager.getWindow().getSize().x;
-	float screenSizeY = windowManager.getWindow().getSize().y;
-
-	if (ImGui::CollapsingHeader("Screen Info"))
-	{
-		ImGui::Text("Screen Size: ");
-		ImGui::Text(fmt::format("X: {}", screenSizeX).c_str());
-		ImGui::Text(fmt::format("Y: {}", screenSizeY).c_str());
-
-
-		ImGui::Separator();
-
-		// Random screen sizes
-		ImGui::Text("Random screen size testing");
-
-		// Update the random screen size variables
-		if (ImGui::Button("Update Random Screen Size"))
-		{
-			this->SetRandomScreenPos();
-		}
-
-		ImGui::Checkbox("Display random screen size", &showRandomScreenSize);
-
-		// I fixed this by making a randomScreenPosX and Y variable, and updating it on a button press.
-		// This random screen size could be useful for random player or enemy spawns if I fine tune it.
-		if (showRandomScreenSize)
-		{
-			ImGui::Text(fmt::format("X: {}", randomScreenPosX).c_str());
-			ImGui::Text(fmt::format("Y: {}", randomScreenPosY).c_str());
-		}
-
-		ImGui::Separator();
-
-		// This is using tuples and returning them, works well for a coordinate system.
-		ImGui::Text("Pause menu debug");
-		ImGui::SliderFloat("Text pos X", &ImGuiDebug::pauseMenuTextPosX, 0.0, screenSizeX - ImGuiDebug::maxTextPosX);
-		ImGui::SliderFloat("Text pos Y", &ImGuiDebug::pauseMenuTextPosY, 0.0, screenSizeY - ImGuiDebug::maxTextPosY);
-
-		//ImGui::Text(fmt::format("Current Pos X: {}", textHandler.GetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION)).c_str());
-		ImGui::Text(fmt::format("Current Pos X: {}",
-			std::get<0>(textHandler.GetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION))).c_str());
-
-		ImGui::Text(fmt::format("Current Pos Y: {}",
-			std::get<1>(textHandler.GetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION))).c_str());
-
-		if (ImGui::Button("Apply new text positions"))
-		{
-			textHandler.SetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION, ImGuiDebug::pauseMenuTextPosX, ImGuiDebug::pauseMenuTextPosY);
-		}
-	}
-}
 
 void ImGuiMenu::ControllerMenu()
 {
