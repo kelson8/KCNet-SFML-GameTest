@@ -172,6 +172,8 @@ void WindowManager::pollEvents()
 
                 // Move right
                 case KeyCodes::Key_D:
+                    if (game.getPaused() || game.getEndScreen()) return;
+                    player.Move(0.f, player.GetMoveSpeed());
                     break;
 
                 
