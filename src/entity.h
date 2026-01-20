@@ -12,6 +12,9 @@ public:
 
 	const bool IsInBounds(sf::RectangleShape entity);
 
+	sf::FloatRect GetGlobalBounds(sf::RectangleShape entity);
+	sf::FloatRect GetLocalBounds(sf::RectangleShape entity);
+
 private:
 	// Constructors / Destructors
 	Entity();

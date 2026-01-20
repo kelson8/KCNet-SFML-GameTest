@@ -13,6 +13,7 @@ public:
 
 	void Update();
 	void Render(sf::RenderTarget& target);
+	void RenderPauseScreen(sf::RenderTarget& target);
 	void RenderEndScreen();
 
 #ifdef _IMGUI_TEST
@@ -30,6 +31,7 @@ private:
 	void Init();
 	void InitFonts();
 	void InitVariables();
+	void InitPauseMenu();
 
 	// Resources
 	sf::Font font;
@@ -39,6 +41,9 @@ private:
 	sf::Text healthText;
 	sf::Text livesText;
 	sf::Text endScreenText;
+
+	sf::Text pauseMenuText;
+	sf::Text pauseMenuContinueText;
 
 	// Text position
 

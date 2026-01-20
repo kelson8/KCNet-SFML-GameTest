@@ -57,3 +57,23 @@ const bool Entity::IsInBounds(sf::RectangleShape entity)
 
 	return true;
 }
+
+/**
+ * @brief Get the entity's global bounds for like a border/intersection.
+ * @param entity The entity to check
+ * @return The entity's global bounds.
+ */
+sf::FloatRect Entity::GetGlobalBounds(sf::RectangleShape entity)
+{
+	return entity.getGlobalBounds();
+}
+
+/**
+ * @brief Get the entity's local bounds for like a border/intersection.
+ * @param entity The entity to check
+ * @return The entity's local bounds.
+ */
+sf::FloatRect Entity::GetLocalBounds(sf::RectangleShape entity)
+{
+	return entity.getLocalBounds();
+}

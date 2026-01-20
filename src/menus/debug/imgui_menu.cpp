@@ -144,6 +144,15 @@ void ImGuiMenu::Draw()
 			ImGui::Text("Player is in bounds.");
 		}
 
+		if (game.getEndScreen())
+		{
+			if (ImGui::Button("Respawn player"))
+			{
+				game.setEndGame(false);
+				player.SetLives(Defines::defaultLives);
+			}
+		}
+
 		//-----
 		// Lives debug
 		//-----
@@ -164,8 +173,12 @@ void ImGuiMenu::Draw()
 			{
 				textHandler.SetLivesTextPos(ImGuiDebug::livesPosX, ImGuiDebug::livesPosY);
 			}
+
+			ImGui::Text("Current lives: {}", player.GetLives());
 		}
 	}
+
+	ImGui::Separator();
 
 	//------
 	// Enemy
@@ -185,6 +198,8 @@ void ImGuiMenu::Draw()
 
 		ImGui::Text(fmt::format("Random Spawn Position: {}", enemy.GetRandomSpawnPos()).c_str());
 	}
+
+	ImGui::Separator();
 
 	//------
 	// Screen
@@ -222,6 +237,8 @@ void ImGuiMenu::Draw()
 		ImGui::Text(fmt::format("Seconds passed since ImGui has been open: {}", ImGuiDebug::timePassed).c_str());
 	}
 
+	ImGui::Separator();
+
 	//------
 	// Mouse
 	//------
@@ -237,6 +254,8 @@ void ImGuiMenu::Draw()
 		ImGui::Text(fmt::format("X: {}", mouseUtil.getMousePosView().x).c_str());
 		ImGui::Text(fmt::format("Y: {}", mouseUtil.getMousePosView().y).c_str());
 	}
+
+	ImGui::Separator();
 
 	//------
 	// Music
@@ -263,6 +282,8 @@ void ImGuiMenu::Draw()
 			musicUtil.SetMusicInfo(false, true, false);
 		}
 	}
+
+	ImGui::Separator();
 
 	//------
 	// Controller

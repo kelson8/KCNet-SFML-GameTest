@@ -304,6 +304,11 @@ void Game::Render()
 
 			// Draw game objects
 		}
+		// Show the pause screen
+		else 
+		{
+			textHandler.RenderPauseScreen(windowManager.getWindow());
+		}
 
 	}
 	// Show the end screen

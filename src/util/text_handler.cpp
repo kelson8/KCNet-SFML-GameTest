@@ -3,6 +3,7 @@
 #include "defines.h"
 
 #include "player.h"
+#include "game.h"
 
 #include <SFML/Audio.hpp>
 
@@ -13,7 +14,9 @@ TextHandler::TextHandler() :
 	scoreText(font),
 	healthText(font),
 	livesText(font),
-	endScreenText(font)
+	endScreenText(font),
+	pauseMenuText(font),
+	pauseMenuContinueText(font)
 {
 	this->InitFonts();
 	this->Init();
@@ -74,9 +77,14 @@ void TextHandler::Init()
 	// End screen
 	//----
 	this->endScreenText.setFont(this->font);
-	//this->endScreenText.setPosition(40, 40);
 	this->endScreenText.setPosition(sf::Vector2f(40, 40));
 	this->endScreenText.setCharacterSize(48);
+
+	//----
+	// Pause screen
+	//----
+	this->InitPauseMenu();
+
 }
 
 /**
@@ -115,6 +123,23 @@ void TextHandler::InitVariables()
 }
 
 /**
+ * @brief Setup the values for the pause menu
+ */
+void TextHandler::InitPauseMenu()
+{
+	this->pauseMenuText.setFont(this->font);
+	this->pauseMenuText.setPosition(sf::Vector2f(40, 40));
+	this->pauseMenuText.setCharacterSize(48);
+	this->pauseMenuText.setString("Paused");
+
+	// Incomplete
+	//this->pauseMenuContinueText.setFont(this->font);
+	//this->pauseMenuContinueText.setPosition(sf::Vector2f(40, 80));
+	//this->pauseMenuContinueText.setCharacterSize(48);
+	//this->pauseMenuContinueText.setString("Continue?");
+}
+
+/**
  * @brief Update the game text
  */
 void TextHandler::Update()
@@ -149,11 +174,26 @@ void TextHandler::Render(sf::RenderTarget& target)
 
 	// Draw the lives text
 	target.draw(this->livesText);
+
 #ifdef _IMGUI_TEST
 	// This is required for changing the position of the displays.
 	this->livesText.setPosition(sf::Vector2f(livesTextPosX, livesTextPosY));
 #endif // _IMGUI_TEST
+}
 
+/**
+ * @brief Pause screen for the game.
+ * @param target
+ */
+void TextHandler::RenderPauseScreen(sf::RenderTarget& target)
+{
+	Game& game = Game::getInstance();
+
+	if (game.getPaused())
+	{
+		target.draw(this->pauseMenuText);
+		//target.draw(this->pauseMenuContinueText);
+	}
 }
 
 /**

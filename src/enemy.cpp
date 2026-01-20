@@ -1,10 +1,18 @@
 #include "enemy.h"
 #include "window_manager.h"
 
+#include <fmt/core.h>
+
 #include "defines.h"
+
+#include "entity.h"
+#include "player.h"
+#include "game.h"
 
 #include "util/random_number_generator.h"
 #include "util/timers.h"
+
+
 
 // TODO Make a life system, if enough enemies get through it's game over, add a way to attack or something.
 
@@ -187,6 +195,12 @@ void Enemy::Update()
 	RandomNumberGenerator& randomNumberGenerator = RandomNumberGenerator::getInstance();
 	Timers& timers = Timers::getInstance();
 
+	Entity& entity = Entity::getInstance();
+	Player& player = Player::getInstance();
+	Game& game = Game::getInstance();
+
+	sf::FloatRect playerBoundingBox = player.GetPlayer().getGlobalBounds();
+
 	// TODO Fix this
 #ifdef _ENEMY_SOUNDS_TEST
 	// Play sound effect
@@ -196,14 +210,18 @@ void Enemy::Update()
 
 	Defines defines = Defines();
 	Enemy enemy = Enemy();
+	
 
 	// Updating the timer.
 	if (this->enemies.size() < this->maxEnemies)
 	{
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
 		{
-			this->Spawn();
-			this->enemySpawnTimer = 0.0f;
+			if (!game.getEndScreen() && !game.getPaused())
+			{
+				this->Spawn();
+				this->enemySpawnTimer = 0.0f;
+			}
 		}
 		else
 		{
@@ -230,9 +248,31 @@ void Enemy::Update()
 		this->enemies[i].move(sf::Vector2f(5.0f, m_RandomSpawnPos));
 
 #else
-		//Change the speed by changing the offsetY
-		this->enemies[i].move(sf::Vector2f(0.0f, enemySpeed));
+		
+		if (!game.getEndScreen() && !game.getPaused())
+		{
+			// Change the speed by changing the offsetY
+			this->enemies[i].move(sf::Vector2f(0.0f, enemySpeed));
+		}
+		
 #endif // ENEMY_RANDOM_SPAWNS
+
+		// New
+			
+		// TODO Work on this, this is the player/enemy collision detection test.
+		// This works for basic collisions!
+		// Well now this takes more then one life away..
+
+		//if (entity.GetGlobalBounds(enemies[i]).contains(player.GetPosition()))
+		//{
+			//if (timers.SecondPassed())
+			//{
+				//player.SetLives(player.GetLives() - 1);
+				//fmt::println("Enemy is hitting the player, new lives: {}", player.GetLives());
+			//}
+			//
+		//}
+		//
 
 		// Delete the enemy if they are past the bottom of the screen.
 		if (this->enemies[i].getPosition().y > windowManager.getWindow().getSize().y
