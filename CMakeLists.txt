@@ -3,8 +3,30 @@ cmake_minimum_required(VERSION 3.28)
 set(PROJECT_NAME "KCNet-SFML-GameTest")
 project(${PROJECT_NAME} LANGUAGES CXX)
 
-file(GLOB SOURCES "src/*.cpp" "src/util/*.cpp" "src/menus/debug/*.cpp")
-file(GLOB HEADERS "src/*.h" "src/util/*.h" "src/menus/debug/*.h")
+file(GLOB SOURCES 
+	"src/*.cpp" 
+	"src/util/*.cpp" 
+	"src/menus/*.cpp"
+	"src/menus/debug/*.cpp")
+
+file(GLOB HEADERS 
+	"src/*.h" 
+	"src/util/*.h" 
+	"src/menus/*.h"
+	"src/menus/debug/*.h")
+
+# New for Visual Studio filters
+# TODO Make this neater later.
+file(GLOB SOURCES_MAIN "src/*.cpp")
+file(GLOB SOURCES_UTIL "src/util/*.cpp")
+file(GLOB SOURCES_MENU "src/menus/*.cpp")
+file(GLOB SOURCES_MENU_IMGUI "src/menus/debug/*.cpp")
+
+file(GLOB HEADERS_MAIN "src/*.h")
+file(GLOB HEADERS_UTIL "src/util/*.h")
+file(GLOB HEADERS_MENU "src/menus/*.h")
+file(GLOB HEADERS_MENU_IMGUI "src/menus/debug/*.h")
+#
 
 # 
 # https://github.com/eliasdaler/imgui-sfml-fetchcontent/blob/master/dependencies/CMakeLists.txt
@@ -84,3 +106,15 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/resources/"
         "$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")
+
+# New for Visual Studio filters
+# https://stackoverflow.com/questions/33808087/cmake-how-to-create-visual-studio-filters
+source_group("src"            	FILES ${SOURCES_MAIN})
+source_group("src/util"         FILES ${SOURCES_UTIL})
+source_group("src/menus"        FILES ${SOURCES_MENU})
+source_group("src/menus/debug"  FILES ${SOURCES_MENU_IMGUI})
+
+source_group("src"        		FILES ${HEADERS_MAIN})
+source_group("src/util"        	FILES ${HEADERS_UTIL})
+source_group("src/menus"        FILES ${HEADERS_MENU})
+source_group("src/menus/debug"	FILES ${HEADERS_MENU_IMGUI})
