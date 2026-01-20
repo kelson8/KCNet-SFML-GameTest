@@ -2,6 +2,20 @@
 #include <SFML/Graphics.hpp>
 #include "defines.h"
 
+#include <tuple>
+
+#ifdef _IMGUI_TEST
+enum class TextPositions
+{
+	SCORE_TEXT_POSITION,
+	HEALTH_TEXT_POSITION,
+	LIVES_TEXT_POSITION,
+	PAUSE_TEXT_POSITION,
+	PAUSE_CONTINUE_TEXT_POSITION,
+
+};
+#endif // _IMGUI_TEST
+
 class TextHandler
 {
 public:
@@ -21,6 +35,9 @@ public:
 	const float GetLivesTextPosY() const;
 
 	void SetLivesTextPos(float livesPosX, float livesPosY);
+	void SetDisplayPositions(TextPositions textPosEnum, float posX, float posY);
+	//float GetDisplayPositions(TextPositions textPosEnum);
+	std::tuple<float, float> GetDisplayPositions(TextPositions textPosEnum);
 #endif
 
 private:
@@ -48,24 +65,28 @@ private:
 	// Text position
 
 	// Score text Position X
-	float scoreTextPosX;
+	float m_ScoreTextPosX;
 	// Score text Position Y
-	float scoreTextPosY;
+	float m_ScoreTextPosY;
 
 	// Health text Position X
-	float healthTextPosX;
+	float m_HealthTextPosX;
 	// Health text Position Y
-	float healthTextPosY;
+	float m_HealthTextPosY;
 
 	// Lives text Position X
-	float livesTextPosX;
+	float m_LivesTextPosX;
 	// Lives text Position Y
-	float livesTextPosY;
+	float m_LivesTextPosY;
+
+	// Pause menu
+	float m_PauseMenuTextPosX;
+	float m_PauseMenuTextPosY;
 
 	// End screen text Position X
-	float endScreenTextPosX;
+	float m_EndScreenTextPosX;
 	// End screen text Position Y
-	float endScreenTextPosY;
+	float m_EndScreenTextPosY;
 	//
 };
 

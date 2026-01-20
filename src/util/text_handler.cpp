@@ -65,7 +65,7 @@ void TextHandler::Init()
 
 	// Set the Y to be lower then the the other vaules, so it doesn't overlap.
 	//this->livesText.setPosition(sf::Vector2f(0.0f, 35.0f));
-	this->livesText.setPosition(sf::Vector2f(livesTextPosX, livesTextPosY));
+	this->livesText.setPosition(sf::Vector2f(m_LivesTextPosX, m_LivesTextPosY));
 
 	// Set the character size, fill color and default string
 	this->livesText.setCharacterSize(24);
@@ -108,18 +108,22 @@ void TextHandler::InitFonts()
 void TextHandler::InitVariables()
 {
 	// Score text position values.
-	scoreTextPosX = 0.0f;
-	scoreTextPosY = 0.0f;
+	m_ScoreTextPosX = 0.0f;
+	m_ScoreTextPosY = 0.0f;
 
-	healthTextPosX = 0.0f;
-	healthTextPosY = 30.0f;
+	m_HealthTextPosX = 0.0f;
+	m_HealthTextPosY = 30.0f;
 
-	livesTextPosX = 0.0f;
-	livesTextPosY = 60.0f;
+	m_LivesTextPosX = 0.0f;
+	m_LivesTextPosY = 60.0f;
 
-	endScreenTextPosX = 40.0f;
-	endScreenTextPosY = 40.0f;
+	m_EndScreenTextPosX = 40.0f;
+	m_EndScreenTextPosY = 40.0f;
 	//
+
+	// Pause menu
+	m_PauseMenuTextPosX = 327.0f;
+	m_PauseMenuTextPosY = 182.0f;
 }
 
 /**
@@ -128,7 +132,7 @@ void TextHandler::InitVariables()
 void TextHandler::InitPauseMenu()
 {
 	this->pauseMenuText.setFont(this->font);
-	this->pauseMenuText.setPosition(sf::Vector2f(40, 40));
+	this->pauseMenuText.setPosition(sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY));
 	this->pauseMenuText.setCharacterSize(48);
 	this->pauseMenuText.setString("Paused");
 
@@ -177,7 +181,7 @@ void TextHandler::Render(sf::RenderTarget& target)
 
 #ifdef _IMGUI_TEST
 	// This is required for changing the position of the displays.
-	this->livesText.setPosition(sf::Vector2f(livesTextPosX, livesTextPosY));
+	this->livesText.setPosition(sf::Vector2f(m_LivesTextPosX, m_LivesTextPosY));
 #endif // _IMGUI_TEST
 }
 
@@ -194,6 +198,11 @@ void TextHandler::RenderPauseScreen(sf::RenderTarget& target)
 		target.draw(this->pauseMenuText);
 		//target.draw(this->pauseMenuContinueText);
 	}
+
+#ifdef _IMGUI_TEST
+	// This is required for changing the position of the displays.
+	this->pauseMenuText.setPosition(sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY));
+#endif // _IMGUI_TEST
 }
 
 /**
@@ -217,20 +226,108 @@ void TextHandler::RenderEndScreen()
 // Debugging for moving the text display on screen
 const float TextHandler::GetLivesTextPosX() const
 {
-	return this->livesTextPosX;
+	return this->m_LivesTextPosX;
 }
 
 const float TextHandler::GetLivesTextPosY() const
 {
-	return this->livesTextPosY;
+	return this->m_LivesTextPosY;
 }
 
 void TextHandler::SetLivesTextPos(float livesPosX, float livesPosY)
 {
-	this->livesTextPosX = livesPosX;
-	this->livesTextPosY = livesPosY;
+	this->m_LivesTextPosX = livesPosX;
+	this->m_LivesTextPosY = livesPosY;
 }
 
+/**
+ * @brief Set the text positions for debugging.
+ * 
+ * Not all of these values can be set yet, for these to be able to be set and updated:
+ * 
+ * First, you will need to create a member variable to store the X text position and Y text position.
+ * 
+ * Then, initialize that with a value in the InitVariables function.
+ * 
+ * Lastly, You will need to place something extra in the 
+ *  TextHandler::Render function, or the TextHandler::RenderPauseScreen function depending on where you want this text to update.
+ * 
+ * Copy one of the methods from the _IMGUI_TEST preprocessor in one of those functions
+ * and change to the values you are trying to update.
+ * 
+ * @param textPosEnum The text position to set from my enum
+ * @param posX The X position on the screen.
+ * @param posY The Y position on the screen.
+ */
+void TextHandler::SetDisplayPositions(TextPositions textPosEnum, float posX, float posY)
+{
+	switch (textPosEnum)
+	{
+	case TextPositions::SCORE_TEXT_POSITION:
+	
+		this->m_ScoreTextPosX = posX;
+		this->m_ScoreTextPosY = posY;
+		break;
+	
+	case TextPositions::HEALTH_TEXT_POSITION:
+		this->m_HealthTextPosX = posX;
+		this->m_HealthTextPosY = posY;
+		break;
+
+	case TextPositions::LIVES_TEXT_POSITION:
+		this->m_LivesTextPosX = posX;
+		this->m_LivesTextPosY = posY;
+		break;
+
+	case TextPositions::PAUSE_TEXT_POSITION:
+		this->m_PauseMenuTextPosX = posX;
+		this->m_PauseMenuTextPosY = posY;
+		break;
+
+	case TextPositions::PAUSE_CONTINUE_TEXT_POSITION:
+		break;
+
+	default:
+		break;
+	}
+}
+
+/**
+ * @brief Get the text positions for debugging.
+ * 
+ * This is a much better implementation then what I was doing 
+ *  for the GetLivesTextPosX and GetLivesTextPosY functions.
+ * 
+ * https://stackoverflow.com/questions/321068/returning-multiple-values-from-a-c-function
+ * 
+ * @param textPosEnum The text position to get from my enum
+ */
+//float TextHandler::GetDisplayPositions(TextPositions textPosEnum)
+std::tuple<float, float> TextHandler::GetDisplayPositions(TextPositions textPosEnum)
+{
+	switch (textPosEnum)
+	{
+	case TextPositions::SCORE_TEXT_POSITION:
+		return std::make_tuple(m_ScoreTextPosX, m_ScoreTextPosY);
+
+	case TextPositions::HEALTH_TEXT_POSITION:
+		return std::make_tuple(m_HealthTextPosX, m_HealthTextPosY);
+
+	case TextPositions::LIVES_TEXT_POSITION:
+		return std::make_tuple(m_LivesTextPosX, m_LivesTextPosY);
+
+	case TextPositions::PAUSE_TEXT_POSITION:
+		return std::make_tuple(m_PauseMenuTextPosX, m_PauseMenuTextPosY);
+
+	case TextPositions::PAUSE_CONTINUE_TEXT_POSITION:
+		// TODO Set this one up.
+		//return std::make_tuple(pauseMenuContinueTextPosX, pauseMenuContinueTextPosX);
+		break;
+
+	default:
+		break;
+	}
+}
 
 #endif // _IMGUI_TEST
 

@@ -24,6 +24,9 @@ namespace ImGuiDebug
 	float livesPosX = 0.0f;
 	float livesPosY = 0.0f;
 
+	float pauseMenuTextPosX = 0.0f;
+	float pauseMenuTextPosY = 0.0f;
+
 	// The max text position for the debug display editor.
 	// Checks if this value is too high for the display.
 	float maxTextPosX = 100.0f;
@@ -204,38 +207,7 @@ void ImGuiMenu::Draw()
 	//------
 	// Screen
 	//------
-	if (ImGui::CollapsingHeader("Screen Info"))
-	{
-		ImGui::Text("Screen Size: ");
-		ImGui::Text(fmt::format("X: {}", screenSizeX).c_str());
-		ImGui::Text(fmt::format("Y: {}", screenSizeY).c_str());
-
-
-		ImGui::Separator();
-
-		// Random screen sizes
-		ImGui::Text("Random screen size testing");
-
-		// Update the random screen size variables
-		if (ImGui::Button("Update Random Screen Size"))
-		{
-			this->SetRandomScreenPos();
-		}
-
-		ImGui::Checkbox("Display random screen size", &showRandomScreenSize);
-
-		// I fixed this by making a randomScreenPosX and Y variable, and updating it on a button press.
-		// This random screen size could be useful for random player or enemy spawns if I fine tune it.
-		if(showRandomScreenSize)
-		{
-			ImGui::Text(fmt::format("X: {}", randomScreenPosX).c_str());
-			ImGui::Text(fmt::format("Y: {}", randomScreenPosY).c_str());
-		}
-
-		// Display the seconds passed since game start with ImGui open
-		//ImGui::Text(fmt::format("Seconds passed since game start (ImGui was open): {}", ImGuiDebug::timePassed).c_str());
-		ImGui::Text(fmt::format("Seconds passed since ImGui has been open: {}", ImGuiDebug::timePassed).c_str());
-	}
+	this->ScreenMenu();
 
 	ImGui::Separator();
 
@@ -290,46 +262,121 @@ void ImGuiMenu::Draw()
 	//------
 	this->ControllerMenu();
 
+	
+	//
+	// Display the seconds passed since game start with ImGui open
+	//ImGui::Text(fmt::format("Seconds passed since game start (ImGui was open): {}", ImGuiDebug::timePassed).c_str());
+	ImGui::Text(fmt::format("Seconds passed since ImGui has been open: {}", ImGuiDebug::timePassed).c_str());
+
 	ImGui::End();
+}
+
+//----------
+// Menus
+// TODO Move these into separate menu files later.
+//----------
+
+/**
+ * @brief Display the screen menu.
+ */
+void ImGuiMenu::ScreenMenu()
+{
+	WindowManager& windowManager = WindowManager::getInstance();
+	TextHandler& textHandler = TextHandler::getInstance();
+
+	float screenSizeX = windowManager.getWindow().getSize().x;
+	float screenSizeY = windowManager.getWindow().getSize().y;
+
+	if (ImGui::CollapsingHeader("Screen Info"))
+	{
+		ImGui::Text("Screen Size: ");
+		ImGui::Text(fmt::format("X: {}", screenSizeX).c_str());
+		ImGui::Text(fmt::format("Y: {}", screenSizeY).c_str());
+
+
+		ImGui::Separator();
+
+		// Random screen sizes
+		ImGui::Text("Random screen size testing");
+
+		// Update the random screen size variables
+		if (ImGui::Button("Update Random Screen Size"))
+		{
+			this->SetRandomScreenPos();
+		}
+
+		ImGui::Checkbox("Display random screen size", &showRandomScreenSize);
+
+		// I fixed this by making a randomScreenPosX and Y variable, and updating it on a button press.
+		// This random screen size could be useful for random player or enemy spawns if I fine tune it.
+		if (showRandomScreenSize)
+		{
+			ImGui::Text(fmt::format("X: {}", randomScreenPosX).c_str());
+			ImGui::Text(fmt::format("Y: {}", randomScreenPosY).c_str());
+		}
+
+		ImGui::Separator();
+
+		// This is using tuples and returning them, works well for a coordinate system.
+		ImGui::Text("Pause menu debug");
+		ImGui::SliderFloat("Text pos X", &ImGuiDebug::pauseMenuTextPosX, 0.0, screenSizeX - ImGuiDebug::maxTextPosX);
+		ImGui::SliderFloat("Text pos Y", &ImGuiDebug::pauseMenuTextPosY, 0.0, screenSizeY - ImGuiDebug::maxTextPosY);
+
+		//ImGui::Text(fmt::format("Current Pos X: {}", textHandler.GetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION)).c_str());
+		ImGui::Text(fmt::format("Current Pos X: {}",
+			std::get<0>(textHandler.GetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION))).c_str());
+
+		ImGui::Text(fmt::format("Current Pos Y: {}",
+			std::get<1>(textHandler.GetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION))).c_str());
+
+		if (ImGui::Button("Apply new text positions"))
+		{
+			textHandler.SetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION, ImGuiDebug::pauseMenuTextPosX, ImGuiDebug::pauseMenuTextPosY);
+		}
+	}
 }
 
 void ImGuiMenu::ControllerMenu()
 {
 	// These don't seem to go to anything.
-	float controllerXHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
-	float controllerRHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R);
-	float controllerPovXPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
-	float controllerPovYPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY);
+	//float controllerXHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
+	//float controllerRHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R);
+	//float controllerPovXPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
+	//float controllerPovYPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY);
 	
 	// Right stick up/down
-	float controllerVPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V);
+	float controllerRightStickY = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V);
 	// Right stick left/right
-	float controllerUHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::U);
+	float controllerRightStickX = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::U);
 
 	// Left stick up/down
-	float controllerYPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y);
+	float controllerLeftStickY = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y);
 	// Left stick left/right
-	float controllerXPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
+	float controllerLeftStickX = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	// 0 to 100 is L2 on Xbox controller.
 	// 0 to -100 is R2 on Xbox controller.
-	float controllerZPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z);
+	float controllerBumpers = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z);
 
 	if (ImGui::CollapsingHeader("Controller Menu"))
 	{
-		ImGui::Text(fmt::format("Controller X Hat position: {}", controllerXHatPos).c_str());
-		ImGui::Text(fmt::format("Controller R position: {}", controllerRHatPos).c_str());
-		ImGui::Text(fmt::format("Controller U position: {}", controllerUHatPos).c_str());
+		//ImGui::Text(fmt::format("Controller X Hat position: {}", controllerXHatPos).c_str());
+		//ImGui::Text(fmt::format("Controller R position: {}", controllerRHatPos).c_str());
+		//ImGui::Text(fmt::format("Controller X Pov position: {}", controllerPovXPos).c_str());
+		//ImGui::Text(fmt::format("Controller Y Pov position: {}", controllerPovYPos).c_str());
 
-		ImGui::Text(fmt::format("Controller X Pov position: {}", controllerPovXPos).c_str());
-		ImGui::Text(fmt::format("Controller Y Pov position: {}", controllerPovYPos).c_str());
+		ImGui::Text(fmt::format("Right stick X position: {}", controllerRightStickX).c_str());
+		ImGui::Text(fmt::format("Right stick Y position: {}", controllerRightStickY).c_str());
 
-		ImGui::Text(fmt::format("Controller V position: {}", controllerVPos).c_str());
-		ImGui::Text(fmt::format("Controller X position: {}", controllerXPos).c_str());
-		ImGui::Text(fmt::format("Controller Y position: {}", controllerYPos).c_str());
-		ImGui::Text(fmt::format("Controller Z position: {}", controllerZPos).c_str());
+		ImGui::Spacing();
 
+		ImGui::Text(fmt::format("Left stick X position: {}", controllerLeftStickX).c_str());
+		ImGui::Text(fmt::format("Left stick Y position: {}", controllerLeftStickY).c_str());
 
+		ImGui::Spacing();
+
+		ImGui::Text("0 to 100 is L2, 0 to -100 is R2");
+		ImGui::Text(fmt::format("Controller Bumpers: {}", controllerBumpers).c_str());
 	}
 }
 
