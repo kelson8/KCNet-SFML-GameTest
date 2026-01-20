@@ -34,23 +34,23 @@
  */
 namespace KeyCodes
 {
-    sf::Keyboard::Scan Key_W = sf::Keyboard::Scancode::W;
-    sf::Keyboard::Scan Key_A = sf::Keyboard::Scancode::A;
-    sf::Keyboard::Scan Key_D = sf::Keyboard::Scancode::S;
-    sf::Keyboard::Scan Key_S = sf::Keyboard::Scancode::D;
-    
-    sf::Keyboard::Scan Key_F2 = sf::Keyboard::Scancode::F2;
-    sf::Keyboard::Scan Key_F4 = sf::Keyboard::Scancode::F4;
+    const sf::Keyboard::Key Key_W = sf::Keyboard::Key::W;
+    const sf::Keyboard::Key Key_A = sf::Keyboard::Key::A;
+    const sf::Keyboard::Key Key_D = sf::Keyboard::Key::S;
+    const sf::Keyboard::Key Key_S = sf::Keyboard::Key::D;
 
-    sf::Keyboard::Scan Key_Enter = sf::Keyboard::Scancode::Enter;
-    sf::Keyboard::Scan Key_Escape = sf::Keyboard::Scancode::Escape;
+    const sf::Keyboard::Key Key_B = sf::Keyboard::Key::B;
+    
+    const sf::Keyboard::Key Key_F2 = sf::Keyboard::Key::F2;
+    const sf::Keyboard::Key Key_F4 = sf::Keyboard::Key::F4;
+
+    const sf::Keyboard::Key Key_Enter = sf::Keyboard::Key::Enter;
+    const sf::Keyboard::Key Key_Escape = sf::Keyboard::Key::Escape;    
 }
 
 WindowManager::WindowManager() : window(nullptr) 
 {
-    // Well this just freezes the program..
-    //game = &Game::getInstance();
-    //game = game->getInstance();
+
 }
 
 WindowManager::~WindowManager()
@@ -58,12 +58,18 @@ WindowManager::~WindowManager()
 	delete window; // Clean up
 }
 
+/**
+ * @brief Initialize the Window Manager, setup the width and height, along with the title.
+ * 
+ * @param width The width for the window.
+ * @param height The height for the window.
+ * @param title The window title.
+ */
 void WindowManager::initWindow(unsigned int width, unsigned int height, const std::string& title) {
     Defines defines = Defines();
     ImGuiSetup& imGuiSetup = ImGuiSetup::getInstance();
 
-    //window = new sf::RenderWindow(sf::VideoMode({ 1920u, 1080u }), title, sf::Style::Titlebar | sf::Style::Close);
-    window = new sf::RenderWindow(sf::VideoMode({ defines.screenWidth, defines.screenHeight }), title, sf::Style::Titlebar | sf::Style::Close);
+    window = new sf::RenderWindow(sf::VideoMode({ width, height }), title, sf::Style::Titlebar | sf::Style::Close);
 
     this->window->setFramerateLimit(defines.gameFramerate);
     this->window->setVerticalSyncEnabled(defines.vsyncEnabled);
@@ -85,6 +91,13 @@ void WindowManager::initWindow(unsigned int width, unsigned int height, const st
 #endif //_IMGUI_TEST
 }
 
+/**
+ * @brief Poll the events that run every frame in game.
+ * 
+ * This handles operations like checking which key is being pressed.
+ * 
+ * This also processes events, and ImGui events if enabled.
+ */
 void WindowManager::pollEvents() 
 {
     Player& player = Player::getInstance();
@@ -94,104 +107,92 @@ void WindowManager::pollEvents()
 
     while (const std::optional<sf::Event> event = window->pollEvent()) 
     {
-        sf::Vector2f playerPos = player.GetPosition();
-
-        //std::cout << "Player position X: " << playerPos.x << " Y: " << playerPos.y << std::endl;
-
-        //if(Game::getInstance().getWindowInitialized())
-        //    player.Draw();
-
-
 #ifdef _IMGUI_TEST
         ImGui::SFML::ProcessEvent(*window, *event);
-#endif
-
+#endif // _IMGUI_TEST
 
         if (event->is<sf::Event::Closed>()) {
             close();
         }
+
         // Handle other events here, e.g. key presses
         else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-            
-            // Pause the game
-            if (keyPressed->scancode == KeyCodes::Key_Escape) {
-                game.setPaused(!game.getPaused());
+
+            // I figured out the switch statement for this! I had to change the settings
+            // For my key handling, and switch from keyPressed->scancode to keyPressed-Code.
+            switch (keyPressed->code)
+            {
+                //------
+                // Pause the game
+                //------
+
+                case KeyCodes::Key_Escape:
+                    game.setPaused(!game.getPaused());
+                    break;
+
+                //------
+                // Move keys
+                // These check if the game is paused, and if the end screen is shown.
+                // Otherwise it doesn't update the values.
+                //------
+
+                // Move Up
+                case KeyCodes::Key_W:
+                    if (game.getPaused() || game.getEndScreen()) return;
+                    player.Move(0.f, -player.GetMoveSpeed());
+                    break;
+
+                // Move Down
+                case KeyCodes::Key_S:
+                    if (game.getPaused() || game.getEndScreen()) return;
+                    player.Move(player.GetMoveSpeed(), 0.f); // Move down
+                    break;
+
+                // Move Left
+                case KeyCodes::Key_A:
+                    if (game.getPaused() || game.getEndScreen()) return;
+                    player.Move(-player.GetMoveSpeed(), 0.f); // Move left
+                    break;
+
+                // Move right
+                case KeyCodes::Key_D:
+                    break;
+
                 
-            }
+                // If the player is on the end screen, reset the game.
+                case KeyCodes::Key_Enter:
+                    if (game.getEndScreen())
+                    {
+                        game.setEndScreen(false);
+                        enemy.Reset();
+                        player.SetLives(Defines::defaultLives);
+                    }
+                    break;
 
-            //------
-            // Move keys
-            // These check if the game is paused, and if the end screen is shown.
-            // Otherwise it doesn't update the values.
-            //------
-            
-            // TODO Possibly move player movement into player class somehow?
-            else if (keyPressed->scancode == KeyCodes::Key_W)
-            {
-                if (game.getPaused() || game.getEndScreen()) return;
-                player.Move(0.f, -player.GetMoveSpeed());
-            }
-
-            else if (keyPressed->scancode == KeyCodes::Key_A)
-            {
-                if (game.getPaused() || game.getEndScreen()) return;
-                player.Move(-player.GetMoveSpeed(), 0.f); // Move left
+                //------
+                // Debug Keys
+                //------
                 
+                case KeyCodes::Key_B:
+                    
+                    // Game::getInstance().setEndGame(true);
+                    // std::cout << "Game ended with 'B' key" << std::endl;
+                    break;
 
-                //Game::getInstance().setEndScreen(true);
-                //std::cout << "Game end screen set with 'A' key" << std::endl;
-            }
-
-            else if (keyPressed->scancode == KeyCodes::Key_S)
-            {
-                if (game.getPaused() || game.getEndScreen()) return;
-                player.Move(player.GetMoveSpeed(), 0.f); // Move down
-
-                
-            }
-
-            else if (keyPressed->scancode == KeyCodes::Key_D)
-            {
-                if (game.getPaused() || game.getEndScreen()) return;
-                player.Move(0.f, player.GetMoveSpeed());
-            }
-
-            // Test
-
-            //else if (keyPressed->scancode == sf::Keyboard::Scancode::B)
-            //{
-            //    Game::getInstance().setEndGame(true);
-            //    std::cout << "Game ended with 'B' key" << std::endl;
-            //}
-
-            // End game key to restart
-            // Set the end screen to false
-            // Reset enemies
-            // Set the players lives back to default.
-            else if (keyPressed->scancode == KeyCodes::Key_Enter)
-            {
-                if (game.getEndScreen())
-                {
-                    game.setEndScreen(false);
-                    enemy.Reset();
-                    player.SetLives(Defines::defaultLives);
-                }
-            }
-
-            //------
-            // ImGui keys
-            //-------
+                // ImGui Key
 #ifdef _IMGUI_TEST
-            else if (keyPressed->scancode == KeyCodes::Key_F2)
-            {
-                imGuiMenu.SetStatus(!imGuiMenu.GetStatus());
-            }
-#endif
+                case KeyCodes::Key_F2:
+                    imGuiMenu.SetStatus(!imGuiMenu.GetStatus());
+                    break;
+#endif // _IMGUI_TEST
 
-            // Close the game
-            else if (keyPressed->scancode == KeyCodes::Key_F4)
-            {
-                close();
+                //------
+                // Close the game
+                //------
+
+                case KeyCodes::Key_F4:
+                    close();
+                    break;
             }
         }
     }
