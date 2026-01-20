@@ -28,9 +28,19 @@ FetchContent_Declare(fmt
 FetchContent_MakeAvailable(fmt)
 
 #-------------
-# ImGui
+# Spdlog
 #-------------
 
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog.git
+    GIT_TAG        v1.17.0
+)
+FetchContent_MakeAvailable(spdlog)
+
+#-------------
+# ImGui
+#-------------
 
 FetchContent_Declare(imgui
   URL "https://github.com/ocornut/imgui/archive/v${IMGUI_VERSION}.zip"

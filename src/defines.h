@@ -68,6 +68,10 @@ public:
 	const std::string programAuthor = "kelson8";
 	const std::string programLicense = "Licensed under the MIT License (c) kelson8 - KCNet";
 
+	// Logger info
+	const static std::string loggerPrefix;
+	const static std::string logFileName;
+
 	// The frame rate can be changed here if needed.
 	unsigned int gameFramerate = 60;
 	bool vsyncEnabled = true;

@@ -1,5 +1,7 @@
 #include "imgui_menu.h"
 
+#include <fmt/core.h>
+
 #ifdef _IMGUI_TEST
 #include <imgui-SFML.h>
 #include <imgui.h>
@@ -15,8 +17,6 @@
 #include "util/mouse_util.h"
 #include "util/music_util.h"
 #include "util/timers.h"
-
-#include <fmt/core.h>
 
 namespace ImGuiDebug 
 {
