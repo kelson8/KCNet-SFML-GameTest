@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+#include "defines.h"
+
 class Timers
 {
 public:
@@ -11,12 +13,20 @@ public:
 	}
 
 	bool SecondPassed();
+	
+	void StartTimer();
+	void StopTimer();
+
+	void TimerLoop();
+
 	void TimerTest();
+
+	const int GetElapsedTime() const;
 
 private:
 	// Constructors / Destructors
 	Timers();
-	~Timers();
+	~Timers();	
 
 	// Current elapsed time.
 	int m_ElapsedTime;

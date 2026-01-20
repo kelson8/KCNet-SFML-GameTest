@@ -1,19 +1,23 @@
 #include "timers.h"
 #include <iostream>
 
+#include <fmt/core.h>
 
 Timers::Timers()
 {
 	m_ElapsedTime = 0;
 	m_ElapsedTimeOld = 0;
 
-	m_TimerDisplayConsole = false;
+	m_TimerDisplayConsole = true;
+
+	// Start the timer when this constructor starts up
+	this->StartTimer();
 }
 
 Timers::~Timers()
 {
 	// This should work for stopping the clock when this ends, although not sure if this is needed.
-	timerClock.stop();
+	this->StopTimer();
 }
 
 /**
@@ -32,11 +36,36 @@ bool Timers::SecondPassed()
 }
 
 /**
- * @brief This is a timer that updates every second.
- * There is some extra code in here from when I was messing around with this function.
- * This outputs the elaspedTime each second.
+ * @brief Start the main game timer
  */
-void Timers::TimerTest()
+void Timers::StartTimer()
+{
+	if (timerClock.isRunning())
+		return;
+
+	// Is this needed?
+	timerClock.start();
+	fmt::println("Main game timer has been started.");
+}
+
+/**
+ * @brief Stop the main game timer
+ */
+void Timers::StopTimer()
+{
+	if (!timerClock.isRunning())
+		return;
+
+	timerClock.stop();
+	fmt::println("Main game timer has been stopped.");
+}
+
+/**
+ * @brief This is a timer that updates every second.
+ * 
+ * If enabled, this outputs the elapsed time to the console.
+ */
+void Timers::TimerLoop()
 {
 	// https://gamefromscratch.com/sfml-with-c-tutorial-series-windows-game-loops-and-timers/
 	// I got this working!!
@@ -46,16 +75,22 @@ void Timers::TimerTest()
 	{
 		m_ElapsedTime++;
 
+		// TODO Make this a variable to be accessed in ImGui
 		if (m_TimerDisplayConsole)
 		{
 			std::cout << "Elapsed time (seconds): " << m_ElapsedTime << std::endl;
 		}
-		
 
 		// Start the countdown over.  Think of laps on a stop watch.
 		timerClock.restart();
 	}
+}
 
+/**
+ * @brief This some testing code for the timer system.
+ */
+void Timers::TimerTest()
+{
 	// Old Timer test
 
 	// 
@@ -78,4 +113,9 @@ void Timers::TimerTest()
 	//}
 	//std::cout << "Seconds: " << secondsToPass << std::endl;
 	//std::cout << "Seconds: " << currentGameSeconds << std::endl;
+}
+
+const int Timers::GetElapsedTime() const
+{
+	return m_ElapsedTime;
 }

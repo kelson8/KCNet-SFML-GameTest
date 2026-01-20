@@ -351,7 +351,8 @@ void Game::Run()
 		Update();
 
 		// Toggle the timer test here.
-		timers.TimerTest();
+		//timers.TimerTest();
+		timers.TimerLoop();
 
 		// Render
 		Render();

@@ -1,10 +1,19 @@
 #pragma once
 #include "defines.h"
 
+#include "menus/IMenuBase.h"
+
+// Menus
+#include "imgui_controller_menu.h"
+#include "imgui_enemy_menu.h"
+#include "imgui_player_menu.h"
 #include "imgui_screen_menu.h"
+#include "imgui_mouse_menu.h"
+#include "imgui_music_menu.h"
+#include "imgui_timers_menu.h"
+//
 
-
-class ImGuiMenu
+class ImGuiMenu : public IMenuBase
 {
 #ifdef _IMGUI_TEST
 public:
@@ -28,35 +37,29 @@ private:
 	ImGuiMenu();
 	~ImGuiMenu();
 
+	//void MouseMenu();
+	//void MusicMenu();
+	//void TimeMenu();
+	//void ControllerMenu();
 
-	void ControllerMenu();
+	// Menu variables
+	ImGuiControllerMenu imGuiControllerMenu;
+	ImGuiEnemyMenu imGuiEnemyMenu;
+	ImGuiPlayerMenu imGuiPlayerMenu;
 
 	ImGuiScreenMenu imGuiScreenMenu;
+	ImGuiMouseMenu imGuiMouseMenu;
+
+	ImGuiMusicMenu imGuiMusicMenu;
+	ImGuiTimersMenu imGuiTimersMenu;
 
 	bool showDemoWindow;
 	bool showImGuiWindow;
-
-	// Debug variables for game menu, these are for the float sliders to use.
-	float livesPosX;
-	float livesPosY;
 
 	// The max text position for the debug display editor.
 	// Checks if this value is too high for the display.
 	float maxTextPosX;
 	float maxTextPosY;
-
-	//int timePassed = 0;
-	int timePassed;
-
-	// Toggle the random screen size display
-	bool showRandomScreenSize;
-
-	// Random X position from the window.
-	float randomScreenPosX;
-
-	// Random Y position from the window.
-	float randomScreenPosY;
-
 
 #endif // _IMGUI_TEST
 };
