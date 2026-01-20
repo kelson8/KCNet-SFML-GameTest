@@ -7,7 +7,6 @@
 class WindowManager
 {
 public:
-    // TODO Fix this....
     static WindowManager& getInstance()
     {
         static WindowManager instance; // Guaranteed to be destroyed.
@@ -34,6 +33,4 @@ private:
     WindowManager& operator=(const WindowManager&) = delete; // Prevent assignments
 
     sf::RenderWindow* window;
-
-    //Game* game;
 };

@@ -24,6 +24,9 @@ private:
 	// Store the previous time value.
 	int m_ElapsedTimeOld;
 
+	// Toggle the timer showing in the console.
+	bool m_TimerDisplayConsole;
+
 	// Clock for the game timer display.
 	sf::Clock timerClock;
 };

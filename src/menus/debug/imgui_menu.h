@@ -24,6 +24,8 @@ private:
 
 	void SetRandomScreenPos();
 
+	void ControllerMenu();
+
 	bool showDemoWindow;
 	bool showImGuiWindow;
 

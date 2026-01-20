@@ -19,12 +19,22 @@
 
 #include "util/random_number_generator.h"
 
+#include "util/input_handler.h"
+
 
 // Using this for getters and setters
 // https://www.geeksforgeeks.org/cpp/write-getter-and-setter-methods-in-cpp/
 
-// 
+WindowManager::WindowManager() : 
+    window(nullptr)
+{
 
+}
+
+WindowManager::~WindowManager()
+{
+    delete window; // Clean up
+}
 
 /**
  * @brief Keycodes I am using in the game so far, putting them here for easier access
@@ -45,17 +55,7 @@ namespace KeyCodes
     const sf::Keyboard::Key Key_F4 = sf::Keyboard::Key::F4;
 
     const sf::Keyboard::Key Key_Enter = sf::Keyboard::Key::Enter;
-    const sf::Keyboard::Key Key_Escape = sf::Keyboard::Key::Escape;    
-}
-
-WindowManager::WindowManager() : window(nullptr) 
-{
-
-}
-
-WindowManager::~WindowManager()
-{
-	delete window; // Clean up
+    const sf::Keyboard::Key Key_Escape = sf::Keyboard::Key::Escape;
 }
 
 /**
@@ -105,19 +105,35 @@ void WindowManager::pollEvents()
     Game& game = Game::getInstance();
     Enemy& enemy = Enemy::getInstance();
 
+    InputHandler& inputHandler = InputHandler::getInstance();
+
     while (const std::optional<sf::Event> event = window->pollEvent()) 
     {
 #ifdef _IMGUI_TEST
         ImGui::SFML::ProcessEvent(*window, *event);
 #endif // _IMGUI_TEST
 
-        if (event->is<sf::Event::Closed>()) {
+        if (event->is<sf::Event::Closed>()) 
+        {
             close();
         }
 
         // Handle other events here, e.g. key presses
-        else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
 
+        // Controller input
+        else if (const auto* controllerButtonPressed = event->getIf<sf::Event::JoystickButtonPressed>())
+        {
+            // This is disabled for now.
+            // https://www.sfml-dev.org/tutorials/3.0/window/inputs/#joystick
+            //if (sf::Joystick::isConnected(0))
+            //{
+                //inputHandler.HandleControllerInput();
+            //}
+        }
+
+        // Keyboard input
+        else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) 
+        {
             // I figured out the switch statement for this! I had to change the settings
             // For my key handling, and switch from keyPressed->scancode to keyPressed-Code.
             switch (keyPressed->code)

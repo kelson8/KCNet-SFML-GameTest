@@ -264,9 +264,53 @@ void ImGuiMenu::Draw()
 		}
 	}
 
+	//------
+	// Controller
+	//------
+	this->ControllerMenu();
+
 	ImGui::End();
 }
 
+void ImGuiMenu::ControllerMenu()
+{
+	// These don't seem to go to anything.
+	float controllerXHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
+	float controllerRHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R);
+	float controllerPovXPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX);
+	float controllerPovYPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY);
+	
+	// Right stick up/down
+	float controllerVPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V);
+	// Right stick left/right
+	float controllerUHatPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::U);
+
+	// Left stick up/down
+	float controllerYPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y);
+	// Left stick left/right
+	float controllerXPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
+
+	// 0 to 100 is L2 on Xbox controller.
+	// 0 to -100 is R2 on Xbox controller.
+	float controllerZPos = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z);
+
+	if (ImGui::CollapsingHeader("Controller Menu"))
+	{
+		ImGui::Text(fmt::format("Controller X Hat position: {}", controllerXHatPos).c_str());
+		ImGui::Text(fmt::format("Controller R position: {}", controllerRHatPos).c_str());
+		ImGui::Text(fmt::format("Controller U position: {}", controllerUHatPos).c_str());
+
+		ImGui::Text(fmt::format("Controller X Pov position: {}", controllerPovXPos).c_str());
+		ImGui::Text(fmt::format("Controller Y Pov position: {}", controllerPovYPos).c_str());
+
+		ImGui::Text(fmt::format("Controller V position: {}", controllerVPos).c_str());
+		ImGui::Text(fmt::format("Controller X position: {}", controllerXPos).c_str());
+		ImGui::Text(fmt::format("Controller Y position: {}", controllerYPos).c_str());
+		ImGui::Text(fmt::format("Controller Z position: {}", controllerZPos).c_str());
+
+
+	}
+}
 
 
 #endif // _IMGUI_TEST

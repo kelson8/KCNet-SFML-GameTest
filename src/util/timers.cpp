@@ -6,6 +6,8 @@ Timers::Timers()
 {
 	m_ElapsedTime = 0;
 	m_ElapsedTimeOld = 0;
+
+	m_TimerDisplayConsole = false;
 }
 
 Timers::~Timers()
@@ -44,7 +46,11 @@ void Timers::TimerTest()
 	{
 		m_ElapsedTime++;
 
-		std::cout << "Elapsed time (seconds): " << m_ElapsedTime << std::endl;
+		if (m_TimerDisplayConsole)
+		{
+			std::cout << "Elapsed time (seconds): " << m_ElapsedTime << std::endl;
+		}
+		
 
 		// Start the countdown over.  Think of laps on a stop watch.
 		timerClock.restart();
