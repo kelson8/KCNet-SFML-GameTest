@@ -1,5 +1,17 @@
 #include "input_handler.h"
 
+#ifdef _IMGUI_TEST
+#include <imgui-SFML.h>
+#include <imgui.h>
+#include "util/imgui_setup.h"
+#include "menus/debug/imgui_menu.h"
+#endif // _IMGUI_TEST
+
+#include "game.h"
+
+#include "player.h"
+#include "enemy.h"
+
 InputHandler::InputHandler() :
     m_MaxControllerButtons(16)
 {
@@ -9,6 +21,147 @@ InputHandler::InputHandler() :
 InputHandler::~InputHandler()
 {
 
+}
+
+/**
+ * @brief Run the main loop for the input handler.
+ */
+void InputHandler::Run()
+{
+    HandleAllInput();
+}
+
+/**
+ * @brief Handle mouse/keyboard input, and handle controller input.
+ */
+void InputHandler::HandleAllInput()
+{
+    WindowManager& windowManager = WindowManager::getInstance();
+
+    Player& player = Player::getInstance();
+#ifdef _IMGUI_TEST
+    ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
+#endif // _IMGUI_TEST
+    Game& game = Game::getInstance();
+    Enemy& enemy = Enemy::getInstance();
+
+    InputHandler& inputHandler = InputHandler::getInstance();
+
+    while (const std::optional<sf::Event> event = windowManager.getWindow().pollEvent())
+    {
+#ifdef _IMGUI_TEST
+        // Process ImGui events if enabled.
+        ImGui::SFML::ProcessEvent(windowManager.getWindow(), *event);
+#endif // _IMGUI_TEST
+
+        // Close the window if the event type is set to closed.
+        if (event->is<sf::Event::Closed>())
+        {
+            windowManager.close();
+        }
+        
+        //------
+        // Handle inputs
+        //------
+
+        //------
+        // Controller input
+        //------
+        else if (const auto* controllerButtonPressed = event->getIf<sf::Event::JoystickButtonPressed>())
+        {
+            // This is disabled for now.
+            // https://www.sfml-dev.org/tutorials/3.0/window/inputs/#joystick
+            //if (sf::Joystick::isConnected(0))
+            //{
+                //inputHandler.HandleControllerInput();
+            //}
+        }
+
+        //------
+        // Keyboard input
+        //------
+        else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+        {
+            // I figured out the switch statement for this! I had to change the settings
+            // For my key handling, and switch from keyPressed->scancode to keyPressed-Code.
+            switch (keyPressed->code)
+            {
+                //------
+                // Pause the game
+                //------
+
+            case KeyCodes::Key_Escape:
+                game.setPaused(!game.getPaused());
+                break;
+
+                //------
+                // Move keys
+                // These check if the game is paused, and if the end screen is shown.
+                // Otherwise it doesn't update the values.
+                //------
+
+                // Move Up
+            case KeyCodes::Key_W:
+                if (game.getPaused() || game.getEndScreen()) return;
+                player.Move(0.f, -player.GetMoveSpeed());
+                break;
+
+                // Move Down
+            case KeyCodes::Key_S:
+                if (game.getPaused() || game.getEndScreen()) return;
+                player.Move(player.GetMoveSpeed(), 0.f); // Move down
+                break;
+
+                // Move Left
+            case KeyCodes::Key_A:
+                if (game.getPaused() || game.getEndScreen()) return;
+                player.Move(-player.GetMoveSpeed(), 0.f); // Move left
+                break;
+
+                // Move right
+            case KeyCodes::Key_D:
+                if (game.getPaused() || game.getEndScreen()) return;
+                player.Move(0.f, player.GetMoveSpeed());
+                break;
+
+
+                // If the player is on the end screen, reset the game.
+            case KeyCodes::Key_Enter:
+                if (game.getEndScreen())
+                {
+                    game.setEndScreen(false);
+                    enemy.Reset();
+                    player.SetLives(Defines::defaultLives);
+                }
+                break;
+
+                //------
+                // Debug Keys
+                //------
+
+            case KeyCodes::Key_B:
+
+                // Game::getInstance().setEndGame(true);
+                // std::cout << "Game ended with 'B' key" << std::endl;
+                break;
+
+                // ImGui Key
+#ifdef _IMGUI_TEST
+            case KeyCodes::Key_F2:
+                imGuiMenu.SetStatus(!imGuiMenu.GetStatus());
+                break;
+#endif // _IMGUI_TEST
+
+                //------
+                // Close the game
+                //------
+
+            case KeyCodes::Key_F4:
+                windowManager.close();
+                break;
+            }
+        }
+    }
 }
 
 /**

@@ -31,11 +31,14 @@ public:
         return instance;
     }
 
-    void HandleControllerInput() const;
+    void Run();
 
 private:
     InputHandler();
     ~InputHandler();
+
+    void HandleAllInput();
+    void HandleControllerInput() const;
 
     InputHandler(const InputHandler&) = delete; // Prevent copying
     InputHandler& operator=(const InputHandler&) = delete; // Prevent assignments
