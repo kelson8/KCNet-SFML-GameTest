@@ -14,7 +14,10 @@
 
 
 
-// TODO Make a life system, if enough enemies get through it's game over, add a way to attack or something.
+// TODO Work on the life system, sometimes the player gets hit
+// more then once from a single enemy, and sometimes the hit doesn't register.
+
+// TODO Add a way to attack or something.
 
 Enemy::Enemy()
 {
@@ -23,6 +26,8 @@ Enemy::Enemy()
 
 	m_RandomSpawnPos = 0.0f;
 
+	m_DefaultEnemyXMovePos = 0.0f;
+
 	this->Init();
 }
 
@@ -30,17 +35,6 @@ Enemy::~Enemy()
 {
 
 }
-
-#ifdef _IMGUI_TEST
-/**
- * @brief Get the enemy random spawn position.
- * @return The random spawn position for the enemy.
- */
-const float Enemy::GetRandomSpawnPos() const
-{
-	return m_RandomSpawnPos;
-}
-#endif // _IMGUI_TEST
 
 /**
  * @brief Setup the enemies variables
@@ -100,27 +94,26 @@ void Enemy::Spawn()
 	// Using static cast, safely turning the value into a float, the random function only takes an int so it has to be
 	// converted to an int first then randomize it.
 
-
 #ifdef ENEMY_RANDOM_SPAWNS
 	//float randomSpawnPos = randomNumberGenerator.GenerateRandomNumber(10.0f, 40.0f);
 	//this->enemy.setPosition(sf::Vector2f(m_RandomSpawnPos, m_RandomSpawnPos));
-this->enemy.setPosition(
-	sf::Vector2f(windowManager.getWindow().getSize().x - this->enemy.getSize().x,
+	this->enemy.setPosition(
+		sf::Vector2f(windowManager.getWindow().getSize().x - this->enemy.getSize().x,
 		0.0f));
 
 #else
-this->enemy.setPosition(sf::Vector2f(
-	static_cast<float> (rand() % static_cast<int>(windowManager.getWindow().getSize().x - this->enemy.getSize().x)), 0.0f)
-);
+	this->enemy.setPosition(sf::Vector2f(
+		static_cast<float> (rand() % static_cast<int>(windowManager.getWindow().getSize().x - this->enemy.getSize().x)), 0.0f)
+	);
 
 #endif // ENEMY_RANDOM_SPAWNS
 
-this->enemy.setFillColor(enemyColor);
+	this->enemy.setFillColor(enemyColor);
 
-// Spawn the enemy
-this->enemies.push_back(this->enemy);
+	// Spawn the enemy
+	this->enemies.push_back(this->enemy);
 
-// Remove enemies at the end of the screen.
+	// Remove enemies at the end of the screen.
 }
 
 //void Game::playEnemySfx()
@@ -235,6 +228,9 @@ void Enemy::Update()
 		else
 		{
 			this->enemySpawnTimer += 1.0f;
+			// Changing this allows more enemies to spawn in at once.
+			// TODO Mess with this value later.
+			//this->enemySpawnTimer += 5.0f;
 		}
 	}
 
@@ -261,7 +257,8 @@ void Enemy::Update()
 		if (!game.getEndScreen() && !game.getPaused())
 		{
 			// Change the speed by changing the offsetY
-			this->enemies[i].move(sf::Vector2f(0.0f, enemySpeed));
+			//this->enemies[i].move(sf::Vector2f(0.0f, enemySpeed));
+			this->enemies[i].move(sf::Vector2f(m_DefaultEnemyXMovePos, enemySpeed));
 		}
 		
 #endif // ENEMY_RANDOM_SPAWNS
@@ -271,7 +268,9 @@ void Enemy::Update()
 		// This works for basic collisions!
 		// I got this mostly working better then it was. I had to add the m_PlayerHit variable.
 
-		if (entity.GetGlobalBounds(enemies[i]).contains(player.GetPosition()))
+#ifdef ENEMY_DAMAGE_PLAYER
+		// Only damage the player if they don't have god mode, and they are within range of the enemy.
+		if (!player.HasGodMode() && entity.GetGlobalBounds(enemies[i]).contains(player.GetPosition()))
 		{
 			if (timers.SecondPassed() && !m_PlayerHit)
 			{
@@ -284,6 +283,7 @@ void Enemy::Update()
 		{
 			m_PlayerHit = false;
 		}
+#endif
 		//
 
 		// Delete the enemy if they are past the bottom of the screen.
@@ -301,3 +301,82 @@ void Enemy::Update()
 		}
 	}
 }
+
+//----------------------------------------
+// Enemy debug
+//----------------------------------------
+
+#ifdef _IMGUI_TEST
+// TODO Move these into debug/enemy_debug.cpp/.h later, along with the other debug options.
+
+/**
+ * @brief Get the enemy random spawn position.
+ * @return The random spawn position for the enemy.
+ */
+const float Enemy::GetRandomSpawnPos() const
+{
+	return m_RandomSpawnPos;
+}
+
+/**
+ * @brief Get the X Move position for the enemy.
+ * @return
+ */
+const float Enemy::GetDefaultXMovePos() const
+{
+	return m_DefaultEnemyXMovePos;
+}
+
+/**
+ * @brief Set the X Move position for the enemy.
+ * @param value
+ */
+void Enemy::SetDefaultXMovePos(float value)
+{
+	m_DefaultEnemyXMovePos = value;
+}
+
+/**
+ * @brief Get the player speed (Y value)
+ * @return
+ */
+const float Enemy::GetSpeed() const
+{
+	return enemySpeed;
+}
+
+/**
+ * @brief Set the enemies speed (Y value)
+ * @param value
+ */
+void Enemy::SetSpeed(float value)
+{
+	enemySpeed = value;
+}
+
+const
+
+const float Enemy::GetSpawnRate() const
+{
+	return enemySpawnTimerMax;
+}
+
+void Enemy::SetSpawnRate(float value)
+{
+	enemySpawnTimerMax = value;
+}
+
+//	this->enemySpawnTimer = this->enemySpawnTimerMax;
+//this->maxEnemies = 10.0f;
+
+const float Enemy::GetMaxEnemies() const
+{
+	return maxEnemies;
+}
+
+void Enemy::SetMaxEnemies(float value)
+{
+	maxEnemies = value;
+}
+
+#endif // _IMGUI_TEST

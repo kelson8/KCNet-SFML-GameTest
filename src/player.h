@@ -2,6 +2,8 @@
 
 #include "window_manager.h"
 
+#include "entity.h"
+
 #include <SFML/Graphics.hpp>
 //#include <SFML/System.hpp>
 //#include <SFML/Window.hpp>
@@ -10,7 +12,7 @@
 
 
 
-class Player
+class Player : public Entity
 {
 public:
 	static Player& getInstance()
@@ -37,6 +39,19 @@ public:
 	void SetPoints(int points);
 
 	const sf::RectangleShape GetPlayer() const;
+
+	// You can now use the inherited functions
+	void EnableGodMode() {
+		SetGodMode(true); // Set god mode to true
+	}
+
+	void DisableGodMode() {
+		SetGodMode(false); // Set god mode to false
+	}
+
+	bool IsInvincible() const {
+		return HasGodMode(); // Check if player is invincible
+	}
 
 private:
 	// Constructors / Destructors

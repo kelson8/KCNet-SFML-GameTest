@@ -84,7 +84,7 @@ void Timers::TimerLoop()
 		// TODO Make this a variable to be accessed in ImGui
 		if (m_TimerDisplayConsole)
 		{
-			std::cout << "Elapsed time (seconds): " << m_ElapsedTime << std::endl;
+			fmt::println("Elapsed time (seconds): {}", m_ElapsedTime);
 		}
 
 		// Start the countdown over.  Think of laps on a stop watch.
@@ -141,7 +141,10 @@ void Timers::TimerWaitLoop()
  */
 void Timers::ScoreTimer()
 {
-	if (!m_GameTimerStopped && scoreTimerClock.getElapsedTime().asSeconds() > 1)
+	if (!Game::getInstance().getPaused() &&
+		!Game::getInstance().getEndScreen() &&
+		!m_GameTimerStopped 
+		&& scoreTimerClock.getElapsedTime().asSeconds() > 1)
 	{
 		m_CurrentScoreTime++;
 		m_Score++;

@@ -19,6 +19,9 @@ ImGuiPlayerMenu::ImGuiPlayerMenu()
 {
 	livesPosX = 0.0f;
 	livesPosY = 0.0f;
+
+	godModeActive = false;
+	godModeActiveFlag = false;
 }
 
 void ImGuiPlayerMenu::Draw()
@@ -44,6 +47,7 @@ void ImGuiPlayerMenu::Draw()
 		ImGui::Text(fmt::format("X: {}", playerPosX).c_str());
 		ImGui::Text(fmt::format("Y: {}", playerPosY).c_str());
 
+		ImGui::Spacing();
 
 		//-----
 		// Check if player is out of bounds, I made a new function for this
@@ -57,6 +61,8 @@ void ImGuiPlayerMenu::Draw()
 			ImGui::Text("Player is in bounds.");
 		}
 
+		ImGui::Spacing();
+
 		if (game.getEndScreen())
 		{
 			if (ImGui::Button("Respawn player"))
@@ -65,6 +71,51 @@ void ImGuiPlayerMenu::Draw()
 				player.SetLives(Defines::defaultLives);
 			}
 		}
+
+		ImGui::Spacing();
+
+		//------
+		// God mode
+		// TODO Make these into checkboxes
+		//------
+		ImGui::Text("Toggle god mode");
+		if (ImGui::Button("Enable god mode"))
+		{
+			if (!player.HasGodMode())
+			{
+				player.SetGodMode(true);
+				fmt::println("God mode enabled");
+			}
+		}
+
+		if (ImGui::Button("Disable god mode"))
+		{
+			if (player.HasGodMode())
+			{
+				player.SetGodMode(false);
+				fmt::println("God mode disabled");
+			}
+		}
+
+		// TODO Fix this
+		//ImGui::Checkbox("Toggle god mode", &godModeActive);
+		//if (godModeActive && !godModeActiveFlag && !player.HasGodMode())
+		//{
+		//	godModeActiveFlag = true;
+		//	player.SetGodMode(true);
+		//	fmt::println("God mode enabled");
+		//}
+		//else if (godModeActive && godModeActiveFlag && player.HasGodMode())
+		//{
+		//	godModeActiveFlag = false;
+		//	player.SetGodMode(false);
+		//	fmt::println("God mode disabled");
+		//}
+
+		// Bounds check testing with my new template
+		// TODO Try to fix this template in the Entity class, not sure if it'll work like this.
+		//ImGui::Text(fmt::format("Player bounds: X: {}", entity.GetGlobalBoundsTest(player.GetPlayer().getPosition().x)).c_str());
+		//ImGui::Text(fmt::format("Player bounds: Y: {}", entity.GetGlobalBoundsTest(player.GetPlayer().getPosition().y)).c_str());
 
 		//-----
 		// Lives debug

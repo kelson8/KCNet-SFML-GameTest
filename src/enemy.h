@@ -16,6 +16,19 @@ public:
 
 #ifdef _IMGUI_TEST
 	const float GetRandomSpawnPos() const;
+
+	const float GetDefaultXMovePos() const;
+	void SetDefaultXMovePos(float value);
+
+	const float GetSpeed() const;
+	void SetSpeed(float value);
+
+	const float GetSpawnRate() const;
+	void SetSpawnRate(float value);
+
+
+	const float GetMaxEnemies() const;
+	void SetMaxEnemies(float value);
 #endif // _IMGUI_TEST
 
 	void Init();
@@ -50,6 +63,9 @@ private:
 
 	// Random spawn position for the enemies.
 	float m_RandomSpawnPos;
+
+	// The default X position for the enemy to move.
+	float m_DefaultEnemyXMovePos;
 
 	// Set the enemy color
 	sf::Color enemyColor;

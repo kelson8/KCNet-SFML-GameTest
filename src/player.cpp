@@ -6,6 +6,9 @@
 
 #include "defines.h"
 
+// Useful link for collisions:
+// https://www.sfml-dev.org/tutorials/3.0/graphics/transform/#custom-transforms
+
 /**
  * @brief Setup the player
  */
@@ -132,12 +135,16 @@ void Player::Move(float x, float y)
 	if (!entity.IsInBounds(player))
 	{
 		this->SetPosition(centerX, centerY);
-		this->playerLives = this->playerLives - 1;
+
+		// Only remove lives if the player doesn't have god mode enabled.
+		if (!this->HasGodMode())
+		{
+			this->playerLives = this->playerLives - 1;
+		}
+		
 	}
 
-	// TODO Use this for colliding with enemies and negating the lives.
-	// https://www.sfml-dev.org/tutorials/3.0/graphics/transform/#custom-transforms
-	//player.getGlobalBounds()
+	
 
 	this->player.move(sf::Vector2f(x, y));
 }

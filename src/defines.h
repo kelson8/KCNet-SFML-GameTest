@@ -21,6 +21,10 @@
 // If this is disabled, the enemies fall from the top to the bottom.
 //#define ENEMY_RANDOM_SPAWNS
 
+// If this is enabled, the player can take damage from the falling enemies.
+// Can be toggled off for debugging
+#define ENEMY_DAMAGE_PLAYER
+
 class Defines {
 public:
 
@@ -71,6 +75,11 @@ public:
 	// Logger info
 	const static std::string loggerPrefix;
 	const static std::string logFileName;
+
+	// Test
+	// Hmm, I didn't know I could make these inline.
+	//inline const static std::string testString = "";
+	//
 
 	// The frame rate can be changed here if needed.
 	unsigned int gameFramerate = 60;

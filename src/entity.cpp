@@ -10,7 +10,7 @@
  */
 Entity::Entity()
 {
-
+	m_EntityHasGodMode = false;
 }
 
 /**
@@ -20,6 +20,32 @@ Entity::~Entity()
 {
 
 }
+
+//-------
+// These seem to work now.
+//-------
+
+/**
+ * @brief Check if the entity is invincible
+ * @return If m_EntityHasGodMode is true
+ */
+const bool Entity::HasGodMode() const
+{
+	return m_EntityHasGodMode;
+}
+
+/**
+ * @brief Make the entity invincible.
+ * @param status 
+ */
+void Entity::SetGodMode(bool status)
+{
+	m_EntityHasGodMode = status;
+}
+
+//-------
+// 
+//-------
 
 /**
  * @brief Check if the entity is in the bounds of the map
@@ -68,6 +94,17 @@ sf::FloatRect Entity::GetGlobalBounds(sf::RectangleShape entity)
 	return entity.getGlobalBounds();
 }
 
+
+// TODO Figure out this template, in case I change the enemy or player to a sf::CircleShape or something.
+// https://www.geeksforgeeks.org/cpp/templates-cpp/
+// https://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file
+
+template <typename T>
+sf::FloatRect Entity::GetGlobalBoundsTest(T entity)
+{
+	return entity.getGlobalBounds();
+}
+
 /**
  * @brief Get the entity's local bounds for like a border/intersection.
  * @param entity The entity to check
@@ -76,4 +113,16 @@ sf::FloatRect Entity::GetGlobalBounds(sf::RectangleShape entity)
 sf::FloatRect Entity::GetLocalBounds(sf::RectangleShape entity)
 {
 	return entity.getLocalBounds();
+}
+
+/**
+ * @brief These really don't belong in here, just for testing.
+ * 
+ * TODO Move into a FileUtil class.
+ */
+void Test()
+{
+	// TODO Look into using these for files
+	//sf::FileInputStream::
+	//sf::InputStream::
 }
