@@ -67,22 +67,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# TODO Move into dependencies file.
-include(FetchContent)
 
 #---------
-# SFML
-#---------
-FetchContent_Declare(SFML
-    GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 3.0.2
-    GIT_SHALLOW ON
-    EXCLUDE_FROM_ALL
-    SYSTEM)
-FetchContent_MakeAvailable(SFML)
-
-#---------
-# ImGui and other dependencies
+# Setup SFML, ImGui, and other dependencies.
 #---------
 add_subdirectory(dependencies)
 
@@ -121,6 +108,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # Set the Visual Studio startup project to be main.
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+
+#--------------
+# Setup preprocessors for the project.
+# This is disabled, it doesn't currently work for Visual Studio.
+# https://stackoverflow.com/questions/65599308/detect-build-type-debug-release-in-visual-studio-when-using-cmake
+#--------------
+#if(${CMAKE_BUILD_TYPE} STREQUAL "DEBUG" OR ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+
+#if(${CMAKE_BUILD_TYPE} STREQUAL "DEBUG")
+	# Enable ImGui in the project.
+	#target_compile_definitions(${PROJECT_NAME} "_IMGUI_TEST")
+#endif()
 
 #------
 # Copy files to build.

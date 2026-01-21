@@ -11,7 +11,13 @@
 
 // Toggle the ImGui test
 // This now works.
+// TODO Test moving this into CMake
+
+// This should only disable it if NDEBUG is set, which is mostly set for release.
+// TODO Fix the score display with this disabled, not sure why it's broken.
+#ifndef NDEBUG
 #define _IMGUI_TEST
+#endif
 
 // Toggle the enemies rendering and updating here
 #define ENEMIES_ENABLED

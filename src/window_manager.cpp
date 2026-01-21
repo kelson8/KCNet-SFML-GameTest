@@ -67,7 +67,9 @@ namespace KeyCodes
  */
 void WindowManager::initWindow(unsigned int width, unsigned int height, const std::string& title) {
     Defines defines = Defines();
+#ifdef _IMGUI_TEST
     ImGuiSetup& imGuiSetup = ImGuiSetup::getInstance();
+#endif // _IMGUI_TEST
 
     window = new sf::RenderWindow(sf::VideoMode({ width, height }), title, sf::Style::Titlebar | sf::Style::Close);
 
@@ -101,7 +103,9 @@ void WindowManager::initWindow(unsigned int width, unsigned int height, const st
 void WindowManager::pollEvents() 
 {
     Player& player = Player::getInstance();
+#ifdef _IMGUI_TEST
     ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
+#endif // _IMGUI_TEST
     Game& game = Game::getInstance();
     Enemy& enemy = Enemy::getInstance();
 

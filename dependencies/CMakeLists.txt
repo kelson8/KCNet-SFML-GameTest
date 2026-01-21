@@ -1,18 +1,21 @@
 include(FetchContent)
 
+# Don't change this, ImGui-SFML depends on a specific version
+# https://github.com/SFML/imgui-sfml?tab=readme-ov-file#dependencies
+# Dear ImGui >= 1.91.1, < 1.92.0
 set(IMGUI_VERSION 1.91.1)
+
 
 #-------------
 # SFML
-# TODO Move into here, and out of root CMake.
 #-------------
-
-# FetchContent_Declare(
-  # sfml
-  # URL https://github.com/SFML/SFML/archive/refs/tags/2.5.1.zip
-  # URL_MD5 2c4438b3e5b2d81a6e626ecf72bf75be
-# )
-# add_subdirectory(sfml)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 3.0.2
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
+FetchContent_MakeAvailable(SFML)
 
 #-------------
 # SFML Button Library
