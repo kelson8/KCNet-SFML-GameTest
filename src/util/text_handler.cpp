@@ -11,6 +11,8 @@
 
 #include <SFML/Audio.hpp>
 
+#include "version.h"
+
 /**
  * @brief Setup the variables for the TextHandler
  */
@@ -20,7 +22,8 @@ TextHandler::TextHandler() :
 	livesText(font),
 	endScreenText(font),
 	pauseMenuText(font),
-	pauseMenuContinueText(font)
+	pauseMenuContinueText(font),
+	pauseMenuInfoText(font)
 {
 	this->InitFonts();
 	this->Init();
@@ -33,61 +36,53 @@ TextHandler::~TextHandler()
 }
 
 /**
+ * @brief Helper function to setup the game texts.
+ *
+ * This is a cleaner way to setup texts in SFML.
+ *
+ * @param textHandler The sf::Text value to setup.
+ * @param font The font to set to.
+ * @param textPosition The position to display the text.
+ * @param characterSize The character size for the text.
+ * @param displayText The text to display on screen.
+ */
+void TextHandler::SetupText(sf::Text& textHandler, const sf::Font& font, 
+	sf::Vector2f textPosition, uint32_t characterSize, const std::string& displayText)
+{
+	textHandler.setFont(font);
+	textHandler.setPosition(textPosition);
+	textHandler.setCharacterSize(characterSize);
+	textHandler.setString(displayText);
+}
+
+/**
+ * @brief Setup the color for the text
+ * 
+ * TODO Fix this to work later.
+ * 
+ * @param textHandler The sf::Text value to setup.
+ * @param textColor The color of the text.
+ */
+void TextHandler::SetupColor(sf::Text& textHandler, sf::Color textColor)
+{
+	textHandler.setFillColor(textColor);
+}
+
+/**
  * @brief Setup the game text.
  */
 void TextHandler::Init()
 {
-	//----
-	// Score
-	//----
-	// Setup the font
-	this->scoreText.setFont(this->font);
-
-	// // Set the character size, fill color and default string
-	this->scoreText.setCharacterSize(24);
-	this->scoreText.setFillColor(sf::Color::White);
-	this->scoreText.setString("NONE");
 
 	//----
-	// Health
+	// Main Screen
 	//----
-	// Setup the font
-	this->healthText.setFont(this->font);
-
-	// Set the Y to be lower then the scoreText, so it doesn't overlap.
-	this->healthText.setPosition(sf::Vector2f(0.0f, 30.0f));
-
-	// Set the character size, fill color and default string
-	this->healthText.setCharacterSize(24);
-	this->healthText.setFillColor(sf::Color::White);
-	this->healthText.setString("NONE");
-
-	//----
-	// Lives
-	//----
-	this->livesText.setFont(this->font);
-
-	// Set the Y to be lower then the the other vaules, so it doesn't overlap.
-	//this->livesText.setPosition(sf::Vector2f(0.0f, 35.0f));
-	this->livesText.setPosition(sf::Vector2f(m_LivesTextPosX, m_LivesTextPosY));
-
-	// Set the character size, fill color and default string
-	this->livesText.setCharacterSize(24);
-	this->livesText.setFillColor(sf::Color::White);
-	this->livesText.setString("NONE");
-
-
-	//----
-	// End screen
-	//----
-	this->endScreenText.setFont(this->font);
-	this->endScreenText.setPosition(sf::Vector2f(40, 40));
-	this->endScreenText.setCharacterSize(48);
+	InitGameText();
 
 	//----
 	// Pause screen
 	//----
-	this->InitPauseMenu();
+	InitPauseText();
 
 }
 
@@ -128,24 +123,55 @@ void TextHandler::InitVariables()
 	// Pause menu
 	m_PauseMenuTextPosX = 327.0f;
 	m_PauseMenuTextPosY = 182.0f;
+
+	// Pause menu, program name and version/other info display.
+	m_PauseMenuInfoTextPosX = 0.0f;
+	m_PauseMenuInfoTextPosY = 80.0f;
+}
+
+/**
+ * @brief Setup the main screen for the game.
+ * 
+ * Sets up the score, lives, and other position displays.
+ */
+void TextHandler::InitGameText()
+{
+	// Score
+	SetupText(scoreText, font, sf::Vector2f(0.0f, 0.0f), 24, "NONE");
+
+	// This doesn't work for some reason.
+	//SetupColor(scoreText, sf::Color::Blue);
+
+	// Health
+	// Not in use
+	//SetupText(healthText, font, sf::Vector2f(0.0f, 30.0f), 24, "NONE");
+	//SetupColor(scoreText, sf::Color::White);
+
+	// Lives
+	SetupText(livesText, font, sf::Vector2f(m_LivesTextPosX, m_LivesTextPosY), 24, "NONE");
+	SetupColor(scoreText, sf::Color::White);
+
+
+	// End screen
+	// Blank by default
+	SetupText(endScreenText, font, sf::Vector2f(40, 40), 48, "");
 }
 
 /**
  * @brief Setup the values for the pause menu
  */
-void TextHandler::InitPauseMenu()
+void TextHandler::InitPauseText()
 {
-	this->pauseMenuText.setFont(this->font);
-	this->pauseMenuText.setPosition(sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY));
-	this->pauseMenuText.setCharacterSize(48);
-	this->pauseMenuText.setString("Paused");
+	SetupText(pauseMenuText, font, sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY), 48, "Paused");
+
+	SetupText(pauseMenuInfoText, font, sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY), 32, 
+		fmt::format("Welcome to {}: v{}{} ", Defines::gameName, PROJECT_VERSION_STRING, PROJECT_VERSION_SUFFIX));
 
 	// Incomplete
-	//this->pauseMenuContinueText.setFont(this->font);
-	//this->pauseMenuContinueText.setPosition(sf::Vector2f(40, 80));
-	//this->pauseMenuContinueText.setCharacterSize(48);
-	//this->pauseMenuContinueText.setString("Continue?");
+	//SetupText(this->font, sf::Vector2f(40, 80), 48, "Continue?");
 }
+
+
 
 /**
  * @brief Update the game text
@@ -205,13 +231,17 @@ void TextHandler::RenderPauseScreen(sf::RenderTarget& target)
 
 	if (game.getPaused())
 	{
+		// Paused text
 		target.draw(this->pauseMenuText);
 		//target.draw(this->pauseMenuContinueText);
+		// Info text
+		target.draw(this->pauseMenuInfoText);
 	}
 
 #ifdef _IMGUI_TEST
 	// This is required for changing the position of the displays.
 	this->pauseMenuText.setPosition(sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY));
+	this->pauseMenuInfoText.setPosition(sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY));
 #endif // _IMGUI_TEST
 }
 
@@ -297,6 +327,11 @@ void TextHandler::SetDisplayPositions(TextPositions textPosEnum, float posX, flo
 	case TextPositions::PAUSE_CONTINUE_TEXT_POSITION:
 		break;
 
+	case TextPositions::PAUSE_NAME_VERSION_INFO_POSITION:
+		this->m_PauseMenuInfoTextPosX = posX;
+		this->m_PauseMenuInfoTextPosY = posY;
+		break;
+
 	default:
 		break;
 	}
@@ -337,6 +372,8 @@ std::tuple<float, float> TextHandler::GetDisplayPositions(TextPositions textPosE
 	default:
 		break;
 	}
+	// TODO Add better error handling to this later, for now just default to 0, 0.
+	//return std::make_tuple(0, 0);
 }
 
 #endif // _IMGUI_TEST

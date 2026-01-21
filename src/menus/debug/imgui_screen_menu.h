@@ -27,6 +27,9 @@ private:
 
 	float m_PauseMenuTextPosX;
 	float m_PauseMenuTextPosY;
+
+	float m_PauseMenuInfoTextPosX;
+	float m_PauseMenuInfoTextPosY;
 #endif // _IMGUI_TEST
 };
 

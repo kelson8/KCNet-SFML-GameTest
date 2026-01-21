@@ -20,6 +20,9 @@ ImGuiScreenMenu::ImGuiScreenMenu()
 
 	m_PauseMenuTextPosX = 0.0f;
 	m_PauseMenuTextPosY = 0.0f;
+
+	m_PauseMenuInfoTextPosX = 0.0f;
+	m_PauseMenuInfoTextPosY = 0.0f;
 }
 
 /**
@@ -65,7 +68,10 @@ void ImGuiScreenMenu::Draw()
 		ImGui::Separator();
 
 		// This is using tuples and returning them, works well for a coordinate system.
+		// TODO Make helper functions for some of these later.
+		
 		ImGui::Text("Pause menu debug");
+		ImGui::Text("Pause menu main text");
 		ImGui::SliderFloat("Text pos X", &m_PauseMenuTextPosX, 0.0, screenSizeX - imGuiMenu.GetMaxTextXPos());
 		ImGui::SliderFloat("Text pos Y", &m_PauseMenuTextPosY, 0.0, screenSizeY - imGuiMenu.GetMaxTextYPos());
 
@@ -79,6 +85,18 @@ void ImGuiScreenMenu::Draw()
 		if (ImGui::Button("Apply new text positions"))
 		{
 			textHandler.SetDisplayPositions(TextPositions::PAUSE_TEXT_POSITION, m_PauseMenuTextPosX, m_PauseMenuTextPosY);
+		}
+
+		ImGui::Separator();
+
+		// This currently doesn't work, I'll try to fix it later.
+		ImGui::Text("Pause menu info text");
+		ImGui::SliderFloat("Text pos X", &m_PauseMenuInfoTextPosX, 0.0, screenSizeX - imGuiMenu.GetMaxTextXPos());
+		ImGui::SliderFloat("Text pos Y", &m_PauseMenuInfoTextPosY, 0.0, screenSizeY - imGuiMenu.GetMaxTextYPos());
+
+		if (ImGui::Button("Apply new text positions"))
+		{
+			textHandler.SetDisplayPositions(TextPositions::PAUSE_NAME_VERSION_INFO_POSITION, m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY);
 		}
 	}
 }

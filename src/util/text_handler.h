@@ -7,11 +7,13 @@
 #ifdef _IMGUI_TEST
 enum class TextPositions
 {
-	SCORE_TEXT_POSITION,
-	HEALTH_TEXT_POSITION,
-	LIVES_TEXT_POSITION,
-	PAUSE_TEXT_POSITION,
-	PAUSE_CONTINUE_TEXT_POSITION,
+	SCORE_TEXT_POSITION, // Score text
+	HEALTH_TEXT_POSITION, // Health text
+	LIVES_TEXT_POSITION, // Lives text
+	PAUSE_TEXT_POSITION, // Pause text
+	PAUSE_CONTINUE_TEXT_POSITION, // Continue text
+	PAUSE_NAME_VERSION_INFO_POSITION, // Pause, program name and version/other info display.
+	NONE,
 
 };
 #endif // _IMGUI_TEST
@@ -45,22 +47,30 @@ private:
 	TextHandler();
 	~TextHandler();
 
+	void SetupText(sf::Text& textHandler, const sf::Font& font,
+		sf::Vector2f textPosition, uint32_t characterSize, const std::string& displayText);
+	void SetupColor(sf::Text& textHandler, sf::Color textColor);
+
 	void Init();
 	void InitFonts();
 	void InitVariables();
-	void InitPauseMenu();
+	void InitGameText();
+	void InitPauseText();
 
 	// Resources
 	sf::Font font;
 
 	// Text
-	sf::Text scoreText;
-	sf::Text healthText;
-	sf::Text livesText;
-	sf::Text endScreenText;
+	// Main game
+	sf::Text scoreText; // Score
+	sf::Text healthText; // Health
+	sf::Text livesText; // Lives
+	sf::Text endScreenText; // End screen
 
-	sf::Text pauseMenuText;
-	sf::Text pauseMenuContinueText;
+	// Pause menu
+	sf::Text pauseMenuText; // Pause text
+	sf::Text pauseMenuContinueText; // Pause text, continue
+	sf::Text pauseMenuInfoText;
 
 	// Text position
 
@@ -82,6 +92,10 @@ private:
 	// Pause menu
 	float m_PauseMenuTextPosX;
 	float m_PauseMenuTextPosY;
+
+	// Pause menu, program name and version/other info display.
+	float m_PauseMenuInfoTextPosX;
+	float m_PauseMenuInfoTextPosY;
 
 	// End screen text Position X
 	float m_EndScreenTextPosX;

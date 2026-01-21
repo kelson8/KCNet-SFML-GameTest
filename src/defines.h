@@ -78,6 +78,8 @@ public:
 	const std::string programAuthor = "kelson8";
 	const std::string programLicense = "Licensed under the MIT License (c) kelson8 - KCNet";
 
+	const static std::string gameName;
+
 	// Logger info
 	const static std::string loggerPrefix;
 	const static std::string logFileName;
