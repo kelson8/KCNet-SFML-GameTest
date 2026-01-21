@@ -1,7 +1,29 @@
 cmake_minimum_required(VERSION 3.28)
 
+# Original CMake came from here
+# https://github.com/eliasdaler/imgui-sfml-fetchcontent/blob/master/dependencies/CMakeLists.txt
+
 set(PROJECT_NAME "KCNet-SFML-GameTest")
-project(${PROJECT_NAME} LANGUAGES CXX)
+set(APP_VERSION "0.0.1")
+set(APP_VERSION_SUFFIX "a")  # Pre-release suffix
+
+#--------------
+# Project name, C++ language, and version
+#--------------
+project(${PROJECT_NAME} 
+	LANGUAGES CXX
+	VERSION ${APP_VERSION})
+
+# Specify the path to the version.h.in file for autogenerating the version.h header.
+set(VERSION_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in")
+set(GENERATED_VERSION_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/src/version.h")
+
+# Generate a header file with version info
+configure_file(
+    "${VERSION_HEADER}"
+    "${GENERATED_VERSION_HEADER}"
+    @ONLY
+)
 
 file(GLOB SOURCES 
 	"src/*.cpp" 
@@ -28,9 +50,14 @@ file(GLOB HEADERS_MENU "src/menus/*.h")
 file(GLOB HEADERS_MENU_IMGUI "src/menus/debug/*.h")
 #
 
-# 
-# https://github.com/eliasdaler/imgui-sfml-fetchcontent/blob/master/dependencies/CMakeLists.txt
+#---------
+# Runtime directory for project. 
+# C++ version info, and setting C++ parameters.
+#---------
 
+# TODO Move these to the top or elsewhere later.
+
+# This sets the build path to the build/bin folder. 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Switched to C++20
@@ -40,6 +67,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# TODO Move into dependencies file.
 include(FetchContent)
 
 #---------
@@ -92,11 +120,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # add_subdirectory(lib/SFML-Button)
 
 # Set the Visual Studio startup project to be main.
-#set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT main)
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 #------
-# Copy files to build
+# Copy files to build.
 #------
 
 # Copy the fonts to the build folder
@@ -112,8 +139,12 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         "${CMAKE_CURRENT_SOURCE_DIR}/resources/"
         "$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")
 
-# New for Visual Studio filters
+#------
+# Setup Visual Studio filters.
+# This sets up the filter view to be cleaner in Visual Studio.
 # https://stackoverflow.com/questions/33808087/cmake-how-to-create-visual-studio-filters
+#------
+
 source_group("src"            	FILES ${SOURCES_MAIN})
 source_group("src/util"         FILES ${SOURCES_UTIL})
 source_group("src/menus"        FILES ${SOURCES_MENU})
