@@ -32,7 +32,7 @@
  */
 Game::Game() : 
 	endGame(false), 
-	endScreen(false),
+	m_EndScreen(false),
 	windowInitialized(false)
 {
 	// Init game variables, music, and the window.
@@ -70,7 +70,9 @@ void Game::initVariables()
 	this->endGame = false;
 
 	// Set the endScreen status
-	this->endScreen = false;
+	this->m_EndScreen = false;
+
+	m_CurrentRound = 1;
 
 	// Set mouse held to false
 	// TODO Make into function in mouse_util.cpp/.h
@@ -176,7 +178,7 @@ void Game::setPaused(bool paused)
  */
 const bool Game::getEndScreen() const
 {
-	return this->endScreen;
+	return this->m_EndScreen;
 }
 
 /**
@@ -185,7 +187,7 @@ const bool Game::getEndScreen() const
  */
 void Game::setEndScreen(bool newEndScreen)
 {
-	endScreen = newEndScreen;
+	m_EndScreen = newEndScreen;
 }
 
 /**
@@ -202,6 +204,27 @@ void Game::setEndScreen(bool newEndScreen)
 void Game::ResetEnemies()
 {
 	Enemy::getInstance().Reset();
+}
+
+/**
+ * @brief Set the games current round
+ * @param newRound The new round to set to
+ * 
+ * TODO Setup round system to change rounds every 30 seconds.
+ * Make enemies faster depending on which round is set.
+ */
+void Game::SetRound(int newRound)
+{
+	m_CurrentRound = newRound;
+}
+
+/**
+ * @brief Get the games current round
+ * @return The current round the game is on.
+ */
+int Game::GetRound() const
+{
+	return m_CurrentRound;
 }
 
 /**

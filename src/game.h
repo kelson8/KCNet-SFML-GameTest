@@ -34,6 +34,9 @@ public:
 	//void Restart();
 	void ResetEnemies();
 
+	void SetRound(int newRound);
+	int GetRound() const;
+
 
 private:
 	// Constructors / Destructors
@@ -76,7 +79,10 @@ private:
 	bool endGame;
 
 	// Check if the end screen is being shown
-	bool endScreen;
+	bool m_EndScreen;
+
+	// The current round for the game
+	int m_CurrentRound;
 
 	//void PollEvents();
 	//void updateMousePositions();

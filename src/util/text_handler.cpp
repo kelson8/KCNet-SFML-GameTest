@@ -15,25 +15,55 @@
 
 /**
  * @brief Setup the variables for the TextHandler
+ * 
+ * TODO Move these values into a different init function.
  */
 TextHandler::TextHandler() :
+	// Game menu
 	scoreText(font),
 	healthText(font),
+	roundText(font),
 	livesText(font),
+	
 	endScreenText(font),
+	// Pause menu
 	pauseMenuText(font),
 	pauseMenuContinueText(font),
 	pauseMenuInfoText(font)
 {
+
+//TextHandler::TextHandler()
+//{
+	//textObjects.resize(static_cast<int>(TextId::TEXT_COUNT));
+	//this->InitFontVariables();
+	
 	this->InitFonts();
-	this->Init();
+	// This has to be above Init, or the variables aren't set on runtime.
 	this->InitVariables();
+	this->Init();
 }
 
 TextHandler::~TextHandler()
 {
 
 }
+
+/**
+ * @brief Setup the font variables.
+ * 
+ * TODO Figure out how to move these out of the constructor.
+ * If I do, I get errors.
+ */
+//void TextHandler::InitFontVariables()
+//{
+//	scoreText = font;
+//	healthText = font;
+//	livesText = font;
+//	endScreenText = font;
+//	pauseMenuText = font;
+//	pauseMenuInfoText = font;
+//	pauseMenuContinueText = font;
+//}
 
 /**
  * @brief Helper function to setup the game texts.
@@ -110,12 +140,20 @@ void TextHandler::InitVariables()
 	m_ScoreTextPosX = 0.0f;
 	m_ScoreTextPosY = 0.0f;
 
+	// Health
 	m_HealthTextPosX = 0.0f;
 	m_HealthTextPosY = 30.0f;
 
+	// Current round
+	// TODO Change this later if I use the health text.
+	m_CurrentRoundPosX = 0.0f;
+	m_CurrentRoundPosY = 30.0f;
+
+	// Lives
 	m_LivesTextPosX = 0.0f;
 	m_LivesTextPosY = 60.0f;
 
+	// End screen
 	m_EndScreenTextPosX = 40.0f;
 	m_EndScreenTextPosY = 40.0f;
 	//
@@ -146,6 +184,10 @@ void TextHandler::InitGameText()
 	// Not in use
 	//SetupText(healthText, font, sf::Vector2f(0.0f, 30.0f), 24, "NONE");
 	//SetupColor(scoreText, sf::Color::White);
+
+	// Current round
+	//SetupText(roundText, font, sf::Vector2f(m_CurrentRoundPosX, m_CurrentRoundPosY), 24, "NONE");
+	SetupText(roundText, font, sf::Vector2f(m_CurrentRoundPosX, m_CurrentRoundPosY), 24, "Round: ");
 
 	// Lives
 	SetupText(livesText, font, sf::Vector2f(m_LivesTextPosX, m_LivesTextPosY), 24, "NONE");
@@ -188,15 +230,18 @@ void TextHandler::Update()
 	// This is kind of like cout, can add floats, ints and everything else to it.
 	std::stringstream points_ss;
 	//std::stringstream health_ss;
+	std::stringstream round_ss;
 	std::stringstream lives_ss;
 
 	points_ss << "Points: " << timers.GetScore();
 	//points_ss << "Points: " << player.GetPoints();
 	//health_ss << "Health: " << player.getHealth();
+	round_ss << "Round: " << Game::getInstance().GetRound();
 	lives_ss << "Lives: " << player.GetLives();
 
 	this->scoreText.setString(points_ss.str());
 	//this->healthText.setString(health_ss.str());
+	this->roundText.setString(round_ss.str());
 	this->livesText.setString(lives_ss.str());
 }
 
@@ -212,12 +257,17 @@ void TextHandler::Render(sf::RenderTarget& target)
 	// Draw the health text
 	//target.draw(this->healthText);
 
+	// Draw the round text
+	target.draw(this->roundText);
+
 	// Draw the lives text
 	target.draw(this->livesText);
 
 #ifdef _IMGUI_TEST
 	// This is required for changing the position of the displays.
 	this->livesText.setPosition(sf::Vector2f(m_LivesTextPosX, m_LivesTextPosY));
+
+	this->roundText.setPosition(sf::Vector2f(m_CurrentRoundPosX, m_CurrentRoundPosY));
 #endif // _IMGUI_TEST
 }
 
@@ -314,6 +364,11 @@ void TextHandler::SetDisplayPositions(TextPositions textPosEnum, float posX, flo
 		this->m_HealthTextPosY = posY;
 		break;
 
+	case TextPositions::ROUND_TEXT_POSITION:
+		this->m_CurrentRoundPosX = posX;
+		this->m_CurrentRoundPosY = posY;
+		break;
+
 	case TextPositions::LIVES_TEXT_POSITION:
 		this->m_LivesTextPosX = posX;
 		this->m_LivesTextPosY = posY;
@@ -357,6 +412,10 @@ std::tuple<float, float> TextHandler::GetDisplayPositions(TextPositions textPosE
 
 	case TextPositions::HEALTH_TEXT_POSITION:
 		return std::make_tuple(m_HealthTextPosX, m_HealthTextPosY);
+
+	case TextPositions::ROUND_TEXT_POSITION:
+		return std::make_tuple(m_CurrentRoundPosX, m_CurrentRoundPosY);
+		break;
 
 	case TextPositions::LIVES_TEXT_POSITION:
 		return std::make_tuple(m_LivesTextPosX, m_LivesTextPosY);

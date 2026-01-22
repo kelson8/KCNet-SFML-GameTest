@@ -9,6 +9,7 @@ enum class TextPositions
 {
 	SCORE_TEXT_POSITION, // Score text
 	HEALTH_TEXT_POSITION, // Health text
+	ROUND_TEXT_POSITION, // Round text
 	LIVES_TEXT_POSITION, // Lives text
 	PAUSE_TEXT_POSITION, // Pause text
 	PAUSE_CONTINUE_TEXT_POSITION, // Continue text
@@ -17,6 +18,19 @@ enum class TextPositions
 
 };
 #endif // _IMGUI_TEST
+
+// Not in use
+//enum class TextId
+//{
+//	SCORE_TEXT,
+//	HEALTH_TEXT,
+//  ROUND_TEXT,
+//	LIVES_TEXT,
+//	PAUSE_TEXT,
+//	PAUSE_CONTINUE_TEXT,
+//	PAUSE_NAME_VERSION_INFO,
+//	TEXT_COUNT // Must be the last item
+//};
 
 class TextHandler
 {
@@ -52,6 +66,7 @@ private:
 	void SetupColor(sf::Text& textHandler, sf::Color textColor);
 
 	void Init();
+	//void InitFontVariables();
 	void InitFonts();
 	void InitVariables();
 	void InitGameText();
@@ -60,10 +75,14 @@ private:
 	// Resources
 	sf::Font font;
 
+	// New for storing texts in a vector
+	//std::vector<sf::Text> textObjects;
+
 	// Text
 	// Main game
 	sf::Text scoreText; // Score
 	sf::Text healthText; // Health
+	sf::Text roundText; // Current round display
 	sf::Text livesText; // Lives
 	sf::Text endScreenText; // End screen
 
@@ -88,6 +107,11 @@ private:
 	float m_LivesTextPosX;
 	// Lives text Position Y
 	float m_LivesTextPosY;
+
+	// Current round text Position X
+	float m_CurrentRoundPosX;
+	// Current round text Position Y
+	float m_CurrentRoundPosY;
 
 	// Pause menu
 	float m_PauseMenuTextPosX;
