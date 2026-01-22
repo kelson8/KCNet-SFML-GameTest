@@ -389,8 +389,8 @@ void Game::Run()
 		// Update
 		Update();
 
-		// Toggle the timer test here.
-		//timers.TimerTest();
+		// Toggle the Main timer here for keeping track of how long the game has been opened.
+		// Logs total execution time to the console if enabled.
 		timers.TimerLoop();
 
 		// Update the wait timer when it is active
@@ -399,6 +399,9 @@ void Game::Run()
 		// Update the timer to keep track of the score.
 		// Gets reset when the player runs out of lives.
 		timers.ScoreTimer();
+		
+		// Update the current round timer
+		timers.RoundTimerLoop();
 
 		// Render
 		Render();

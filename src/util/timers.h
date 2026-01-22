@@ -18,6 +18,8 @@ public:
 	void StopTimer();
 
 	void TimerLoop();
+	
+	void RoundTimerLoop();
 
 	void StartWait(int duration, char unit);
 	void TimerWaitLoop();
@@ -54,6 +56,13 @@ private:
 
 	// Timer for keeping track of the score.
 	sf::Clock scoreTimerClock;
+
+	// Timer for keeping track of the round.
+	sf::Clock roundTimerClock;
+	// Store the round score timer
+	int m_RoundScoreTimer;
+	// Set the round max score time, round gets 1 added, and clock resets when this is hit.
+	int m_MaxRoundScoreTime;
 
 	// Int to keep track of the time for the score.
 	int m_CurrentScoreTime = 0;

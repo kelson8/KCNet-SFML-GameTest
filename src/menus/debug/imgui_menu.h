@@ -37,11 +37,6 @@ private:
 	ImGuiMenu();
 	~ImGuiMenu();
 
-	//void MouseMenu();
-	//void MusicMenu();
-	//void TimeMenu();
-	//void ControllerMenu();
-
 	// Menu variables
 	ImGuiControllerMenu imGuiControllerMenu;
 	ImGuiEnemyMenu imGuiEnemyMenu;

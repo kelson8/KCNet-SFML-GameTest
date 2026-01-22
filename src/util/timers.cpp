@@ -9,6 +9,10 @@ Timers::Timers()
 	m_ElapsedTime = 0;
 	m_ElapsedTimeOld = 0;
 
+	m_RoundScoreTimer = 0;
+	// TODO Make this be obtained from a config or somewhere else.
+	m_MaxRoundScoreTime = 30;
+
 	m_TimerDisplayConsole = true;
 
 	// Start the timers when this constructor starts up
@@ -89,6 +93,29 @@ void Timers::TimerLoop()
 
 		// Start the countdown over.  Think of laps on a stop watch.
 		timerClock.restart();
+	}
+}
+
+/**
+ * @brief Run the loop for the round timer.
+ * 
+ * This updates the games round after a set amount of time.
+ */
+void Timers::RoundTimerLoop()
+{
+	if (roundTimerClock.getElapsedTime().asSeconds() > 1)
+	{
+		m_RoundScoreTimer++;
+
+		// After the max time, this resets back to 0 and increases the round to the game.
+		if (m_RoundScoreTimer == m_MaxRoundScoreTime)
+		{
+			Game::getInstance().SetRound(Game::getInstance().GetRound() + 1);
+			m_RoundScoreTimer = 0;
+		}
+
+		// Start the countdown over.
+		roundTimerClock.restart();
 	}
 }
 
