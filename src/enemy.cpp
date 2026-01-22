@@ -277,7 +277,7 @@ void Enemy::Update()
 				player.SetLives(player.GetLives() - 1);
 				m_PlayerHit = true;
 				//fmt::println("Enemy is hitting the player, new lives: {}", player.GetLives());
-			}			
+			}
 		}
 		else
 		{
@@ -353,8 +353,6 @@ void Enemy::SetSpeed(float value)
 {
 	enemySpeed = value;
 }
-
-const
 
 const float Enemy::GetSpawnRate() const
 {
