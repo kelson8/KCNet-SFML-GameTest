@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "defines.h"
+#include "util/ini_handler.h"
 
 class Timers
 {
@@ -34,7 +35,9 @@ public:
 private:
 	// Constructors / Destructors
 	Timers();
-	~Timers();	
+	~Timers();
+
+	IniHandler iniHandler;
 
 	// Current elapsed time.
 	int m_ElapsedTime;

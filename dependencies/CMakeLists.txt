@@ -53,6 +53,19 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(spdlog)
 
 #-------------
+# SimpleIni
+#-------------
+
+FetchContent_Declare(simpleini
+  GIT_REPOSITORY https://github.com/brofield/simpleini.git
+  GIT_TAG        v4.25
+  GIT_PROGRESS   TRUE
+  GIT_SHALLOW    TRUE
+  EXCLUDE_FROM_ALL
+)
+FetchContent_MakeAvailable(simpleini)
+
+#-------------
 # ImGui
 #-------------
 

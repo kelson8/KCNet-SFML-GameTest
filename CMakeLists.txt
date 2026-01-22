@@ -94,6 +94,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	ImGui-SFML::ImGui-SFML
 	fmt::fmt
 	# SFMLButton
+	SimpleIni::SimpleIni
 	)
 	
 # Include directories for the project, I prefer to use util/ or menus/ for other folders.

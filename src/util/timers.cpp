@@ -4,14 +4,18 @@
 #include <fmt/core.h>
 #include "game.h"
 
+// TODO Try to figure out how to consolidate some 
+// of these timers into one function later, make helper functions for them.
+
 Timers::Timers()
 {
 	m_ElapsedTime = 0;
 	m_ElapsedTimeOld = 0;
 
 	m_RoundScoreTimer = 0;
-	// TODO Make this be obtained from a config or somewhere else.
-	m_MaxRoundScoreTime = 30;
+	// This sets this to a default value if this isn't found in the ini.
+	m_MaxRoundScoreTime = iniHandler.GetInt("RoundTimes", "MaxRoundTime") 
+		? iniHandler.GetInt("RoundTimes", "MaxRoundTime") : 30;
 
 	m_TimerDisplayConsole = true;
 

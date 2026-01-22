@@ -84,6 +84,9 @@ public:
 	const static std::string loggerPrefix;
 	const static std::string logFileName;
 
+	// Config
+	static const char* iniFile;
+
 	// Test
 	// Hmm, I didn't know I could make these inline.
 	//inline const static std::string testString = "";
