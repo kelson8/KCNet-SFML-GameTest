@@ -31,11 +31,6 @@ ImGuiScreenMenu::ImGuiScreenMenu()
 	// This works like this!
 	m_ScreenSizeX = WindowManager::getInstance().getWindow().getSize().x;
 	m_ScreenSizeY = WindowManager::getInstance().getWindow().getSize().y;
-
-	std::cout << "Address of m_PauseMenuTextPosX: " << &m_PauseMenuTextPosX << std::endl;
-	std::cout << "Address of m_PauseMenuTextPosY: " << &m_PauseMenuTextPosY << std::endl;
-	std::cout << "Address of m_PauseMenuInfoTextPosX: " << &m_PauseMenuInfoTextPosX << std::endl;
-	std::cout << "Address of m_PauseMenuInfoTextPosY: " << &m_PauseMenuInfoTextPosY << std::endl;
 }
 
 
