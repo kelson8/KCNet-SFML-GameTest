@@ -8,11 +8,7 @@
 
 #include <fmt/core.h>
 
-#ifdef MOVE_INI_CONFIG_MANAGER
-IniHandler::IniHandler(const std::string& configFile)
-#else
 IniHandler::IniHandler()
-#endif // MOVE_INI_CONFIG_MANAGER
 {
     SI_Error rc = iniFile.LoadFile(Defines::iniFile);
 
