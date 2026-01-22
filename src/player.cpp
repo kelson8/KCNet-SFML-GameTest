@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+#include "game.h"
 #include "defines.h"
 
 // Useful link for collisions:
@@ -71,6 +72,23 @@ void Player::Draw()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
 	windowManager.getWindow().draw(this->player);
+}
+
+/**
+ * @brief Respawn the player
+ *
+ * Disable end game, end screen variables, and set the players lives back to default.
+ */
+void Player::Respawn()
+{
+	// The game should exit if this is set, but reset it just in case.
+	Game::getInstance().setEndGame(false);
+	// Make the end screen go away.
+	Game::getInstance().setEndScreen(false);
+	// Reset the enemies
+	Game::getInstance().ResetEnemies();
+	// Reset the players lives.
+	ResetLives();
 }
 
 /**
@@ -197,6 +215,14 @@ const bool Player::HasLives() const
 void Player::SetLives(int lives)
 {
 	this->playerLives = lives;
+}
+
+/**
+ * @brief Reset the players lives back to the default value.
+ */
+void Player::ResetLives()
+{
+	SetLives(Defines::defaultLives);
 }
 
 /**

@@ -189,6 +189,22 @@ void Game::setEndScreen(bool newEndScreen)
 }
 
 /**
+ * @brief This is unused, I may setup this later, I currently have the Player::Respawn function.
+ */
+//void Game::Restart()
+//{
+//
+//}
+
+/**
+ * @brief So far this just resets the enemy positions, I may make it do more later.
+ */
+void Game::ResetEnemies()
+{
+	Enemy::getInstance().Reset();
+}
+
+/**
  * @brief Updates the game events
  * 
  * Update poll events, and delta time.

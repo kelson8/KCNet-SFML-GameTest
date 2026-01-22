@@ -31,6 +31,8 @@ public:
 
 	void setEndGame(bool newEndGame);
 	void setEndScreen(bool newEndScreen);
+	//void Restart();
+	void ResetEnemies();
 
 
 private:

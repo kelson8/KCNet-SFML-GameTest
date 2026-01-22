@@ -23,6 +23,9 @@ public:
 
 	void Draw();
 
+	void Respawn();
+	void ResetLives();
+
 	sf::Vector2f GetPosition();
 	void SetPosition(float x, float y);
 

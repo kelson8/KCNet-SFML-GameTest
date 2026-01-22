@@ -125,13 +125,11 @@ void InputHandler::HandleAllInput()
                 break;
 
 
-                // If the player is on the end screen, reset the game.
+                // If the player is on the end screen, respawn them.
             case KeyCodes::Key_Enter:
                 if (game.getEndScreen())
                 {
-                    game.setEndScreen(false);
-                    enemy.Reset();
-                    player.SetLives(Defines::defaultLives);
+                    player.Respawn();
                 }
                 break;
 

@@ -67,8 +67,7 @@ void ImGuiPlayerMenu::Draw()
 		{
 			if (ImGui::Button("Respawn player"))
 			{
-				game.setEndGame(false);
-				player.SetLives(Defines::defaultLives);
+				player.Respawn();
 			}
 		}
 
