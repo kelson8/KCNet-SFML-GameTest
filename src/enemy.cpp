@@ -12,8 +12,6 @@
 #include "util/random_number_generator.h"
 #include "util/timers.h"
 
-
-
 // TODO Work on the life system, sometimes the player gets hit
 // more then once from a single enemy, and sometimes the hit doesn't register.
 
@@ -28,7 +26,7 @@ Enemy::Enemy()
 	m_RandomSpawnPos = 0.0f;
 
 	m_DefaultEnemyXMovePos = 0.0f;
-	
+
 	// Set the enemy size and scale
 	m_EnemySize = 100.0f;
 	m_EnemyScale = 0.5f;

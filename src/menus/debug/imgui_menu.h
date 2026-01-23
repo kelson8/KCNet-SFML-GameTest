@@ -4,6 +4,7 @@
 #include "menus/IMenuBase.h"
 
 // Menus
+#include "imgui_button_menu.h"
 #include "imgui_controller_menu.h"
 #include "imgui_enemy_menu.h"
 #include "imgui_player_menu.h"
@@ -38,6 +39,7 @@ private:
 	~ImGuiMenu();
 
 	// Menu variables
+	ImGuiButtonMenu imGuiButtonMenu;
 	ImGuiControllerMenu imGuiControllerMenu;
 	ImGuiEnemyMenu imGuiEnemyMenu;
 	ImGuiPlayerMenu imGuiPlayerMenu;

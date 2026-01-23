@@ -9,7 +9,7 @@
 
 #include "timers.h"
 
-#include <SFML/Audio.hpp>
+#include "util/button_util.h"
 
 #include "version.h"
 
@@ -281,11 +281,19 @@ void TextHandler::Render(sf::RenderTarget& target)
 
 /**
  * @brief Pause screen for the game.
+ * @param button1 The first button to display
+ * @param button2 The second button to display
  * @param target
  */
-void TextHandler::RenderPauseScreen(sf::RenderTarget& target)
+void TextHandler::RenderPauseScreen(ButtonUtil button1, ButtonUtil button2, sf::RenderTarget& target)
 {
 	Game& game = Game::getInstance();
+	// For setting up buttons, takes a sf::Vector2 for size, position, and a sf::Color for the color.
+	// TODO Figure out how to place these under the text, and add text to them.
+	// Moved these into the function, now the Buttons are created in Game.cpp where this is drawn.
+	// I also have a debug menu option for modifying the button positions.
+	//ButtonUtil button1 = ButtonUtil(sf::Vector2f(100.0f, 100.0f), sf::Vector2f(150.0f, 50.0f), sf::Color::Magenta, "Test");
+	//ButtonUtil button2 = ButtonUtil(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Magenta, "Test");
 
 	if (game.getPaused())
 	{
@@ -297,6 +305,13 @@ void TextHandler::RenderPauseScreen(sf::RenderTarget& target)
 
 		// Music options text
 		target.draw(this->pauseMenuMusicToggleText);
+
+		// Test buttons
+		// This works for drawing multiple buttons to the screen!
+		button1.Draw(WindowManager::getInstance().getWindow());
+
+		// Disabled second button drawing.
+		//button2.Draw(WindowManager::getInstance().getWindow());
 	}
 
 #ifdef _IMGUI_TEST

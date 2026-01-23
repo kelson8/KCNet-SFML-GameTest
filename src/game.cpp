@@ -6,6 +6,8 @@
 #include <SFML/Audio.hpp>
 #include "util/music_util.h"
 
+#include "util/button_util.h"
+
 #ifdef _IMGUI_TEST
 #include <imgui-SFML.h>
 #include <imgui.h>
@@ -33,7 +35,10 @@
 Game::Game() :
 	endGame(false),
 	m_EndScreen(false),
-	windowInitialized(false)
+	windowInitialized(false),
+	// Buttons, TODO Move these elsewhere.
+	button1(ButtonUtil(sf::Vector2f(133.0f, 32.0f), sf::Vector2f(542.0f, 247.0f), sf::Color::Black)),
+	button2(ButtonUtil(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Black))
 {
 	// Init game variables, music, and the window.
 	this->initVariables();
@@ -56,6 +61,37 @@ const bool Game::getWindowInitialized() const
 {
 	return windowInitialized;
 }
+
+// 
+#ifdef _IMGUI_TEST
+
+/**
+ * @brief Test for changing the button positions in ImGui
+ * 
+ * This works for changing the button positions.
+ * 
+ * @param button The ButtonPositions button to change position from the enum.
+ * @param position The position to set the button to.
+ * @param size The new size of the button.
+ */
+void Game::SetButtonPositions(ButtonPositions buttonPosition, sf::Vector2f position, sf::Vector2f size)
+{
+	switch (buttonPosition)
+	{
+	case ButtonPositions::PAUSE_MENU_TEST_BUTTON1_POSITION:
+		button1.SetPosition(position);
+		button1.SetSize(size);
+		break;
+	case ButtonPositions::PAUSE_MENU_TEST_BUTTON2_POSITION:
+		button2.SetPosition(position);
+		button2.SetSize(size);
+		break;
+	default:
+		break;
+	}
+}
+
+#endif // _IMGUI_TEST
 
 /**
  * @brief Setup the end game status, and the end screen status
@@ -394,7 +430,8 @@ void Game::Render()
 		// Show the pause screen
 		else
 		{
-			textHandler.RenderPauseScreen(windowManager.getWindow());
+			//textHandler.RenderPauseScreen(windowManager.getWindow());
+			textHandler.RenderPauseScreen(button1, button2, windowManager.getWindow());
 		}
 
 	}

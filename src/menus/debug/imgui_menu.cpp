@@ -125,6 +125,11 @@ void ImGuiMenu::Draw()
 	//------
 	imGuiTimersMenu.Draw();
 
+	//------
+	// Buttons
+	//------
+	imGuiButtonMenu.Draw();
+
 	ImGui::End();
 }
 

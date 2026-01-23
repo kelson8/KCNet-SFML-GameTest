@@ -5,6 +5,8 @@
 
 #include "window_manager.h"
 
+#include "util/button_util.h"
+
 class Game
 {
 public:
@@ -29,7 +31,14 @@ public:
 
 	void setPaused(bool paused);
 
+
+
 	const bool getWindowInitialized() const;
+
+	// Buttons
+	//const bool GetButtonPositions() const;
+	//void SetButtonPositions(ButtonPositions buttonPosition, sf::Vector2f position);
+	void SetButtonPositions(ButtonPositions buttonPosition, sf::Vector2f position, sf::Vector2f size);
 
 	void setEndGame(bool newEndGame);
 	void setEndScreen(bool newEndScreen);
@@ -51,6 +60,12 @@ private:
 	void initWindow();
 
 	void RenderMainScreen();
+
+	// Buttons
+		//ButtonUtil button1 = ButtonUtil(sf::Vector2f(100.0f, 100.0f), sf::Vector2f(150.0f, 50.0f), sf::Color::Magenta);
+	//ButtonUtil button2 = ButtonUtil(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Magenta);
+	ButtonUtil button1;
+	ButtonUtil button2;
 
 	// Couldn't get this working in SFML3
 	//sf::VideoMode videoMode;

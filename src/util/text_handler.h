@@ -4,6 +4,8 @@
 
 #include <tuple>
 
+#include "util/button_util.h"
+
 #ifdef _IMGUI_TEST
 enum class TextPositions
 {
@@ -44,7 +46,7 @@ public:
 
 	void Update();
 	void Render(sf::RenderTarget& target);
-	void RenderPauseScreen(sf::RenderTarget& target);
+	void RenderPauseScreen(ButtonUtil button1, ButtonUtil button2, sf::RenderTarget& target);
 	void RenderEndScreen();
 
 #ifdef _IMGUI_TEST

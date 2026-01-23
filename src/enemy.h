@@ -64,7 +64,7 @@ private:
 	// Random spawn position for the enemies.
 	float m_RandomSpawnPos;
 
-	// The default X position for the m_Enemy to move.
+	// The default X position for the enemy to move.
 	float m_DefaultEnemyXMovePos;
 
 	// The size of the m_Enemy
