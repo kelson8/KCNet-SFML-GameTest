@@ -1,14 +1,44 @@
 # KCNet-SFML-GameTest
-I am working on a basic game in SFML using C++ in this repo
+I am working on a basic game in SFML using C++ in this repo.
 
 ## Info
-This just has a player that can move around, some game music, and falling enemies.
+This just has a player that can move around, some game music, and falling enemies to dodge.
 
-The player only loses lives if they go out of bounds, I haven't setup the enemies to make the player
-lose lives just yet.
+The player can now lose lives when the enemies hit them, although it is sometimes delayed or too fast.
 
-I now have a very basic pause menu working, all it does is display the text `Paused` on the screen so far.
-Once I figure out how to use buttons with SFML, then I will most likely add a resume button, options, and quit.
+I will most likely add a resume button, options, and quit later on for the pause menu.
+
+So far, this has no textures or sprites and I'm just using 
+`sf::RectangleShape` for the enemies and player for now, it's just a demo for me to experiment with and learn more SFML and C++.
+
+## Features
+**Pause Menu**
+
+You can press `Escape` to view the pause menu, so far you can toggle the music on/off but it doesn't update the status display in game without a restart of the game.
+
+**Player**
+
+The player by default has 3 lives.
+
+**Score**
+
+The score is set to increase by 1 every second, runs on a timer.
+
+**Rounds**
+
+The rounds go up by 1 every 30 seconds by default, this can be setup in the `game-settings.ini` file.
+
+**End screen**
+
+This game has an end screen when the player dies, it shows your total score, and you can restart by pressing enter on this screen.
+
+**Config**
+
+This uses SimpleIni for handling the config, there is a few settings that can be changed in the `game-settings.ini` file, and I will be adding more to this later.
+
+**Debug Menu**
+
+I have a debug menu setup with ImGui, use the `F2` key to open/close it in game.
 
 ## Quick start
 
@@ -83,6 +113,18 @@ If using Debug build mode, copy the sfml-d.dll files to ./x64/Debug,
 if using Release build mode.copy the files without the -d to ./x64/Release
 ```
 
+## Libraries used
+This is a list of libraries in use for this C++ game project.
+
+These are obtained from the `dependencies` folder, which has a `CMakeLists.txt` file to read from.
+
+* Fmt - For formatting text and printing (https://github.com/fmtlib/fmt)
+* ImGui - ImGui menu dependency (https://github.com/ocornut/imgui)
+* SpdLog - For logging system (https://github.com/gabime/spdlog)
+* SimpleIni - For the config system/ini handling (https://github.com/brofield/simpleini)
+* SFML - Main game engine (https://github.com/SFML/SFML.git)
+* SFML-ImGui - ImGui debug menu for SFML (https://github.com/SFML/imgui-sfml.git)
+
 
 # Credits
 None of this would be possible without the team at SFML, this is using their libraries and window system:
@@ -90,6 +132,9 @@ None of this would be possible without the team at SFML, this is using their lib
 
 I would like to thank the author of this youtube series for a lot of help with learning SFML:
 * https://www.youtube.com/playlist?list=PL6xSOsbVA1eb_QqMTTcql_3PdOiE928up
+
+The CMake SFML template was originally from the SFML team on GitHub:
+* https://github.com/SFML/cmake-sfml-project
 
 # License
 This project is licensed under the MIT license.

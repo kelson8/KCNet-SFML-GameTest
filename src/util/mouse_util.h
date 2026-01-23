@@ -15,6 +15,8 @@ public:
 	void updateMousePositions(sf::RenderWindow& window);
 	sf::Vector2i getMousePosWindow() const;
 	sf::Vector2f getMousePosView() const;
+
+	bool IsHoveringOverButton(float x1, float y1, float x2, float y2) const;
 	
 private:
 	// Constructors / Destructors

@@ -34,6 +34,11 @@ public:
 
 	void SetSize(sf::Vector2f size);
 	sf::Vector2f GetSize() const;
+
+	void SetColor(sf::Color color);
+	sf::Color GetColor() const;
+
+	sf::FloatRect GetGlobalBounds() const;
 	
 private:
 	sf::RectangleShape buttonShape;

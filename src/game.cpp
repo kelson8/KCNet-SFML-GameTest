@@ -3,6 +3,8 @@
 
 #include "player.h"
 
+#include <fmt/core.h>
+
 #include <SFML/Audio.hpp>
 #include "util/music_util.h"
 
@@ -67,9 +69,9 @@ const bool Game::getWindowInitialized() const
 
 /**
  * @brief Test for changing the button positions in ImGui
- * 
+ *
  * This works for changing the button positions.
- * 
+ *
  * @param button The ButtonPositions button to change position from the enum.
  * @param position The position to set the button to.
  * @param size The new size of the button.
@@ -112,6 +114,9 @@ void Game::initVariables()
 	// TODO Make a config option for this
 	m_StartingRound = 1;
 
+	// If the music init has run or not.
+	m_MusicSetup = false;
+
 	// Set mouse held to false
 	// TODO Make into function in mouse_util.cpp/.h
 	//this->mouseHeld = false;
@@ -145,9 +150,9 @@ void Game::initMusic()
 
 	// Play the game music
 	// TODO Move this into a different function
-	// OH HELL, I accidentally put this in the loop at first lol, that was loud.
-	// Play the music, add a toggle in defines.h
-	if (defines.musicEnabled)
+	// I accidentally put this in the loop at first lol, that was loud.
+	// Play the music, add a toggle in defines.h.
+	if (defines.musicEnabled && !m_MusicSetup && std::filesystem::exists(defines.musicSound))
 	{
 		sf::Music* gameMusic = musicUtil.PlayMusic(defines.musicSound);
 		//std::unique_ptr<sf::Music> gameMusic = musicUtil.PlayMusic(defines.musicSound);
@@ -157,7 +162,16 @@ void Game::initMusic()
 			gameMusic->play();
 			gameMusic->setLooping(true);
 			gameMusic->setVolume(defines.musicVolume);
+			m_MusicSetup = true;
 		}
+	}
+	else
+	{
+		// TODO Fix this to only run once, it seems to always run in this loop.
+		// Now this part spams the console.
+		//fmt::println("Music not setup, file possibly doesn't exist.");
+		// Music either disabled or not setup
+		m_MusicSetup = false;
 	}
 	//
 }
@@ -243,11 +257,11 @@ void Game::setEndScreen(bool newEndScreen)
 
 /**
  * @brief Restart the game
- * 
+ *
  * This runs some restart functions for the buttons I will setup.
  */
 void Game::Restart()
-{	
+{
 	// Respawn the player
 	Player::getInstance().Respawn();
 	// Reset the players score
@@ -310,6 +324,78 @@ int Game::GetRound() const
 }
 
 /**
+ * @brief Manage the buttons in the game
+ * So far, this just has one pause button defined
+ * 
+ * TODO Make helper functions for these buttons
+ */
+void Game::ButtonHandler()
+{
+	MouseUtil& mouseUtil = MouseUtil::getInstance();
+	Defines& defines = Defines::getInstance();
+	Timers& timers = Timers::getInstance();
+	MusicUtil& musicUtil = MusicUtil::getInstance();
+
+	IniHandler iniHandler;
+
+	//---------
+	// Button handling
+	//---------
+	// This works for updating the button color if hovering over the button.
+	//if(button1.GetGlobalBounds().contains(mouseUtil.getMousePosView()))
+
+	// TODO Fix this to update the button text when the value changes, it isn't updating.
+
+	// Update the button color if the music is enabled or not
+	// TODO Make this update text under or beside of the button stating on/off instead of just the color.
+	if (defines.musicEnabled)
+	{
+		button1.SetColor(sf::Color::Green);
+		
+		// Setup the music first.
+		if (!m_MusicSetup)
+		{
+			//iniHandler.LoadIni();
+			initMusic();
+		}
+
+		// Play the music and loop it.
+		musicUtil.SetMusicInfo(true, false, true);
+	}
+	else
+	{
+		button1.SetColor(sf::Color::Red);
+		// Stop the music.
+		musicUtil.SetMusicInfo(false, true, false);
+	}
+
+	// This updates the button if it is clicked on
+	if (button1.GetGlobalBounds().contains(mouseUtil.getMousePosView()) &&
+		// Check if mouse button pressed
+		sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+
+		//button1.SetColor(sf::Color::Blue);
+
+		// Make sure this doesn't get spammed, add a second delay to it.
+		if (timers.SecondPassed())
+		{
+			// Now this works for updating the music value in the INI.
+			// Now to figure out how to reload the INI for these values in game.
+			if (defines.musicEnabled)
+			{
+				iniHandler.SetBool("SoundToggles", "MusicEnabled", false, "#Enable/Disable music", true);
+				defines.musicEnabled = false;
+			}
+			else
+			{
+				iniHandler.SetBool("SoundToggles", "MusicEnabled", true, "#Enable/Disable music", true);
+				defines.musicEnabled = true;
+			}
+		}
+	}
+}
+
+/**
  * @brief Updates the game events
  *
  * Update poll events, and delta time.
@@ -327,6 +413,10 @@ void Game::Update()
 
 	MouseUtil& mouseUtil = MouseUtil::getInstance();
 	TextHandler& textHandler = TextHandler::getInstance();
+	Defines& defines = Defines::getInstance();
+	Timers& timers = Timers::getInstance();
+
+	IniHandler iniHandler;
 
 	windowManager.pollEvents(); // Poll events regularly
 
@@ -358,6 +448,10 @@ void Game::Update()
 
 	// Update the mouse positions
 	mouseUtil.updateMousePositions(windowManager.getWindow());
+
+
+	// Update the buttons in the game
+	ButtonHandler();
 
 	//sf::Time elapsed = clock.getElapsedTime();
 

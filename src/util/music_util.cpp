@@ -60,6 +60,12 @@ const sf::Music* MusicUtil::GetMusicInfo()
  */
 void MusicUtil::SetMusicInfo(bool isLooping, bool isPaused, bool isPlaying, float newVolume)
 {
+	if (m_Music == nullptr)
+	{
+		fmt::println("Error, music is nullptr, function disabled.");
+		return;
+	}
+
 	m_Music->setLooping(isLooping);
 	if (isPaused && !m_MusicPaused)
 	{

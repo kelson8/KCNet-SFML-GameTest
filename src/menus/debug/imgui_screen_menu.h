@@ -47,6 +47,9 @@ private:
 	float m_PauseMenuMusicTextPosX;
 	float m_PauseMenuMusicTextPosY;
 
+	float m_PauseMusicStatusTextPosX;
+	float m_PauseMusicStatusTextPosY;
+
 	// Game screen text
 	float m_RoundTextPosX;
 	float m_RoundTextPosY;

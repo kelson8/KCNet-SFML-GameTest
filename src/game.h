@@ -61,6 +61,8 @@ private:
 
 	void RenderMainScreen();
 
+	void ButtonHandler();
+
 	// Buttons
 		//ButtonUtil button1 = ButtonUtil(sf::Vector2f(100.0f, 100.0f), sf::Vector2f(150.0f, 50.0f), sf::Color::Magenta);
 	//ButtonUtil button2 = ButtonUtil(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Magenta);
@@ -105,4 +107,6 @@ private:
 
 	// The starting round for the game
 	int m_StartingRound;
+
+	bool m_MusicSetup;
 };

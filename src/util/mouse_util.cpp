@@ -44,3 +44,30 @@ sf::Vector2f MouseUtil::getMousePosView() const
 {
 	return this->mousePosView;
 }
+
+
+
+/**
+ * @brief Check if the mouse is hovering over a button
+ * 
+ * I switched to using GetGlobalBounds().contains instead of this, keeping here for future reference.
+ * @param x1 
+ * @param y1 
+ * @param x2 
+ * @param y2 
+ * @return If the mouse is hovering over a button.
+ */
+bool MouseUtil::IsHoveringOverButton(float x1, float y1, float x2, float y2) const
+{
+	if (getMousePosWindow().x >= x1 &&
+		getMousePosWindow().x <= x2 &&
+		getMousePosWindow().y >= y1 &&
+		getMousePosWindow().y <= y2
+		)
+	{
+		fmt::println("Button is hovered");
+		return true;
+	}
+
+	return false;
+}

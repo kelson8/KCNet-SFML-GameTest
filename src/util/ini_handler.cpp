@@ -8,6 +8,8 @@
 
 #include <fmt/core.h>
 
+#include "logger.h"
+
 // TODO Add a reload option for this ini handler, so the game doesn't have to be restarted.
 
 IniHandler::IniHandler()
@@ -58,7 +60,10 @@ const char* IniHandler::GetValue(const std::string& section, const std::string& 
 
     if (value == nullptr)
     {
-        fmt::println("Key '{}' not found in section '{}'", key, section);
+        std::string errorText = fmt::format("Key '{}' not found in section '{}'", key, section);
+        fmt::println("{}", errorText);
+        //SPDLOG_ERROR(errorText);
+        //spdlog::error(errorText);
         return nullptr; // Return nullptr if not found
     }
 
@@ -68,22 +73,8 @@ const char* IniHandler::GetValue(const std::string& section, const std::string& 
     // Trim quotes from the value
     valueStr = trimQuotes(valueStr);
 
-    // If your application requires a raw pointer, return valueStr.c_str()
-    // Make sure your application handles the lifetime accordingly
-    return strdup(valueStr.c_str()); // Use strdup, remember to free later
+    return strdup(valueStr.c_str());
 }
- 
- //const char* IniHandler::GetValue(const std::string& section, const std::string& key)
-//{
-//    const char* value = iniFile.GetValue(section.c_str(), key.c_str());
-//
-//    if (value == nullptr)
-//    {
-//        fmt::println("Key '{}' not found in section '{}'", key, section);
-//    }
-//
-//    return value;
-//}
 
 /**
  * @brief Get a int from the ini file.
@@ -149,4 +140,35 @@ bool IniHandler::GetBool(const std::string &section, const std::string &key)
 
     bool boolValue = iniFile.GetBoolValue(section.c_str(), key.c_str());
     return boolValue;
+}
+
+/**
+ * @brief Set an ini boolean
+ * 
+ * @param section The section in the ini file to set.
+ * @param key The key in the ini file to set
+ * @param comment The comment to set for the ini value
+ * @param forceReplace If this forces the replacement of the value.
+ * @param value 
+ */
+void IniHandler::SetBool(const std::string& section, const std::string& key, bool value, std::string comment, bool forceReplace)
+{
+    if (iniFile.GetValue(section.c_str(), key.c_str()) == nullptr)
+    {
+        fmt::println("Key '{}' not found in section '{}'.", key, section);
+        return;
+    }
+
+    // https://stackoverflow.com/questions/43056169/writing-to-ini-file-simpleini-setvalue-not-doing-anything-despite-appearing
+    SI_Error rc = iniFile.SetBoolValue(section.c_str(), key.c_str(), value, comment.c_str(), forceReplace);
+    if (rc < 0)
+    {
+        fmt::println("Error, could not write boolean to ini file");
+        return;
+    }
+
+    // Save the ini file.
+    iniFile.SaveFile(Defines::iniFile);
+
+    fmt::println("Ini file updated successfully.");
 }

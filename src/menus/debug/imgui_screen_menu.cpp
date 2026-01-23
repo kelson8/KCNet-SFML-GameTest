@@ -33,6 +33,10 @@ ImGuiScreenMenu::ImGuiScreenMenu()
 	m_PauseMenuMusicTextPosX = 0.0f;
 	m_PauseMenuMusicTextPosY = 0.0f;
 
+	// Music status
+	m_PauseMusicStatusTextPosX = 0.0f;
+	m_PauseMusicStatusTextPosY = 0.0f;
+
 	// Game round
 	m_RoundTextPosX = 0.0f;
 	m_RoundTextPosY = 0.0f;
@@ -169,6 +173,12 @@ void ImGuiScreenMenu::Draw()
 			"Music text pos X", "Music text pos Y");
 		PositionDebugButton(TextPositions::PAUSE_MUSIC_OPTIONS_TEXT_POSITION,
 			m_PauseMenuMusicTextPosX, m_PauseMenuMusicTextPosY, "Apply music positions");
+
+		// Pause music status text
+		PositionDebugSlider(&m_PauseMusicStatusTextPosX, &m_PauseMusicStatusTextPosY, 0.0, "Pause music status pos",
+			"Music status pos X", "Music status pos Y");
+		PositionDebugButton(TextPositions::PAUSE_MUSIC_STATUS_TEXT_POSITION,
+			m_PauseMusicStatusTextPosX, m_PauseMusicStatusTextPosY, "Apply music status positions");
 	}
 }
 

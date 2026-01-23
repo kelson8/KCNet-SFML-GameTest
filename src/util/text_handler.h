@@ -4,6 +4,7 @@
 
 #include <tuple>
 
+#include "ini_handler.h"
 #include "util/button_util.h"
 
 #ifdef _IMGUI_TEST
@@ -13,10 +14,12 @@ enum class TextPositions
 	HEALTH_TEXT_POSITION, // Health text
 	ROUND_TEXT_POSITION, // Round text
 	LIVES_TEXT_POSITION, // Lives text
+
 	PAUSE_TEXT_POSITION, // Pause text
 	PAUSE_CONTINUE_TEXT_POSITION, // Continue text
 	PAUSE_NAME_VERSION_INFO_POSITION, // Pause, program name and version/other info display.
 	PAUSE_MUSIC_OPTIONS_TEXT_POSITION, // Pause, music options text.
+	PAUSE_MUSIC_STATUS_TEXT_POSITION, // Pause, music status text.
 	NONE,
 
 };
@@ -64,6 +67,8 @@ private:
 	TextHandler();
 	~TextHandler();
 
+	IniHandler iniHandler;
+
 	void SetupText(sf::Text& textHandler, const sf::Font& font,
 		sf::Vector2f textPosition, uint32_t characterSize, const std::string& displayText);
 	void SetupColor(sf::Text& textHandler, sf::Color textColor);
@@ -95,6 +100,7 @@ private:
 	sf::Text pauseMenuInfoText;
 	
 	sf::Text pauseMenuMusicToggleText;
+	sf::Text pauseMenuMusicStatusText;
 
 	// Text position
 
@@ -129,6 +135,10 @@ private:
 	// Pause menu, toggle music option
 	float m_PauseMenuToggleMusicPosX;
 	float m_PauseMenuToggleMusicPosY;
+
+	// Pause menu, music status text
+	float m_PauseMenuMusicStatusPosX;
+	float m_PauseMenuMusicStatusPosY;
 
 	// End screen text Position X
 	float m_EndScreenTextPosX;

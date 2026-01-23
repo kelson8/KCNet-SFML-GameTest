@@ -2,6 +2,9 @@
 
 // https://stackoverflow.com/questions/79570600/sfml-3-how-to-deal-with-texts-within-a-rectangle
 
+// Mostly adapted from this guide
+// https://www.youtube.com/watch?v=s2g0mPxZnvM
+
 // This class can setup buttons, update their positions and more.
 // It is setup in game.cpp, and updated in imgui_button_menu.cpp.
 
@@ -82,4 +85,19 @@ void ButtonUtil::SetSize(sf::Vector2f size)
 sf::Vector2f ButtonUtil::GetSize() const
 {
 	return buttonShape.getSize();
+}
+
+sf::Color ButtonUtil::GetColor() const
+{
+	return buttonShape.getFillColor();
+}
+
+void ButtonUtil::SetColor(sf::Color color)
+{
+	buttonShape.setFillColor(color);
+}
+
+sf::FloatRect ButtonUtil::GetGlobalBounds() const
+{
+	return buttonShape.getGlobalBounds();
 }

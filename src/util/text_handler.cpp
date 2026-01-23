@@ -30,7 +30,8 @@ TextHandler::TextHandler() :
 	pauseMenuText(font),
 	pauseMenuContinueText(font),
 	pauseMenuInfoText(font),
-	pauseMenuMusicToggleText(font)
+	pauseMenuMusicToggleText(font),
+	pauseMenuMusicStatusText(font)
 {
 
 //TextHandler::TextHandler()
@@ -170,6 +171,10 @@ void TextHandler::InitVariables()
 	// Pause menu, toggle music option
 	m_PauseMenuToggleMusicPosX = 327.0f;
 	m_PauseMenuToggleMusicPosY = 240.0f;
+
+	// Pause menu, music status text
+	m_PauseMenuMusicStatusPosX = 691.0f;
+	m_PauseMenuMusicStatusPosY = 241.0f;
 }
 
 /**
@@ -209,6 +214,8 @@ void TextHandler::InitGameText()
  */
 void TextHandler::InitPauseText()
 {
+	//IniHandler iniHandler;
+
 	SetupText(pauseMenuText, font, sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY), 48, "Paused");
 
 	SetupText(pauseMenuInfoText, font, sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY), 32, 
@@ -216,6 +223,12 @@ void TextHandler::InitPauseText()
 
 	SetupText(pauseMenuMusicToggleText, font, sf::Vector2f(m_PauseMenuToggleMusicPosX, m_PauseMenuToggleMusicPosY), 32,
 		fmt::format("Toggle music"));
+
+	std::string pauseMusicStatus = iniHandler.GetBool("SoundToggles", "MusicEnabled") ? "On" : "Off";
+	SetupText(pauseMenuMusicStatusText, font, sf::Vector2f(m_PauseMenuMusicStatusPosX, m_PauseMenuMusicStatusPosY), 32,
+		pauseMusicStatus);
+
+		//fmt::format("ON"));
 
 	// Incomplete
 	//SetupText(this->font, sf::Vector2f(40, 80), 48, "Continue?");
@@ -251,6 +264,16 @@ void TextHandler::Update()
 	//this->healthText.setString(health_ss.str());
 	this->roundText.setString(round_ss.str());
 	this->livesText.setString(lives_ss.str());
+
+	// Pause menu
+	// TODO Fix this to work
+	// It works on game start, but if I change the values in the game it doesn't.
+	std::string pauseMusicStatus = iniHandler.GetBool("SoundToggles", "MusicEnabled") ? "On" : "Off";
+	std::stringstream pause_music_status_ss;
+	pause_music_status_ss << pauseMusicStatus;
+
+	// Well this is the problem, this never seems to get a new value.
+	//fmt::println("{}", pauseMusicStatus);
 }
 
 /**
@@ -305,6 +328,8 @@ void TextHandler::RenderPauseScreen(ButtonUtil button1, ButtonUtil button2, sf::
 
 		// Music options text
 		target.draw(this->pauseMenuMusicToggleText);
+		// Music status text
+		target.draw(this->pauseMenuMusicStatusText);
 
 		// Test buttons
 		// This works for drawing multiple buttons to the screen!
@@ -318,7 +343,9 @@ void TextHandler::RenderPauseScreen(ButtonUtil button1, ButtonUtil button2, sf::
 	// This is required for changing the position of the displays.
 	this->pauseMenuText.setPosition(sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY));
 	this->pauseMenuInfoText.setPosition(sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY));
+
 	this->pauseMenuMusicToggleText.setPosition(sf::Vector2f(m_PauseMenuToggleMusicPosX, m_PauseMenuToggleMusicPosY));
+	this->pauseMenuMusicStatusText.setPosition(sf::Vector2f(m_PauseMenuMusicStatusPosX, m_PauseMenuMusicStatusPosY));
 #endif // _IMGUI_TEST
 }
 
@@ -380,6 +407,11 @@ void TextHandler::SetDisplayPositions(TextPositions textPosEnum, float posX, flo
 {
 	switch (textPosEnum)
 	{
+
+	//------
+	// Main game menu
+	//------
+
 	case TextPositions::SCORE_TEXT_POSITION:
 	
 		this->m_ScoreTextPosX = posX;
@@ -401,6 +433,10 @@ void TextHandler::SetDisplayPositions(TextPositions textPosEnum, float posX, flo
 		this->m_LivesTextPosY = posY;
 		break;
 
+	//------
+	// Pause menu
+	//------
+
 	case TextPositions::PAUSE_TEXT_POSITION:
 		this->m_PauseMenuTextPosX = posX;
 		this->m_PauseMenuTextPosY = posY;
@@ -417,6 +453,11 @@ void TextHandler::SetDisplayPositions(TextPositions textPosEnum, float posX, flo
 	case TextPositions::PAUSE_MUSIC_OPTIONS_TEXT_POSITION:
 		this->m_PauseMenuToggleMusicPosX = posX;
 		this->m_PauseMenuToggleMusicPosY = posY;
+		break;
+
+	case TextPositions::PAUSE_MUSIC_STATUS_TEXT_POSITION:
+		this->m_PauseMenuMusicStatusPosX = posX;
+		this->m_PauseMenuMusicStatusPosY = posY;
 		break;
 
 	default:
