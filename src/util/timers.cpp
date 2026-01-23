@@ -105,6 +105,7 @@ void Timers::TimerLoop()
  * @brief Run the loop for the round timer.
  * 
  * This updates the games round after a set amount of time.
+ * 
  */
 void Timers::RoundTimerLoop()
 {
@@ -122,6 +123,23 @@ void Timers::RoundTimerLoop()
 		// Start the countdown over.
 		roundTimerClock.restart();
 	}
+}
+
+/**
+ * @brief Get the current round timer
+ * @return The timer for the current round.
+ */
+const float Timers::GetRoundTimer() const
+{
+	return m_RoundScoreTimer;
+}
+
+/**
+ * @brief Reset the round timer, mostly used for when I restart the game, or pause.
+ */
+void Timers::ResetRoundTimer()
+{
+	m_RoundScoreTimer = 0;
 }
 
 /**

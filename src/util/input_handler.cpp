@@ -140,7 +140,7 @@ void InputHandler::HandleAllInput()
             case KeyCodes::Key_Enter:
                 if (game.getEndScreen())
                 {
-                    player.Respawn();
+                    game.Restart();
                 }
                 break;
 

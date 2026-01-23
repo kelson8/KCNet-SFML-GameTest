@@ -219,10 +219,28 @@ void Game::Restart()
 	// Reset the round count.
 	SetRound(m_StartingRound);
 
+	// Reset the enemies
+	Game::getInstance().ResetEnemies();
+
+	// Reset the round timer
+	Timers::getInstance().ResetRoundTimer();
+
 	// Disable the pause menu if its active
 	if (getPaused())
 	{
 		setPaused(false);
+	}
+
+	// Disable the end screen if it is active
+	if (getEndScreen())
+	{
+		setEndScreen(false);
+	}
+
+	// The game should exit if this is set, but reset it just in case.
+	if (getEndGame())
+	{
+		setEndGame(false);
 	}
 }
 

@@ -21,6 +21,8 @@ public:
 	void TimerLoop();
 	
 	void RoundTimerLoop();
+	const float GetRoundTimer() const;
+	void ResetRoundTimer();
 
 	void StartWait(int duration, char unit);
 	void TimerWaitLoop();

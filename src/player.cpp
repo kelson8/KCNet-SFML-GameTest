@@ -10,6 +10,10 @@
 // Useful link for collisions:
 // https://www.sfml-dev.org/tutorials/3.0/graphics/transform/#custom-transforms
 
+// Currently, I have the player score being set in the Timers class.
+// This is because I update the score every second the player is alive.
+// I may decide to change this in the future.
+
 /**
  * @brief Setup the player
  */
@@ -77,16 +81,10 @@ void Player::Draw()
 /**
  * @brief Respawn the player
  *
- * Disable end game, end screen variables, and set the players lives back to default.
+ * Set the players lives back to default.
  */
 void Player::Respawn()
 {
-	// The game should exit if this is set, but reset it just in case.
-	Game::getInstance().setEndGame(false);
-	// Make the end screen go away.
-	Game::getInstance().setEndScreen(false);
-	// Reset the enemies
-	Game::getInstance().ResetEnemies();
 	// Reset the players lives.
 	ResetLives();
 }
