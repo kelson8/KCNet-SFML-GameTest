@@ -210,7 +210,7 @@ void Enemy::Update()
 	enemySfx.play();
 #endif //_ENEMY_SOUNDS_TEST
 
-	Defines defines = Defines();
+	Defines defines = Defines::getInstance();
 	Enemy enemy = Enemy();
 	
 

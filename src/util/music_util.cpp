@@ -10,6 +10,8 @@
 // Info for pointers:
 // https://www.codegenes.net/blog/when-do-i-have-to-delete-a-pointer/
 
+// TODO Try to switch to unique pointers later.
+
 /**
  * @brief Setup the variables for the current playing music track.
  */
@@ -17,17 +19,25 @@ MusicUtil::MusicUtil()
 {
 	m_Music = new sf::Music();
 
+	//m_Music = std::make_unique<sf::Music>();
+
 	m_MusicPaused = false;
 }
 
 /**
  * @brief Free up memory for variables and pointers.
+ * 
+ * TODO Fix this when the music doesn't exist, for some reason this 
+ *  is always running if the music track resource doesn't exist.
  */
 MusicUtil::~MusicUtil()
 {
 	fmt::println("Shutting down music system and freeing up memory.");
-	delete m_Music;
-	m_Music = nullptr;
+	if (m_Music != nullptr)
+	{
+		delete m_Music;
+		m_Music = nullptr;
+	}
 }
 
 /**
@@ -35,8 +45,10 @@ MusicUtil::~MusicUtil()
  * @return 
  */
 const sf::Music* MusicUtil::GetMusicInfo()
+//const std::unique_ptr<sf::Music> MusicUtil::GetMusicInfo()
 {
 	return m_Music;
+	//return std::move(m_Music); // Return ownership of the music
 }
 
 /**
@@ -72,8 +84,9 @@ void MusicUtil::SetMusicInfo(bool isLooping, bool isPaused, bool isPlaying, floa
  * @return The music if found, nullptr if not.
  */
 sf::Music* MusicUtil::PlayMusic(const std::string& filename)
+//std::unique_ptr<sf::Music> MusicUtil::PlayMusic(const std::string& filename)
 {
-	Defines defines = Defines();
+	//Defines defines = Defines::getInstance();
 
 	if (m_Music == nullptr)
 	{
@@ -84,9 +97,10 @@ sf::Music* MusicUtil::PlayMusic(const std::string& filename)
 	if (!m_Music->openFromFile(filename))
 	{
 		std::cerr << "Error, could not find the game sound track." << std::endl;
-		delete m_Music;
+		//delete m_Music;
 		return nullptr;
 	}
 
 	return m_Music;
+	//return std::move(m_Music); // Return ownership of the music
 }

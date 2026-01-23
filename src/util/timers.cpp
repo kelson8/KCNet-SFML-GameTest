@@ -17,7 +17,8 @@ Timers::Timers()
 	m_MaxRoundScoreTime = iniHandler.GetInt("RoundTimes", "MaxRoundTime") 
 		? iniHandler.GetInt("RoundTimes", "MaxRoundTime") : 30;
 
-	m_TimerDisplayConsole = true;
+	m_TimerDisplayConsole = iniHandler.GetBool("Debug", "TimerDisplayConsole") ?
+		iniHandler.GetBool("Debug", "TimerDisplayConsole") : false;
 
 	// Start the timers when this constructor starts up
 	this->StartTimer();

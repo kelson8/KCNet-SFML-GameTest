@@ -23,8 +23,8 @@ public:
     const char* GetValue(const std::string& section, const std::string& key);
     int GetInt(const std::string& section, const std::string& key);
     double GetDouble(const std::string& section, const std::string& key);
-    // bool GetBool(const std::string &section, const std::string &key);
-    std::optional<bool> GetBool(const std::string& section, const std::string& key);
+     bool GetBool(const std::string &section, const std::string &key);
+    //std::optional<bool> GetBool(const std::string& section, const std::string& key);
 
 private:
     

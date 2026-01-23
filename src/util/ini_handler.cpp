@@ -8,6 +8,8 @@
 
 #include <fmt/core.h>
 
+// TODO Add a reload option for this ini handler, so the game doesn't have to be restarted.
+
 IniHandler::IniHandler()
 {
     SI_Error rc = iniFile.LoadFile(Defines::iniFile);
@@ -25,6 +27,18 @@ IniHandler::IniHandler()
     // {
     // fmt::println("Ini file {} loaded.", Config::GetIniFile().c_str());
     // }
+}
+
+/**
+ * @brief Strip the quotes from the INI value.
+ * @param str 
+ * @return The ini value without quotes.
+ */
+std::string trimQuotes(const std::string& str) {
+    if (str.size() >= 2 && str.front() == '"' && str.back() == '"') {
+        return str.substr(1, str.size() - 2);
+    }
+    return str;
 }
 
 //---------
@@ -45,10 +59,31 @@ const char* IniHandler::GetValue(const std::string& section, const std::string& 
     if (value == nullptr)
     {
         fmt::println("Key '{}' not found in section '{}'", key, section);
+        return nullptr; // Return nullptr if not found
     }
 
-    return value;
+    // Convert to std::string for manipulation
+    std::string valueStr(value);
+
+    // Trim quotes from the value
+    valueStr = trimQuotes(valueStr);
+
+    // If your application requires a raw pointer, return valueStr.c_str()
+    // Make sure your application handles the lifetime accordingly
+    return strdup(valueStr.c_str()); // Use strdup, remember to free later
 }
+ 
+ //const char* IniHandler::GetValue(const std::string& section, const std::string& key)
+//{
+//    const char* value = iniFile.GetValue(section.c_str(), key.c_str());
+//
+//    if (value == nullptr)
+//    {
+//        fmt::println("Key '{}' not found in section '{}'", key, section);
+//    }
+//
+//    return value;
+//}
 
 /**
  * @brief Get a int from the ini file.
@@ -99,16 +134,17 @@ double IniHandler::GetDouble(const std::string& section, const std::string& key)
  * @param key The key in the ini file to check
  * @return The boolean from the ini file if it exists.
  */
- // bool IniHandler::GetBool(const std::string &section, const std::string &key)
-std::optional<bool> IniHandler::GetBool(const std::string& section, const std::string& key)
+bool IniHandler::GetBool(const std::string &section, const std::string &key)
+//std::optional<bool> IniHandler::GetBool(const std::string& section, const std::string& key)
 {
 
     const char* value = iniFile.GetValue(section.c_str(), key.c_str());
-    if (value == nullptr)
+    //if (value == nullptr)
+    if (iniFile.GetValue(section.c_str(), key.c_str()) == nullptr)
     {
         fmt::println("Key '{}' not found in section '{}'.", key, section);
         // throw std::runtime_error("Key does not exist");
-        return std::nullopt;
+        return false;
     }
 
     bool boolValue = iniFile.GetBoolValue(section.c_str(), key.c_str());

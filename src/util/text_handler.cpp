@@ -121,7 +121,7 @@ void TextHandler::Init()
  */
 void TextHandler::InitFonts()
 {
-	Defines defines = Defines();
+	Defines defines = Defines::getInstance();
 
 	// If the font failed to load
 	//if (!this->font.loadFromFile(defines.fontFile))

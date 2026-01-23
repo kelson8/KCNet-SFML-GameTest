@@ -63,7 +63,7 @@ const bool Game::getWindowInitialized() const
  */
 void Game::initVariables()
 {
-	Defines defines = Defines();
+	Defines defines = Defines::getInstance();
 
 	// Game logic
 	// Set the endgame status
@@ -87,7 +87,7 @@ void Game::initWindow()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
 
-	Defines defines = Defines();
+	Defines defines = Defines::getInstance();
 
 	// Only allow one instance of the window, this works now.
 	if (!windowInitialized)
@@ -102,7 +102,7 @@ void Game::initWindow()
  */
 void Game::initMusic()
 {
-	Defines defines = Defines();
+	Defines defines = Defines::getInstance();
 	MusicUtil& musicUtil = MusicUtil::getInstance();
 
 	// Play the game music
@@ -112,6 +112,7 @@ void Game::initMusic()
 	if (defines.musicEnabled)
 	{
 		sf::Music* gameMusic = musicUtil.PlayMusic(defines.musicSound);
+		//std::unique_ptr<sf::Music> gameMusic = musicUtil.PlayMusic(defines.musicSound);
 
 		if (gameMusic)
 		{

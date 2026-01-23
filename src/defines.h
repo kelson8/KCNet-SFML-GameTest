@@ -33,31 +33,41 @@
 
 class Defines {
 public:
+	static Defines& getInstance()
+	{
+		static Defines instance; // Guaranteed to be destroyed.
+		return instance;
+	}
+
+
+	//Defines();
 
 	// Player
 	int playerHealth = 10;
 	const static int defaultLives = 3;
 
-	// I updated these to their new values.
-	// Sounds
-	const std::string pewSound = "resources/sounds/pew.wav";
-	const std::string popSound = "resources/sounds/pop.wav";
-	const std::string winSound = "resources/sounds/win.wav";
-
-	const std::string shipHitSound = "resources/sounds/hit.wav";
-
-	// Music
-	//const std::string musicSound = "resources/sounds/music/dreams.wav";
-	// Turn the music on/off
-	bool musicEnabled = true;
-	const std::string musicSound = "resources/sounds/music/space_dungeon_bpm100.ogg";
-	float musicVolume = 50.0f;
 
 	// Sound effects
 	// TODO Implement the sound effects.
+
+	// I updated these to their new values.
+	// Sounds
+	const char* pewSound;
+	const char* popSound;
+	const char* winSound;
+
+	const char* shipHitSound;
+
 	// Enable/disable sound effects
-	bool soundEffectsEnabled = false;
-	const std::string enemyHitSound = "resources/sounds/hit.wav";
+	bool soundEffectsEnabled;
+	const char* enemyHitSound;
+
+	// Music
+	// Turn the music on/off
+	bool musicEnabled;
+	const char* musicSound;
+	// TODO Move into Ini
+	float musicVolume = 50.0f;
 
 
 	// TODO Setup fonts
@@ -103,5 +113,8 @@ public:
 	const unsigned int screenWidth = 800u;
 	const unsigned int screenHeight = 800u;
 	
-
+private:
+	// Constructors / Destructors
+	Defines();
+	//~Defines();
 };

@@ -44,7 +44,7 @@ WindowManager::~WindowManager()
  * @param title The window title.
  */
 void WindowManager::initWindow(unsigned int width, unsigned int height, const std::string& title) {
-    Defines defines = Defines();
+    Defines defines = Defines::getInstance();
 #ifdef _IMGUI_TEST
     ImGuiSetup& imGuiSetup = ImGuiSetup::getInstance();
 #endif // _IMGUI_TEST
