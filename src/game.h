@@ -25,13 +25,15 @@ public:
 	const bool getPaused() const;
 	const bool getEndScreen() const;
 
+	const bool isPlaying() const;
+
 	void setPaused(bool paused);
 
 	const bool getWindowInitialized() const;
 
 	void setEndGame(bool newEndGame);
 	void setEndScreen(bool newEndScreen);
-	//void Restart();
+	void Restart();
 	void ResetEnemies();
 
 	void SetRound(int newRound);
@@ -47,6 +49,8 @@ private:
 	void initVariables();
 	void initMusic();
 	void initWindow();
+
+	void RenderMainScreen();
 
 	// Couldn't get this working in SFML3
 	//sf::VideoMode videoMode;
@@ -83,6 +87,9 @@ private:
 
 	// The current round for the game
 	int m_CurrentRound;
+
+	// The starting round for the game
+	int m_StartingRound;
 
 	//void PollEvents();
 	//void updateMousePositions();

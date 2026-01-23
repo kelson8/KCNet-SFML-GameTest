@@ -198,7 +198,7 @@ void Enemy::Update()
 
 	// Make this do nothing if the game is paused or the end screen is hit.
 	// This should save me from having to do it everywhere in this function.
-	if(game.getEndScreen() || game.getPaused())
+	if(!game.isPlaying())
 	{
 		return;
 	}
@@ -219,7 +219,7 @@ void Enemy::Update()
 	{
 		if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
 		{
-			if (!game.getEndScreen() && !game.getPaused())
+			if (game.isPlaying())
 			{
 				this->Spawn();
 				this->enemySpawnTimer = 0.0f;
@@ -254,7 +254,7 @@ void Enemy::Update()
 
 #else
 		
-		if (!game.getEndScreen() && !game.getPaused())
+		if (game.isPlaying())
 		{
 			// Change the speed by changing the offsetY
 			//this->enemies[i].move(sf::Vector2f(0.0f, enemySpeed));

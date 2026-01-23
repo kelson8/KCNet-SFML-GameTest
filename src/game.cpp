@@ -30,8 +30,8 @@
 /**
  * @brief Initialize variables, the music, and the window.
  */
-Game::Game() : 
-	endGame(false), 
+Game::Game() :
+	endGame(false),
 	m_EndScreen(false),
 	windowInitialized(false)
 {
@@ -45,7 +45,7 @@ Game::Game() :
 
 Game::~Game()
 {
-	
+
 }
 
 /**
@@ -73,6 +73,8 @@ void Game::initVariables()
 	this->m_EndScreen = false;
 
 	m_CurrentRound = 1;
+	// TODO Make a config option for this
+	m_StartingRound = 1;
 
 	// Set mouse held to false
 	// TODO Make into function in mouse_util.cpp/.h
@@ -183,6 +185,18 @@ const bool Game::getEndScreen() const
 }
 
 /**
+ * @brief Check if the game is currently being played.
+ * @return If the game is not on the end screen, or if the game is paused.
+ */
+const bool Game::isPlaying() const
+{
+	if (!getEndScreen() && !getPaused())
+		return true;
+
+	return false;
+}
+
+/**
  * @brief Set the end screen status
  * @param newEndScreen New status of the end screen.
  */
@@ -192,12 +206,25 @@ void Game::setEndScreen(bool newEndScreen)
 }
 
 /**
- * @brief This is unused, I may setup this later, I currently have the Player::Respawn function.
+ * @brief Restart the game
+ * 
+ * This runs some restart functions for the buttons I will setup.
  */
-//void Game::Restart()
-//{
-//
-//}
+void Game::Restart()
+{	
+	// Respawn the player
+	Player::getInstance().Respawn();
+	// Reset the players score
+	Timers::getInstance().SetScore(0);
+	// Reset the round count.
+	SetRound(m_StartingRound);
+
+	// Disable the pause menu if its active
+	if (getPaused())
+	{
+		setPaused(false);
+	}
+}
 
 /**
  * @brief So far this just resets the enemy positions, I may make it do more later.
@@ -210,7 +237,7 @@ void Game::ResetEnemies()
 /**
  * @brief Set the games current round
  * @param newRound The new round to set to
- * 
+ *
  * TODO Setup round system to change rounds every 30 seconds.
  * Make enemies faster depending on which round is set.
  */
@@ -230,13 +257,13 @@ int Game::GetRound() const
 
 /**
  * @brief Updates the game events
- * 
+ *
  * Update poll events, and delta time.
- * 
+ *
  * Update ImGui if enabled.
- * 
+ *
  * Update the text handler, and enemies.
- * 
+ *
  * Update the Mouse Util, which updates the mouse positions stored for debugging and use later.
  */
 void Game::Update()
@@ -272,7 +299,7 @@ void Game::Update()
 	{
 		enemy.Update();
 	}
-	
+
 #endif ENEMIES_ENABLED
 
 	// Update the mouse positions
@@ -281,6 +308,33 @@ void Game::Update()
 	//sf::Time elapsed = clock.getElapsedTime();
 
 	//std::cout << "Time elapsed: " << elapsed.asSeconds() << " seconds" << std::endl;
+}
+
+/**
+ * @brief This renders the main game screen
+ */
+void Game::RenderMainScreen()
+{
+	Player& player = Player::getInstance();
+	Enemy& enemy = Enemy::getInstance();
+	WindowManager& windowManager = WindowManager::getInstance();
+	TextHandler& textHandler = TextHandler::getInstance();
+
+	// Draw the player
+	player.Draw();
+
+	// Render the texts for the main screen
+	textHandler.Render(windowManager.getWindow());
+
+	// Set the end screen if the players lives go below 0.
+	if (player.GetLives() == 0)
+	{
+		this->setEndScreen(true);
+	}
+
+#ifdef ENEMIES_ENABLED
+	enemy.Render(windowManager.getWindow());
+#endif // ENEMIES_ENABLED
 }
 
 /**
@@ -308,44 +362,19 @@ void Game::Render()
 
 	// TODO Put a background in front of everything else, on the top of the screen.
 
-	if (!this->getEndScreen()) {
+	if (!this->getEndScreen())
+	{
 
+		// Well I didn't mean to do this but it made a neat effect.
+		// I accidentally placed this out here but the pause screen is now transparent if I leave it here.
+		//RenderMainScreen();
 		// If the game is not paused, run everything here.
 		if (!this->getPaused())
 		{
-			player.Draw();
-
-			textHandler.Render(windowManager.getWindow());
-
-			// Set the end screen if the players lives go below 0.
-			if (player.GetLives() == 0)
-			{
-				this->setEndScreen(true);
-			}
-
-			//this->RenderEnemies(*this->window);
-
-#ifdef ENEMIES_ENABLED
-			enemy.Render(windowManager.getWindow());
-#endif // ENEMIES_ENABLED
-
-			// Only run this for now if it is enabled
-			// If i use this again, I moved the functions into the TextHandler class
-			//if (renderTestItems)
-			//{
-			//	// Render the score test.
-			//	this->renderScore();
-
-			//	// Show test text on screen.
-			//	this->RenderText(windowManager.getWindow());
-			//	this->RenderText(*this->window);
-			//}
-
-
-			// Draw game objects
+			RenderMainScreen();
 		}
 		// Show the pause screen
-		else 
+		else
 		{
 			textHandler.RenderPauseScreen(windowManager.getWindow());
 		}
@@ -400,7 +429,7 @@ void Game::Run()
 		// Update the timer to keep track of the score.
 		// Gets reset when the player runs out of lives.
 		timers.ScoreTimer();
-		
+
 		// Update the current round timer
 		timers.RoundTimerLoop();
 

@@ -19,16 +19,25 @@ ImGuiScreenMenu::ImGuiScreenMenu()
 	randomScreenPosX = 0.0f;
 	randomScreenPosY = 0.0f;
 
+	// Pause menu
+
+	// Main text
 	m_PauseMenuTextPosX = 0.0f;
 	m_PauseMenuTextPosY = 0.0f;
-
+	
+	// Info
 	m_PauseMenuInfoTextPosX = 0.0f;
 	m_PauseMenuInfoTextPosY = 0.0f;
 
+	// Music
+	m_PauseMenuMusicTextPosX = 0.0f;
+	m_PauseMenuMusicTextPosY = 0.0f;
+
+	// Game round
 	m_RoundTextPosX = 0.0f;
 	m_RoundTextPosY = 0.0f;
 
-	// This works like this!
+	// Get the current screen X and Y size.
 	m_ScreenSizeX = WindowManager::getInstance().getWindow().getSize().x;
 	m_ScreenSizeY = WindowManager::getInstance().getWindow().getSize().y;
 }
@@ -154,6 +163,12 @@ void ImGuiScreenMenu::Draw()
 			"Info text pos X", "Info text pos Y");
 		PositionDebugButton(TextPositions::PAUSE_NAME_VERSION_INFO_POSITION,
 			m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY, "Apply info positions");
+
+		// Pause music options text
+		PositionDebugSlider(&m_PauseMenuMusicTextPosX, &m_PauseMenuMusicTextPosY, 0.0, "Pause music text pos",
+			"Music text pos X", "Music text pos Y");
+		PositionDebugButton(TextPositions::PAUSE_MUSIC_OPTIONS_TEXT_POSITION,
+			m_PauseMenuMusicTextPosX, m_PauseMenuMusicTextPosY, "Apply music positions");
 	}
 }
 

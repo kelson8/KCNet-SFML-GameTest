@@ -29,7 +29,8 @@ TextHandler::TextHandler() :
 	// Pause menu
 	pauseMenuText(font),
 	pauseMenuContinueText(font),
-	pauseMenuInfoText(font)
+	pauseMenuInfoText(font),
+	pauseMenuMusicToggleText(font)
 {
 
 //TextHandler::TextHandler()
@@ -158,13 +159,17 @@ void TextHandler::InitVariables()
 	m_EndScreenTextPosY = 40.0f;
 	//
 
-	// Pause menu
+	// Pause menu 'Paused' text.
 	m_PauseMenuTextPosX = 327.0f;
 	m_PauseMenuTextPosY = 182.0f;
 
 	// Pause menu, program name and version/other info display.
 	m_PauseMenuInfoTextPosX = 0.0f;
 	m_PauseMenuInfoTextPosY = 80.0f;
+
+	// Pause menu, toggle music option
+	m_PauseMenuToggleMusicPosX = 327.0f;
+	m_PauseMenuToggleMusicPosY = 240.0f;
 }
 
 /**
@@ -208,6 +213,9 @@ void TextHandler::InitPauseText()
 
 	SetupText(pauseMenuInfoText, font, sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY), 32, 
 		fmt::format("Welcome to {}: v{}{} ", Defines::gameName, PROJECT_VERSION_STRING, PROJECT_VERSION_SUFFIX));
+
+	SetupText(pauseMenuMusicToggleText, font, sf::Vector2f(m_PauseMenuToggleMusicPosX, m_PauseMenuToggleMusicPosY), 32,
+		fmt::format("Toggle music"));
 
 	// Incomplete
 	//SetupText(this->font, sf::Vector2f(40, 80), 48, "Continue?");
@@ -286,12 +294,16 @@ void TextHandler::RenderPauseScreen(sf::RenderTarget& target)
 		//target.draw(this->pauseMenuContinueText);
 		// Info text
 		target.draw(this->pauseMenuInfoText);
+
+		// Music options text
+		target.draw(this->pauseMenuMusicToggleText);
 	}
 
 #ifdef _IMGUI_TEST
 	// This is required for changing the position of the displays.
 	this->pauseMenuText.setPosition(sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY));
 	this->pauseMenuInfoText.setPosition(sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY));
+	this->pauseMenuMusicToggleText.setPosition(sf::Vector2f(m_PauseMenuToggleMusicPosX, m_PauseMenuToggleMusicPosY));
 #endif // _IMGUI_TEST
 }
 
@@ -385,6 +397,11 @@ void TextHandler::SetDisplayPositions(TextPositions textPosEnum, float posX, flo
 	case TextPositions::PAUSE_NAME_VERSION_INFO_POSITION:
 		this->m_PauseMenuInfoTextPosX = posX;
 		this->m_PauseMenuInfoTextPosY = posY;
+		break;
+
+	case TextPositions::PAUSE_MUSIC_OPTIONS_TEXT_POSITION:
+		this->m_PauseMenuToggleMusicPosX = posX;
+		this->m_PauseMenuToggleMusicPosY = posY;
 		break;
 
 	default:

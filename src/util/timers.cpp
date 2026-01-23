@@ -213,6 +213,15 @@ const int Timers::GetScore() const
 }
 
 /**
+ * @brief Set the score for the game
+ * @param newScore The new score value
+ */
+void Timers::SetScore(int newScore)
+{
+	m_Score = newScore;
+}
+
+/**
  * @brief Get the current time, this is how long the game has been open.
  * @return
  */

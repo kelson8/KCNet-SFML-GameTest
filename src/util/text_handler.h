@@ -14,6 +14,7 @@ enum class TextPositions
 	PAUSE_TEXT_POSITION, // Pause text
 	PAUSE_CONTINUE_TEXT_POSITION, // Continue text
 	PAUSE_NAME_VERSION_INFO_POSITION, // Pause, program name and version/other info display.
+	PAUSE_MUSIC_OPTIONS_TEXT_POSITION, // Pause, music options text.
 	NONE,
 
 };
@@ -90,6 +91,8 @@ private:
 	sf::Text pauseMenuText; // Pause text
 	sf::Text pauseMenuContinueText; // Pause text, continue
 	sf::Text pauseMenuInfoText;
+	
+	sf::Text pauseMenuMusicToggleText;
 
 	// Text position
 
@@ -120,6 +123,10 @@ private:
 	// Pause menu, program name and version/other info display.
 	float m_PauseMenuInfoTextPosX;
 	float m_PauseMenuInfoTextPosY;
+
+	// Pause menu, toggle music option
+	float m_PauseMenuToggleMusicPosX;
+	float m_PauseMenuToggleMusicPosY;
 
 	// End screen text Position X
 	float m_EndScreenTextPosX;

@@ -102,26 +102,37 @@ void InputHandler::HandleAllInput()
 
                 // Move Up
             case KeyCodes::Key_W:
-                if (game.getPaused() || game.getEndScreen()) return;
+                if (!game.isPlaying()) return;
                 player.Move(0.f, -player.GetMoveSpeed());
                 break;
 
                 // Move Down
             case KeyCodes::Key_S:
-                if (game.getPaused() || game.getEndScreen()) return;
+                if (!game.isPlaying()) return;
                 player.Move(player.GetMoveSpeed(), 0.f); // Move down
                 break;
 
                 // Move Left
             case KeyCodes::Key_A:
-                if (game.getPaused() || game.getEndScreen()) return;
+                if (!game.isPlaying()) return;
                 player.Move(-player.GetMoveSpeed(), 0.f); // Move left
                 break;
 
                 // Move right
             case KeyCodes::Key_D:
-                if (game.getPaused() || game.getEndScreen()) return;
+                if (!game.isPlaying()) return;
                 player.Move(0.f, player.GetMoveSpeed());
+                break;
+
+                // If the player is on the pause screen, restart the game.
+            case KeyCodes::Key_R:
+                if (game.getPaused())
+                {
+                    //player.Respawn();
+                    //game.setPaused(false);
+                    // TODO Make this reset the score and rounds
+                    game.Restart();
+                }
                 break;
 
 
@@ -152,6 +163,7 @@ void InputHandler::HandleAllInput()
 
                 //------
                 // Close the game
+                // TODO Add a confirm option to this.
                 //------
 
             case KeyCodes::Key_F4:

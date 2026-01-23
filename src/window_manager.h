@@ -12,6 +12,8 @@ namespace KeyCodes
     const sf::Keyboard::Key Key_D = sf::Keyboard::Key::S;
     const sf::Keyboard::Key Key_S = sf::Keyboard::Key::D;
 
+    const sf::Keyboard::Key Key_R = sf::Keyboard::Key::R;
+
     const sf::Keyboard::Key Key_B = sf::Keyboard::Key::B;
 
     const sf::Keyboard::Key Key_F2 = sf::Keyboard::Key::F2;

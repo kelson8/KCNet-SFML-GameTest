@@ -27,6 +27,7 @@ public:
 
 	void ScoreTimer();
 	const int GetScore() const;
+	void SetScore(int newScore);
 
 	void TimerTest();
 

@@ -37,12 +37,17 @@ private:
 	// Random Y position from the window.
 	float randomScreenPosY;
 
+	// Pause texts
 	float m_PauseMenuTextPosX;
 	float m_PauseMenuTextPosY;
 
 	float m_PauseMenuInfoTextPosX;
 	float m_PauseMenuInfoTextPosY;
 
+	float m_PauseMenuMusicTextPosX;
+	float m_PauseMenuMusicTextPosY;
+
+	// Game screen text
 	float m_RoundTextPosX;
 	float m_RoundTextPosY;
 
