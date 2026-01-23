@@ -63,15 +63,19 @@ private:
 
 	void Setup();
 
-	int playerHealth;
-	int playerLives;
-	int playerPoints;
+	int m_PlayerSize;
 
-	float moveSpeed;
+	int m_PlayerHealth;
+	int m_PlayerLives;
+	int m_PlayerPoints;
 
-	bool playerJumpStatus;
+	float m_MoveSpeed;
+
+	bool m_PlayerJumpStatus;
 
 	//std::vector<sf::RectangleShape> enemies;
-	sf::RectangleShape player;
+	sf::RectangleShape m_Player;
+
+	sf::Color m_PlayerColor;
 };
 

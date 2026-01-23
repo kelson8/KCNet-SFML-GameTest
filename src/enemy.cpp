@@ -21,14 +21,22 @@
 
 Enemy::Enemy()
 {
-	fastEnemies = false;
-	fastEnemiesFall = false;
+	// Set the fast enemy variables
+	m_FastEnemies = false;
+	m_FastEnemiesFall = false;
 
 	m_RandomSpawnPos = 0.0f;
 
 	m_DefaultEnemyXMovePos = 0.0f;
+	
+	// Set the enemy size and scale
+	m_EnemySize = 100.0f;
+	m_EnemyScale = 0.5f;
 
-	this->Init();
+	// Set the enemy color
+	m_EnemyColor = sf::Color::Cyan;
+
+	Init();
 }
 
 Enemy::~Enemy()
@@ -42,39 +50,39 @@ Enemy::~Enemy()
 void Enemy::Init()
 {
 	// Set the position, size, and scale.
-	this->enemy.setPosition(sf::Vector2f(10.0f, 10.0f));
-	this->enemy.setSize(sf::Vector2f(100.0f, 100.0f));
-	this->enemy.setScale(sf::Vector2f(0.5f, 0.5f));
+	m_Enemy.setPosition(sf::Vector2f(10.0f, 10.0f));
+	// For now these use the same values, another value can be added to change the X and Y.
+	m_Enemy.setSize(sf::Vector2f(m_EnemySize, m_EnemySize));
+	m_Enemy.setScale(sf::Vector2f(m_EnemyScale, m_EnemyScale));
 
 	// Set the fill color, outline color and outline thickness.
-	this->enemyColor = sf::Color::Cyan;
-	this->enemy.setFillColor(enemyColor);
+	m_Enemy.setFillColor(m_EnemyColor);
 
 	// Changing this value spawns in more enemies at once.
 	
-	if (fastEnemies)
+	if (m_FastEnemies)
 	{
-		this->enemySpawnTimerMax = 1.0f;
+		m_EnemySpawnTimerMax = 1.0f;
 	}
 	else
 	{
-		this->enemySpawnTimerMax = 20.0f;
+		m_EnemySpawnTimerMax = 20.0f;
 	}
 
 	// Set the enemies to fall down faster, pretty much spawning in faster.
-	if (fastEnemiesFall)
+	if (m_FastEnemiesFall)
 	{
 		// Fast enemies
-		this->enemySpeed = 25.0f;
+		m_EnemySpeed = 25.0f;
 	}
 	else
 	{
 		// Normal speed
-		this->enemySpeed = 5.0f;
+		m_EnemySpeed = 5.0f;
 	}
 
-	this->enemySpawnTimer = this->enemySpawnTimerMax;
-	this->maxEnemies = 10.0f;
+	m_EnemySpawnTimer = m_EnemySpawnTimerMax;
+	m_MaxEnemies = 10.0f;
 
 	m_PlayerHit = false;
 }
@@ -96,22 +104,22 @@ void Enemy::Spawn()
 
 #ifdef ENEMY_RANDOM_SPAWNS
 	//float randomSpawnPos = randomNumberGenerator.GenerateRandomNumber(10.0f, 40.0f);
-	//this->enemy.setPosition(sf::Vector2f(m_RandomSpawnPos, m_RandomSpawnPos));
-	this->enemy.setPosition(
-		sf::Vector2f(windowManager.getWindow().getSize().x - this->enemy.getSize().x,
+	//m_Enemy.setPosition(sf::Vector2f(m_RandomSpawnPos, m_RandomSpawnPos));
+	m_Enemy.setPosition(
+		sf::Vector2f(windowManager.getWindow().getSize().x - m_Enemy.getSize().x,
 		0.0f));
 
 #else
-	this->enemy.setPosition(sf::Vector2f(
-		static_cast<float> (rand() % static_cast<int>(windowManager.getWindow().getSize().x - this->enemy.getSize().x)), 0.0f)
+	m_Enemy.setPosition(sf::Vector2f(
+		static_cast<float> (rand() % static_cast<int>(windowManager.getWindow().getSize().x - m_Enemy.getSize().x)), 0.0f)
 	);
 
 #endif // ENEMY_RANDOM_SPAWNS
 
-	this->enemy.setFillColor(enemyColor);
+	m_Enemy.setFillColor(m_EnemyColor);
 
 	// Spawn the enemy
-	this->enemies.push_back(this->enemy);
+	m_Enemies.push_back(m_Enemy);
 
 	// Remove enemies at the end of the screen.
 }
@@ -142,26 +150,20 @@ sf::SoundBuffer* Game::playEnemySfx()
 /**
  * @brief Clear the enemies if the game ends or something.
  *
- * TODO Set this up somewhere, I never did have it setup in my other game test.
- *
- * This seems to work in my ImGui menu, I wonder if I can use it to setup rounds?
- * Like reset and make the enemies go faster or something.
+ * This seems to work in my ImGui menu.
  */
 void Enemy::Reset()
 {
 	bool deleted = false;
 
 	// If !deleted
-	//for (size_t i = 0; i < this->enemies.size() && !deleted; i++)
-	for (size_t i = 0; i < this->enemies.size() && deleted == false; i++)
+	//for (size_t i = 0; i < m_Enemies.size() && !deleted; i++)
+	for (size_t i = 0; i < m_Enemies.size() && deleted == false; i++)
 	{
-		// Delete the enemy
+		// Delete the m_Enemy
 		// Setting deleted to true cancels the loop.
 		deleted = true;
-		// TODO Test this.
-		this->enemies.clear();
-		// this->enemies.erase(this->enemies.);
-
+		m_Enemies.clear();
 	}
 }
 
@@ -172,14 +174,14 @@ void Enemy::Reset()
 void Enemy::Render(sf::RenderTarget& target)
 {
 	// Draw the enemies
-	for (auto& e : this->enemies)
+	for (auto& e : m_Enemies)
 	{
 		target.draw(e);
 	}
 }
 
 /**
- * @brief Update the enemy spawn timer and spawns enemies.
+ * @brief Update the m_Enemy spawn timer and spawns enemies.
  * When the total amount of enemies is smaller then the maximum.
  * Moves the enemies downwards.
  * Removes the enemies at the edge of the screen.
@@ -206,7 +208,7 @@ void Enemy::Update()
 	// TODO Fix this
 #ifdef _ENEMY_SOUNDS_TEST
 	// Play sound effect
-	sf::Sound enemySfx(*this->playEnemySfx());
+	sf::Sound enemySfx(*playEnemySfx());
 	enemySfx.play();
 #endif //_ENEMY_SOUNDS_TEST
 
@@ -215,27 +217,27 @@ void Enemy::Update()
 	
 
 	// Updating the timer.
-	if (this->enemies.size() < this->maxEnemies)
+	if (m_Enemies.size() < m_MaxEnemies)
 	{
-		if (this->enemySpawnTimer >= this->enemySpawnTimerMax)
+		if (m_EnemySpawnTimer >= m_EnemySpawnTimerMax)
 		{
 			if (game.isPlaying())
 			{
-				this->Spawn();
-				this->enemySpawnTimer = 0.0f;
+				Spawn();
+				m_EnemySpawnTimer = 0.0f;
 			}
 		}
 		else
 		{
-			this->enemySpawnTimer += 1.0f;
+			m_EnemySpawnTimer += 1.0f;
 			// Changing this allows more enemies to spawn in at once.
 			// TODO Mess with this value later.
-			//this->enemySpawnTimer += 5.0f;
+			//m_EnemySpawnTimer += 5.0f;
 		}
 	}
 
 	// Moving and updating the enemies, check if they are below the screen
-	for (int i = 0; i < this->enemies.size(); i++)
+	for (int i = 0; i < m_Enemies.size(); i++)
 	{
 		bool deleted = false;
 
@@ -248,17 +250,17 @@ void Enemy::Update()
 			m_RandomSpawnPos = randomNumberGenerator.GenerateRandomNumber(5.0f, 20.0f);
 		}
 
-		//this->enemies[i].move(sf::Vector2f(randomSpawnPos, enemySpeed));
-		//this->enemies[i].move(sf::Vector2f(m_RandomSpawnPos, -m_RandomSpawnPos));
-		this->enemies[i].move(sf::Vector2f(5.0f, m_RandomSpawnPos));
+		//m_Enemies[i].move(sf::Vector2f(randomSpawnPos, m_EnemySpeed));
+		//m_Enemies[i].move(sf::Vector2f(m_RandomSpawnPos, -m_RandomSpawnPos));
+		m_Enemies[i].move(sf::Vector2f(5.0f, m_RandomSpawnPos));
 
 #else
 		
 		if (game.isPlaying())
 		{
 			// Change the speed by changing the offsetY
-			//this->enemies[i].move(sf::Vector2f(0.0f, enemySpeed));
-			this->enemies[i].move(sf::Vector2f(m_DefaultEnemyXMovePos, enemySpeed));
+			//m_Enemies[i].move(sf::Vector2f(0.0f, m_EnemySpeed));
+			m_Enemies[i].move(sf::Vector2f(m_DefaultEnemyXMovePos, m_EnemySpeed));
 		}
 		
 #endif // ENEMY_RANDOM_SPAWNS
@@ -269,8 +271,8 @@ void Enemy::Update()
 		// I got this mostly working better then it was. I had to add the m_PlayerHit variable.
 
 #ifdef ENEMY_DAMAGE_PLAYER
-		// Only damage the player if they don't have god mode, and they are within range of the enemy.
-		if (!player.HasGodMode() && entity.GetGlobalBounds(enemies[i]).contains(player.GetPosition()))
+		// Only damage the player if they don't have god mode, and they are within range of the m_Enemy.
+		if (!player.HasGodMode() && entity.GetGlobalBounds(m_Enemies[i]).contains(player.GetPosition()))
 		{
 			if (timers.SecondPassed() && !m_PlayerHit)
 			{
@@ -287,17 +289,10 @@ void Enemy::Update()
 		//
 
 		// Delete the enemy if they are past the bottom of the screen.
-		if (this->enemies[i].getPosition().y > windowManager.getWindow().getSize().y
-			|| this->enemies[i].getPosition().x > windowManager.getWindow().getSize().x)
+		if (m_Enemies[i].getPosition().y > windowManager.getWindow().getSize().y
+			|| m_Enemies[i].getPosition().x > windowManager.getWindow().getSize().x)
 		{
-			this->enemies.erase(this->enemies.begin() + i);
-
-			// Setting the player health? Although why, this must've been for something else.
-			// Oh I remember why, if the enemies went off the screen it took the players health down.
-			// Hmm...
-			// TODO Change this to make the players lives go down if the enemy touches the player.
-			//this->health -= 1;
-			//std::cout << "Health: " << this->health << std::endl;
+			m_Enemies.erase(m_Enemies.begin() + i);
 		}
 	}
 }
@@ -342,7 +337,7 @@ void Enemy::SetDefaultXMovePos(float value)
  */
 const float Enemy::GetSpeed() const
 {
-	return enemySpeed;
+	return m_EnemySpeed;
 }
 
 /**
@@ -351,30 +346,27 @@ const float Enemy::GetSpeed() const
  */
 void Enemy::SetSpeed(float value)
 {
-	enemySpeed = value;
+	m_EnemySpeed = value;
 }
 
 const float Enemy::GetSpawnRate() const
 {
-	return enemySpawnTimerMax;
+	return m_EnemySpawnTimerMax;
 }
 
 void Enemy::SetSpawnRate(float value)
 {
-	enemySpawnTimerMax = value;
+	m_EnemySpawnTimerMax = value;
 }
-
-//	this->enemySpawnTimer = this->enemySpawnTimerMax;
-//this->maxEnemies = 10.0f;
 
 const float Enemy::GetMaxEnemies() const
 {
-	return maxEnemies;
+	return m_MaxEnemies;
 }
 
 void Enemy::SetMaxEnemies(float value)
 {
-	maxEnemies = value;
+	m_MaxEnemies = value;
 }
 
 #endif // _IMGUI_TEST

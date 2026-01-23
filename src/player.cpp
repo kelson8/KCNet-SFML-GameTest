@@ -23,17 +23,24 @@ Player::Player()
 	//windowManager = new WindowManager();
 	//windowManager = WindowManager();
 
+	// Set the player size and color
+	m_PlayerSize = 50.0f;
+	m_PlayerColor = sf::Color::Green;
+
+	// Player health, lives, and points
+	m_PlayerHealth = 100;
+	m_PlayerLives = Defines::defaultLives;
+	m_PlayerPoints = 0;
+
+	// Speed
+	//m_MoveSpeed = 10.0f;
+	m_MoveSpeed = 30.0f;
+
+	// This is an unused option, not really for this game style.
+	m_PlayerJumpStatus = false;
+
 	// Run the setup for the player
 	Setup();
-
-	playerHealth = 100;
-	playerLives = Defines::defaultLives;
-	playerPoints = 0;
-
-	//moveSpeed = 10.0f;
-	moveSpeed = 30.0f;
-
-	playerJumpStatus = false;
 }
 
 /**
@@ -52,11 +59,11 @@ void Player::Setup()
 	WindowManager& windowManager = WindowManager::getInstance();
 
 	// Set the size and color of the player.
-	this->player.setSize(sf::Vector2f(50.f, 50.f));
-	this->player.setFillColor(sf::Color::Green);
+	m_Player.setSize(sf::Vector2f(m_PlayerSize, m_PlayerSize));
+	m_Player.setFillColor(m_PlayerColor);
 
 	// Get the size of the player shape
-	sf::Vector2f playerSize = this->player.getSize();
+	sf::Vector2f playerSize = m_Player.getSize();
 	sf::Vector2u windowSize = windowManager.getWindow().getSize();
 
 	// Calculate the center position
@@ -64,7 +71,7 @@ void Player::Setup()
 	float centerY = (windowSize.y - playerSize.y) / 2;
 
 	// Set the default starting position.
-	this->player.setPosition(sf::Vector2f(centerX, centerY));
+	m_Player.setPosition(sf::Vector2f(centerX, centerY));
 
 	//std::cout << "Player position X: " << centerX << " Y: " << centerY << std::endl;
 }
@@ -75,7 +82,7 @@ void Player::Setup()
 void Player::Draw()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
-	windowManager.getWindow().draw(this->player);
+	windowManager.getWindow().draw(m_Player);
 }
 
 /**
@@ -95,7 +102,7 @@ void Player::Respawn()
  */
 const sf::RectangleShape Player::GetPlayer() const
 {
-	return this->player;
+	return m_Player;
 }
 
 /**
@@ -104,7 +111,7 @@ const sf::RectangleShape Player::GetPlayer() const
  */
 sf::Vector2f Player::GetPosition()
 {
-	return this->player.getPosition();
+	return m_Player.getPosition();
 }
 
 /**
@@ -114,7 +121,7 @@ sf::Vector2f Player::GetPosition()
  */
 void Player::SetPosition(float x, float y)
 {
-	this->player.setPosition(sf::Vector2f(x, y));
+	m_Player.setPosition(sf::Vector2f(x, y));
 	
 }
 
@@ -134,7 +141,7 @@ void Player::Move(float x, float y)
 	Entity& entity = Entity::getInstance();
 
 	// Get the size of the player shape
-	sf::Vector2f playerSize = this->player.getSize();
+	sf::Vector2f playerSize = m_Player.getSize();
 	sf::Vector2u windowSize = windowManager.getWindow().getSize();
 
 	// Calculate the center position
@@ -148,21 +155,19 @@ void Player::Move(float x, float y)
 	// I had to change this to set the position, not the X and Y values.
 
 	// New for checking entities.
-	if (!entity.IsInBounds(player))
+	if (!entity.IsInBounds(m_Player))
 	{
-		this->SetPosition(centerX, centerY);
+		SetPosition(centerX, centerY);
 
 		// Only remove lives if the player doesn't have god mode enabled.
-		if (!this->HasGodMode())
+		if (!HasGodMode())
 		{
-			this->playerLives = this->playerLives - 1;
+			m_PlayerLives = m_PlayerLives - 1;
 		}
-		
 	}
 
-	
-
-	this->player.move(sf::Vector2f(x, y));
+	// Move the player
+	m_Player.move(sf::Vector2f(x, y));
 }
 
 /**
@@ -171,7 +176,7 @@ void Player::Move(float x, float y)
  */
 const float Player::GetMoveSpeed() const
 {
-	return this->moveSpeed;
+	return m_MoveSpeed;
 }
 
 /**
@@ -180,7 +185,7 @@ const float Player::GetMoveSpeed() const
  */
 void Player::SetMoveSpeed(float speed)
 {
-	this->moveSpeed = speed;
+	m_MoveSpeed = speed;
 }
 
 /**
@@ -189,7 +194,7 @@ void Player::SetMoveSpeed(float speed)
  */
 const int Player::GetLives() const
 {
-	return this->playerLives;
+	return m_PlayerLives;
 }
 
 /**
@@ -198,7 +203,7 @@ const int Player::GetLives() const
  */
 const bool Player::HasLives() const
 {
-	if (this->playerLives <= 0)
+	if (m_PlayerLives <= 0)
 	{
 		return false;
 	}
@@ -212,7 +217,7 @@ const bool Player::HasLives() const
  */
 void Player::SetLives(int lives)
 {
-	this->playerLives = lives;
+	m_PlayerLives = lives;
 }
 
 /**
@@ -229,7 +234,7 @@ void Player::ResetLives()
  */
 const int Player::GetPoints() const
 {
-	return this->playerPoints;
+	return m_PlayerPoints;
 }
 
 /**
@@ -238,5 +243,5 @@ const int Player::GetPoints() const
  */
 void Player::SetPoints(int points)
 {
-	this->playerPoints = points;
+	m_PlayerPoints = points;
 }

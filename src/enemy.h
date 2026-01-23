@@ -43,31 +43,37 @@ private:
 	~Enemy();
 
 
-	std::vector<sf::RectangleShape> enemies;
-	sf::RectangleShape enemy;
+	std::vector<sf::RectangleShape> m_Enemies;
+	sf::RectangleShape m_Enemy;
 
-	float enemySpawnTimer;
-	float enemySpawnTimerMax;
-	int maxEnemies;
-	float enemySpeed;
+	float m_EnemySpawnTimer;
+	float m_EnemySpawnTimerMax;
+	int m_MaxEnemies;
+	float m_EnemySpeed;
 
 	// Check if the player has been hit
 	bool m_PlayerHit;
 
 	// TODO Rename these below booleans.
 	// Make the enemies faster.
-	bool fastEnemies;
+	bool m_FastEnemies;
 
 	// Make the enemies go down faster.
-	bool fastEnemiesFall;
+	bool m_FastEnemiesFall;
 
 	// Random spawn position for the enemies.
 	float m_RandomSpawnPos;
 
-	// The default X position for the enemy to move.
+	// The default X position for the m_Enemy to move.
 	float m_DefaultEnemyXMovePos;
 
-	// Set the enemy color
-	sf::Color enemyColor;
+	// The size of the m_Enemy
+	float m_EnemySize;
+
+	// The scale of the m_Enemy
+	float m_EnemyScale;
+
+	// Set the m_Enemy color
+	sf::Color m_EnemyColor;
 };
 

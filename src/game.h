@@ -90,12 +90,4 @@ private:
 
 	// The starting round for the game
 	int m_StartingRound;
-
-	//void PollEvents();
-	//void updateMousePositions();
-
-	//void RenderEnemies(sf::RenderTarget& target);
-
-	// Reset the enemy positions, used for when I reset the game.
-	//void resetEnemies();
 };
