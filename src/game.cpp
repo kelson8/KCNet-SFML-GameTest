@@ -433,7 +433,12 @@ void Game::Update()
 	// https://en.sfml-dev.org/forums/index.php?topic=28906.0
 
 	// Update the texts on screen
-	textHandler.Update();
+
+	// In game
+	textHandler.UpdatePlayingText();
+
+	// Paused
+	textHandler.UpdatePauseText();
 
 	// Have the enemies display on screen
 #ifdef ENEMIES_ENABLED

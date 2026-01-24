@@ -47,7 +47,8 @@ public:
 		return instance;
 	}
 
-	void Update();
+	void UpdatePlayingText();
+	void UpdatePauseText();
 	void Render(sf::RenderTarget& target);
 	void RenderPauseScreen(ButtonUtil button1, ButtonUtil button2, sf::RenderTarget& target);
 	void RenderEndScreen();
@@ -79,6 +80,9 @@ private:
 	void InitVariables();
 	void InitGameText();
 	void InitPauseText();
+
+	//std::string SetupTextUpdater(std::stringstream& stringStream, std::string& text, sf::Text& gameText);
+	void SetupTextUpdater(const std::string& text, sf::Text& gameText);
 
 	// Resources
 	sf::Font font;

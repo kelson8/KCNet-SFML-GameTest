@@ -234,48 +234,54 @@ void TextHandler::InitPauseText()
 	//SetupText(this->font, sf::Vector2f(40, 80), 48, "Continue?");
 }
 
-
+/**
+ * @brief Helper function for updating the texts.
+ * 
+ * This is just a simple function that runs the setString on the sf::Text values.
+ * 
+ * Quicker then using the string streams.
+ * 
+ * @param text The text to display.
+ * @param gameText The sf::Text for the game text to update.
+ */
+void TextHandler::SetupTextUpdater(const std::string& text, sf::Text& gameText)
+{
+	// Set the game text string.
+	gameText.setString(text);
+}
 
 /**
- * @brief Update the game text
- * 
+ * @brief Update the game playing text
  * 
  * Updates the points, lives, and will do more later.
  * 
  */
-void TextHandler::Update()
+void TextHandler::UpdatePlayingText()
 {
 	Player& player = Player::getInstance();
 	Timers& timers = Timers::getInstance();
 
-	// This is kind of like cout, can add floats, ints and everything else to it.
-	std::stringstream points_ss;
-	//std::stringstream health_ss;
-	std::stringstream round_ss;
-	std::stringstream lives_ss;
+	int currentScore = timers.GetScore();
+	int currentRound = Game::getInstance().GetRound();
+	int currentLives = player.GetLives();
 
-	points_ss << "Points: " << timers.GetScore();
-	//points_ss << "Points: " << player.GetPoints();
-	//health_ss << "Health: " << player.getHealth();
-	round_ss << "Round: " << Game::getInstance().GetRound();
-	lives_ss << "Lives: " << player.GetLives();
+	// I got this working, sets the points text and uses the scoreText sf::Text value.
+	SetupTextUpdater("Points: " + std::to_string(currentScore), scoreText);
+	SetupTextUpdater("Round: " + std::to_string(currentRound), roundText);
+	SetupTextUpdater("Lives: " + std::to_string(currentLives), livesText);
+}
 
-	this->scoreText.setString(points_ss.str());
-	//this->healthText.setString(health_ss.str());
-	this->roundText.setString(round_ss.str());
-	this->livesText.setString(lives_ss.str());
-
+/**
+ * @brief Update the pause menu texts
+ */
+void TextHandler::UpdatePauseText()
+{
 	// Pause menu
-	
+
 	// Update the music status text when changed.
 	std::string pauseMusicStatus = Defines::getInstance().musicEnabled ? "On" : "Off";
-	std::stringstream pause_music_status_ss;
-	pause_music_status_ss << pauseMusicStatus;
-	// I can't believe I forgot to set the text..
-	pauseMenuMusicStatusText.setString(pause_music_status_ss.str());
 
-	// Well this is the problem, this never seems to get a new value.
-	//fmt::println("{}", pauseMusicStatus);
+	SetupTextUpdater(pauseMusicStatus, pauseMenuMusicStatusText);
 }
 
 /**
