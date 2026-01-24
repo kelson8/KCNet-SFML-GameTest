@@ -218,8 +218,15 @@ void TextHandler::InitPauseText()
 
 	SetupText(pauseMenuText, font, sf::Vector2f(m_PauseMenuTextPosX, m_PauseMenuTextPosY), 48, "Paused");
 
-	SetupText(pauseMenuInfoText, font, sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY), 32, 
+#ifndef KC_ALPHA_BETA
+	SetupText(pauseMenuInfoText, font, sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY), 32,
+		fmt::format("Welcome to {}: v{} ", Defines::gameName, PROJECT_VERSION_STRING));
+#else
+	SetupText(pauseMenuInfoText, font, sf::Vector2f(m_PauseMenuInfoTextPosX, m_PauseMenuInfoTextPosY), 32,
 		fmt::format("Welcome to {}: v{}{} ", Defines::gameName, PROJECT_VERSION_STRING, PROJECT_VERSION_SUFFIX));
+
+#endif
+
 
 	SetupText(pauseMenuMusicToggleText, font, sf::Vector2f(m_PauseMenuToggleMusicPosX, m_PauseMenuToggleMusicPosY), 32,
 		fmt::format("Toggle music"));

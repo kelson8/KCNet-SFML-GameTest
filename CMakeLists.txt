@@ -36,6 +36,11 @@ file(GLOB HEADERS
 	"src/util/*.h" 
 	"src/menus/*.h"
 	"src/menus/debug/*.h")
+	
+# Extra library sources
+file(GLOB LIB_SOURCES
+	"lib/SFML-Slider/SliderSFML.cpp"
+	)
 
 # New for Visual Studio filters
 # TODO Make this neater later.
@@ -80,6 +85,7 @@ add_subdirectory(dependencies)
 add_executable(${PROJECT_NAME}
 	${SOURCES}
 	${HEADERS}
+	# ${LIB_SOURCES}
 	)
 
 # Setup precompiled headers
@@ -102,7 +108,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 # So just the src and ImGui include directories are in here
 target_include_directories(${PROJECT_NAME} PRIVATE
 	src/
-	${imgui-sfml_SOURCE_DIR}/include)
+	${imgui-sfml_SOURCE_DIR}/include
+	# SFML Slider, this is only for an older SFML version
+	# lib/SFML-Slider
+	)
 	# lib/SFML-Button/include)
 	# ${sfml-button_SOURCE_DIR}/include)
 

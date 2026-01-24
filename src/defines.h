@@ -14,7 +14,6 @@
 // TODO Test moving this into CMake
 
 // This should only disable it if NDEBUG is set, which is mostly set for release.
-// TODO Fix the score display with this disabled, not sure why it's broken.
 #ifndef NDEBUG
 #define _IMGUI_TEST
 #endif
@@ -30,6 +29,14 @@
 // If this is enabled, the player can take damage from the falling enemies.
 // Can be toggled off for debugging
 #define ENEMY_DAMAGE_PLAYER
+
+// Toggle the Alpha/Beta mode for the text display and possibly other options in the future.
+// So far this just changes the text that is displayed on the pause menu to either have an A or B in the version.
+// Or just display without the suffix, such as 0.0.1 instead of 0.0.1a
+#define KC_ALPHA_BETA
+
+// Toggle the slider testing here, this isn't currently working.
+// #define KC_SLIDER_TEST
 
 class Defines {
 public:
