@@ -266,11 +266,13 @@ void TextHandler::Update()
 	this->livesText.setString(lives_ss.str());
 
 	// Pause menu
-	// TODO Fix this to work
-	// It works on game start, but if I change the values in the game it doesn't.
-	std::string pauseMusicStatus = iniHandler.GetBool("SoundToggles", "MusicEnabled") ? "On" : "Off";
+	
+	// Update the music status text when changed.
+	std::string pauseMusicStatus = Defines::getInstance().musicEnabled ? "On" : "Off";
 	std::stringstream pause_music_status_ss;
 	pause_music_status_ss << pauseMusicStatus;
+	// I can't believe I forgot to set the text..
+	pauseMenuMusicStatusText.setString(pause_music_status_ss.str());
 
 	// Well this is the problem, this never seems to get a new value.
 	//fmt::println("{}", pauseMusicStatus);

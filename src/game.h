@@ -31,13 +31,10 @@ public:
 
 	void setPaused(bool paused);
 
-
-
 	const bool getWindowInitialized() const;
 
 	// Buttons
 	//const bool GetButtonPositions() const;
-	//void SetButtonPositions(ButtonPositions buttonPosition, sf::Vector2f position);
 	void SetButtonPositions(ButtonPositions buttonPosition, sf::Vector2f position, sf::Vector2f size);
 
 	void setEndGame(bool newEndGame);
@@ -64,40 +61,29 @@ private:
 	void ButtonHandler();
 
 	// Buttons
-		//ButtonUtil button1 = ButtonUtil(sf::Vector2f(100.0f, 100.0f), sf::Vector2f(150.0f, 50.0f), sf::Color::Magenta);
-	//ButtonUtil button2 = ButtonUtil(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Magenta);
-	ButtonUtil button1;
-	ButtonUtil button2;
+	ButtonUtil m_MusicToggleButton;
+
+	// Unused button, I will set this up later.
+	ButtonUtil m_QuitButton;
 
 	// Couldn't get this working in SFML3
 	//sf::VideoMode videoMode;
 	//sf::Event event;
 
-	// Mouse positions
-
-	sf::Vector2i mousePosWindow;
-	sf::Vector2f mousePosView;
-
-	// Resources
-	sf::Font font;
-
 	// Delta clock for keeping track of time, required for ImGui.
-	sf::Clock deltaClock;
-	sf::Time deltaTime;
-
-	// Clock for the game timer display.
-	sf::Clock timerClock;
+	sf::Clock m_DeltaClock;
+	sf::Time m_DeltaTime;
 
 	// Game logic
 
 	// Check if the window has been initialized
-	bool windowInitialized;
+	bool m_WindowInitialized;
 
 	// Check if the game is paused
-	bool isPaused;
+	bool m_IsPaused;
 
 	// Check if the game has ended
-	bool endGame;
+	bool m_EndGame;
 
 	// Check if the end screen is being shown
 	bool m_EndScreen;

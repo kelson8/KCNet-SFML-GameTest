@@ -35,19 +35,18 @@
  * @brief Initialize variables, the music, and the window.
  */
 Game::Game() :
-	endGame(false),
+	m_EndGame(false),
 	m_EndScreen(false),
-	windowInitialized(false),
+	m_WindowInitialized(false),
 	// Buttons, TODO Move these elsewhere.
-	button1(ButtonUtil(sf::Vector2f(133.0f, 32.0f), sf::Vector2f(542.0f, 247.0f), sf::Color::Black)),
-	button2(ButtonUtil(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Black))
+	m_MusicToggleButton(ButtonUtil(sf::Vector2f(133.0f, 32.0f), sf::Vector2f(542.0f, 247.0f), sf::Color::Black)),
+	// TODO Make this into a quit button.
+	m_QuitButton(ButtonUtil(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Black))
 {
 	// Init game variables, music, and the window.
-	this->initVariables();
-	this->initMusic();
-	this->initWindow();
-
-	//this->initEnemies();
+	initVariables();
+	initMusic();
+	initWindow();
 }
 
 Game::~Game()
@@ -61,7 +60,7 @@ Game::~Game()
  */
 const bool Game::getWindowInitialized() const
 {
-	return windowInitialized;
+	return m_WindowInitialized;
 }
 
 // 
@@ -81,12 +80,12 @@ void Game::SetButtonPositions(ButtonPositions buttonPosition, sf::Vector2f posit
 	switch (buttonPosition)
 	{
 	case ButtonPositions::PAUSE_MENU_TEST_BUTTON1_POSITION:
-		button1.SetPosition(position);
-		button1.SetSize(size);
+		m_MusicToggleButton.SetPosition(position);
+		m_MusicToggleButton.SetSize(size);
 		break;
 	case ButtonPositions::PAUSE_MENU_TEST_BUTTON2_POSITION:
-		button2.SetPosition(position);
-		button2.SetSize(size);
+		m_QuitButton.SetPosition(position);
+		m_QuitButton.SetSize(size);
 		break;
 	default:
 		break;
@@ -105,10 +104,10 @@ void Game::initVariables()
 
 	// Game logic
 	// Set the endgame status
-	this->endGame = false;
+	m_EndGame = false;
 
 	// Set the endScreen status
-	this->m_EndScreen = false;
+	m_EndScreen = false;
 
 	m_CurrentRound = 1;
 	// TODO Make a config option for this
@@ -119,7 +118,7 @@ void Game::initVariables()
 
 	// Set mouse held to false
 	// TODO Make into function in mouse_util.cpp/.h
-	//this->mouseHeld = false;
+	//mouseHeld = false;
 }
 
 /**
@@ -133,10 +132,10 @@ void Game::initWindow()
 	Defines defines = Defines::getInstance();
 
 	// Only allow one instance of the window, this works now.
-	if (!windowInitialized)
+	if (!m_WindowInitialized)
 	{
 		windowManager.initWindow(defines.screenHeight, defines.screenWidth, defines.windowTitle);
-		windowInitialized = true;
+		m_WindowInitialized = true;
 	}
 }
 
@@ -185,7 +184,6 @@ void Game::initMusic()
 const bool Game::running() const
 {
 	WindowManager& windowManager = WindowManager::getInstance();
-	//return this->window->isOpen();
 	return windowManager.isOpen();
 }
 
@@ -195,7 +193,7 @@ const bool Game::running() const
  */
 const bool Game::getEndGame() const
 {
-	return this->endGame;
+	return m_EndGame;
 }
 
 /**
@@ -204,7 +202,7 @@ const bool Game::getEndGame() const
  */
 void Game::setEndGame(bool newEndGame)
 {
-	endGame = newEndGame;
+	m_EndGame = newEndGame;
 }
 
 /**
@@ -213,7 +211,7 @@ void Game::setEndGame(bool newEndGame)
  */
 const bool Game::getPaused() const
 {
-	return this->isPaused;
+	return m_IsPaused;
 }
 
 /**
@@ -222,7 +220,7 @@ const bool Game::getPaused() const
  */
 void Game::setPaused(bool paused)
 {
-	this->isPaused = paused;
+	m_IsPaused = paused;
 }
 
 /**
@@ -231,7 +229,7 @@ void Game::setPaused(bool paused)
  */
 const bool Game::getEndScreen() const
 {
-	return this->m_EndScreen;
+	return m_EndScreen;
 }
 
 /**
@@ -350,7 +348,7 @@ void Game::ButtonHandler()
 	// TODO Make this update text under or beside of the button stating on/off instead of just the color.
 	if (defines.musicEnabled)
 	{
-		button1.SetColor(sf::Color::Green);
+		m_MusicToggleButton.SetColor(sf::Color::Green);
 		
 		// Setup the music first.
 		if (!m_MusicSetup)
@@ -364,13 +362,13 @@ void Game::ButtonHandler()
 	}
 	else
 	{
-		button1.SetColor(sf::Color::Red);
+		m_MusicToggleButton.SetColor(sf::Color::Red);
 		// Stop the music.
 		musicUtil.SetMusicInfo(false, true, false);
 	}
 
 	// This updates the button if it is clicked on
-	if (button1.GetGlobalBounds().contains(mouseUtil.getMousePosView()) &&
+	if (m_MusicToggleButton.GetGlobalBounds().contains(mouseUtil.getMousePosView()) &&
 		// Check if mouse button pressed
 		sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
 
@@ -421,12 +419,12 @@ void Game::Update()
 	windowManager.pollEvents(); // Poll events regularly
 
 	// Calculate delta time
-	deltaTime = deltaClock.restart(); // Gets the time since the last call
+	m_DeltaTime = m_DeltaClock.restart(); // Gets the time since the last call
 
 #ifdef _IMGUI_TEST
 
 
-	ImGui::SFML::Update(windowManager.getWindow(), deltaTime);
+	ImGui::SFML::Update(windowManager.getWindow(), m_DeltaTime);
 
 #endif // _IMGUI_TEST
 
@@ -439,7 +437,7 @@ void Game::Update()
 
 	// Have the enemies display on screen
 #ifdef ENEMIES_ENABLED
-	if (!this->getPaused())
+	if (!getPaused())
 	{
 		enemy.Update();
 	}
@@ -477,7 +475,7 @@ void Game::RenderMainScreen()
 	// Set the end screen if the players lives go below 0.
 	if (player.GetLives() == 0)
 	{
-		this->setEndScreen(true);
+		setEndScreen(true);
 	}
 
 #ifdef ENEMIES_ENABLED
@@ -499,25 +497,24 @@ void Game::Render()
 	ImGuiMenu& imGuiMenu = ImGuiMenu::getInstance();
 #endif
 
-	// 
+	// TODO Make this into a variable elsewhere, I forgot about the window color being set here.
 	// Use this to generate colors:
 	// https://www.rapidtables.com/web/color/RGB_Color.html
 	// Light blue
-	// this->window->clear(sf::Color(102, 178, 255, 255)); // Clear old frame
+	// window->clear(sf::Color(102, 178, 255, 255)); // Clear old frame
 	// Gray
-	//this->window->clear(sf::Color(64, 64, 64, 255)); // Clear old frame
 	windowManager.getWindow().clear(sf::Color(64, 64, 64, 255)); // Clear old frame
 
 	// TODO Put a background in front of everything else, on the top of the screen.
 
-	if (!this->getEndScreen())
+	if (!getEndScreen())
 	{
 
 		// Well I didn't mean to do this but it made a neat effect.
 		// I accidentally placed this out here but the pause screen is now transparent if I leave it here.
 		//RenderMainScreen();
 		// If the game is not paused, run everything here.
-		if (!this->getPaused())
+		if (!getPaused())
 		{
 			RenderMainScreen();
 		}
@@ -525,7 +522,7 @@ void Game::Render()
 		else
 		{
 			//textHandler.RenderPauseScreen(windowManager.getWindow());
-			textHandler.RenderPauseScreen(button1, button2, windowManager.getWindow());
+			textHandler.RenderPauseScreen(m_MusicToggleButton, m_QuitButton, windowManager.getWindow());
 		}
 
 	}
