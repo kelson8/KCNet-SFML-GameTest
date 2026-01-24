@@ -444,7 +444,7 @@ void Game::Update()
 		enemy.Update();
 	}
 
-#endif ENEMIES_ENABLED
+#endif // ENEMIES_ENABLED
 
 	// Update the mouse positions
 	mouseUtil.updateMousePositions(windowManager.getWindow());

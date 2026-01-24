@@ -93,6 +93,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SFML::System
 	ImGui-SFML::ImGui-SFML
 	fmt::fmt
+	spdlog::spdlog
 	# SFMLButton
 	SimpleIni::SimpleIni
 	)
