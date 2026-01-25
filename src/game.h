@@ -1,5 +1,8 @@
 #pragma once
+#include <iostream>
 #include <SFML/Graphics.hpp>
+
+#include "bullet.h"
 
 #include "defines.h"
 
@@ -32,6 +35,9 @@ public:
 	void setPaused(bool paused);
 
 	const bool getWindowInitialized() const;
+
+	//void SpriteHandler(sf::RenderWindow& window, std::string textureFile);
+	//sf::Sprite SpriteHandler(sf::RenderWindow& window, std::string textureFile);
 
 	// Buttons
 	//const bool GetButtonPositions() const;

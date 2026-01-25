@@ -19,6 +19,8 @@ namespace KeyCodes
     const sf::Keyboard::Key Key_F2 = sf::Keyboard::Key::F2;
     const sf::Keyboard::Key Key_F4 = sf::Keyboard::Key::F4;
 
+    const sf::Keyboard::Key Key_Space = sf::Keyboard::Key::Space;
+    
     const sf::Keyboard::Key Key_Enter = sf::Keyboard::Key::Enter;
     const sf::Keyboard::Key Key_Escape = sf::Keyboard::Key::Escape;
 }

@@ -16,6 +16,9 @@
 // This should only disable it if NDEBUG is set, which is mostly set for release.
 #ifndef NDEBUG
 #define _IMGUI_TEST
+
+// Enable extra logging, for now this is just the fmt logger that I have setup to log to console.
+#define ENABLE_LOGGING
 #endif
 
 // Toggle the enemies rendering and updating here

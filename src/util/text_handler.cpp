@@ -520,7 +520,7 @@ std::tuple<float, float> TextHandler::GetDisplayPositions(TextPositions textPosE
 		break;
 	}
 	// TODO Add better error handling to this later, for now just default to 0, 0.
-	//return std::make_tuple(0, 0);
+	return std::make_tuple(0.0f, 0.0f);
 }
 
 #endif // _IMGUI_TEST

@@ -1,5 +1,8 @@
 #include "player.h"
 
+#include "util/logger.h"
+
+#include "bullet.h"
 #include "entity.h"
 
 #include <iostream>
@@ -17,7 +20,8 @@
 /**
  * @brief Setup the player
  */
-Player::Player()
+Player::Player() :
+	m_Bullet(Bullet(5.0f, sf::Vector2f(250.0f, 250.0f), sf::Color::Black))
 {
 	//windowManager = WindowManager::getInstance();
 	//windowManager = new WindowManager();
@@ -35,6 +39,12 @@ Player::Player()
 	// Speed
 	//m_MoveSpeed = 10.0f;
 	m_MoveSpeed = 30.0f;
+
+	// Is the player firing a bullet?
+	m_FiringBullet = false;
+	
+	// Is the bullet currently moving?
+	m_BulletMoving = false;
 
 	// This is an unused option, not really for this game style.
 	m_PlayerJumpStatus = false;
@@ -83,6 +93,43 @@ void Player::Draw()
 {
 	WindowManager& windowManager = WindowManager::getInstance();
 	windowManager.getWindow().draw(m_Player);
+	
+	// Draw the bullet for testing
+	// I still need to figure out how to add the logic to this, 
+	// such as making it hit the enemies and they disappear
+	// Also for now, there is only able to be one bullet at a time.
+	// I'll fix that once I figure out the basic logic to it.
+	//if (m_FiringBullet)
+	//{
+	//	windowManager.getWindow().draw(m_Bullet.Get());
+	//}
+}
+
+/**
+ * @brief Make the player fire the bullet at the enemies
+ * 
+ * TODO Implement this
+ */
+void Player::FireBullet()
+{
+	//Bullet bullet = Bullet(5.0f, sf::Vector2f(250.0f, 250.0f), sf::Color::Black);
+
+	m_FiringBullet = true;
+
+	FMT_LOG("Bullet fired");
+
+	//while (m_Bullet.IsInBounds(m_Bullet.Get()))
+	// Well oops, this just freezes the game.
+	//while (m_FiringBullet)
+	//{
+	//	m_Bullet.Move(sf::Vector2f(25.0f, 25.0f));
+	//	m_BulletMoving = true;
+	//}
+
+	FMT_LOG("Bullet stopped moving");
+	m_FiringBullet = false;
+	m_BulletMoving = false;
+	
 }
 
 /**

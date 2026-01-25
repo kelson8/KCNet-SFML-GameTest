@@ -1,14 +1,15 @@
 #pragma once
-
-#include "window_manager.h"
-
-#include "entity.h"
-
 #include <SFML/Graphics.hpp>
 //#include <SFML/System.hpp>
 //#include <SFML/Window.hpp>
 //#include <SFML/Audio.hpp>
 //#include <SFML/Network.hpp>
+
+#include "bullet.h"
+#include "window_manager.h"
+#include "entity.h"
+
+
 
 
 
@@ -22,6 +23,8 @@ public:
 	}
 
 	void Draw();
+
+	void FireBullet();
 
 	void Respawn();
 	void ResetLives();
@@ -63,6 +66,9 @@ private:
 
 	void Setup();
 
+	// Bullet for the player
+	Bullet m_Bullet;
+
 	int m_PlayerSize;
 
 	int m_PlayerHealth;
@@ -72,6 +78,9 @@ private:
 	float m_MoveSpeed;
 
 	bool m_PlayerJumpStatus;
+
+	bool m_FiringBullet;
+	bool m_BulletMoving;
 
 	//std::vector<sf::RectangleShape> enemies;
 	sf::RectangleShape m_Player;

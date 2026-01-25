@@ -1,6 +1,8 @@
 #include "game.h"
 #include "defines.h"
 
+#include "bullet.h"
+
 #include "player.h"
 
 #include <fmt/core.h>
@@ -93,6 +95,38 @@ void Game::SetButtonPositions(ButtonPositions buttonPosition, sf::Vector2f posit
 }
 
 #endif // _IMGUI_TEST
+
+/**
+ * @brief Handle the game sprites
+ * 
+ * TODO Move this into a different file.
+ * 
+ * @param window
+ * @param textureFile
+ */ 
+//void Game::SpriteHandler(sf::RenderWindow& window, std::string textureFile)
+//sf::Sprite Game::SpriteHandler(sf::RenderWindow& window, std::string textureFile)
+//{
+//	//sf::Texture sprite(spriteFile);
+//
+//	sf::Texture texture;
+//	// TODO Figure out what IntRect is
+//	if (!texture.loadFromFile(textureFile, false, sf::IntRect({ 10, 10 }, { 32, 32 })))
+//	{
+//		fmt::println("An error occurred, texture couldn't be loaded!");
+//		return;
+//	}
+//
+//
+//	//texture.setSmooth(true);
+//	//texture.setRepeated(true);
+//
+//	sf::Sprite sprite(texture);
+//	return sprite;
+//
+//	// Draw the sprite to the screen
+//	//window.draw(sprite);
+//}
 
 /**
  * @brief Setup the end game status, and the end screen status

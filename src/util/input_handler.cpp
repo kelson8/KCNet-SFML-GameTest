@@ -124,6 +124,13 @@ void InputHandler::HandleAllInput()
                 player.Move(0.f, player.GetMoveSpeed());
                 break;
 
+                // Fire bullet
+                // This needs worked on.
+            //case KeyCodes::Key_Space:
+                //if (!game.isPlaying()) return;
+                //player.FireBullet();
+                //break;
+
                 // If the player is on the pause screen, restart the game.
             case KeyCodes::Key_R:
                 if (game.getPaused())
